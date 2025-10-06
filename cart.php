@@ -1,67 +1,4 @@
-<?php
-    // ### Establish Session ###
-    include  __DIR__ . "/functions/session.php";
-    
-    // ### Include functions compilation ###
-    include  __DIR__ . "/functions/FunctionCompilation.php";
-    isLoggedIn();
-    
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Eventia</title>
-    <link rel="icon" type="image/png" href="assets/Logo_BG.png">
-    <link rel="stylesheet" href="css/bootstrap-icons-1.13.1/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.php">
-                <img src="assets/EventiaLogo.png" alt="" width="50" height="45" class="me-2">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="packages.php">Packages</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="services.php">Services</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="shop.php">Shop</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="blogs.php">Blogs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="feedback.php">Feedback</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.php">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.php">Contact</a>
-                    </li>
-                </ul>
-                <div class="d-flex ms-auto align-items-center">
-                    <a class="nav-link p-0" id="userProfile" href="profile.php">Welcome, <?php echo $_SESSION["first_name"]; ?></a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<?php include __DIR__."/components/header.php"; ?>
 
     <!-- Page Header -->
     <div class="hero-section">
@@ -186,7 +123,7 @@
                     <a href="shop.html" class="btn btn-outline-primary">
                         <i class="bi bi-arrow-left me-1"></i>Continue Shopping
                     </a>
-                    <a href="checkout.html" class="btn btn-primary">
+                    <a href="checkout.php" class="btn btn-primary">
                         Proceed to Checkout <i class="bi bi-arrow-right ms-1"></i>
                     </a>
                 </div>
@@ -243,39 +180,4 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="d-flex justify-content-center align-items-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h5>Eventia</h5>
-                    <p>Creating memorable events with precision and creativity. Let us turn your vision into reality.</p>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="index.html" class="text-light text-decoration-none">Home</a></li>
-                        <li><a href="packages.html" class="text-light text-decoration-none">Packages</a></li>
-                        <li><a href="#services" class="text-light text-decoration-none">Services</a></li>
-                        <li><a href="shop.html" class="text-light text-decoration-none">Shop</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h5>Support</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#faq" class="text-light text-decoration-none">FAQ</a></li>
-                        <li><a href="#contact" class="text-light text-decoration-none">Contact</a></li>
-                    </ul>
-                </div>
-            <hr class="mt-0 mb-4">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <p class="mb-0">&copy; 2025 Eventia. All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-<script src="js/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+ <?php include __DIR__."/components/footer.php" ?>
