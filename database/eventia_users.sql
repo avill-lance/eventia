@@ -10,5 +10,7 @@ CREATE TABLE tbl_users(
     city VARCHAR(255) NOT NULL,
     zip VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    otp INT(11),
+    status ENUM('active', 'inactive') NOT NULL DEFAULT 'active'
 );

@@ -22,16 +22,21 @@
             if($result->num_rows>0){
                 $row = $result->fetch_assoc();
 
-                if(password_verify($password, $row['password'])){
+                if($row['status']==="inactive"){
+                    echo"inactive";
+                }
+                else{
+                    if(password_verify($password, $row['password'])){
                     $_SESSION["id"] = $row['user_id'];
                     $_SESSION['email']=$row['email'];
                     $_SESSION['first_name']=$row['first_name'];
                     $_SESSION['last_name']=$row['last_name'];
                     echo "success";
-                }
-                else{
-                    echo "wrong";
-                }
+                    }
+                    else{
+                        echo "wrong";
+                    }
+                    }
             }
             else{
                 echo "invalid";

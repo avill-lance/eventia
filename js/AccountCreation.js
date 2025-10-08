@@ -49,12 +49,16 @@ $(document).ready(function(){
                 if(user.trim()==='empty'){
                     alert("Fields are required");
                 }
+                else if(user.trim()==='inactive'){
+                    alert("Please verify your email first.");
+                }
                 else if(user.trim()==='wrong'){
                     alert("Wrong email or password");
                 }
                 else if(user.trim()==='invalid'){
                     alert("Invalid email or password");
                 }
+                
                 else if(user.trim()==='success'){
                     alert("Login Successful");
                     window.location.href='index.php';

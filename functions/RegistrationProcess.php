@@ -14,6 +14,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     $address = htmlspecialchars($_POST['address'])??'';
     $password = htmlspecialchars($_POST['password'])??'';
     $confirm_password = htmlspecialchars($_POST['confirmPassword'])??'';
+    $otp = rand(1000, 9999);
 
     $check_email= $conn->prepare("SELECT * FROM tbl_users where email=?");
     $check_email->bind_param("s", $email);
@@ -40,8 +41,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             // ### If every condition is met, insert the data into database ###
             else{
                 $hash = password_hash($password, PASSWORD_DEFAULT);
-                $insert_user = $conn->prepare("INSERT INTO tbl_users (first_name,	last_name,	email,	phone,	city,	zip,	address,	password	) VALUES(?,?,?,?,?,?,?,?);");
-                $insert_user->bind_param("ssssssss", $first_name,$last_name,$email,$phone,$city,$zip,$address,$hash);
+                $insert_user = $conn->prepare("INSERT INTO tbl_users (first_name,	last_name,	email,	phone,	city,	zip,	address,	password,otp	) VALUES(?,?,?,?,?,?,?,?,?);");
+                $insert_user->bind_param("ssssssssi", $first_name,$last_name,$email,$phone,$city,$zip,$address,$hash,$otp);
                 
                 if($insert_user->execute()){
                         echo "added";
