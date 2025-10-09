@@ -9,7 +9,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 // Path to autoloader
-$autoloaderPath = __DIR__ . "/../PHPmailer/vendor/autoload.php";
+$autoloaderPath = __DIR__ . "/../vendor/autoload.php";
 
 if (file_exists($autoloaderPath)) {
     require $autoloaderPath;
@@ -61,7 +61,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 
                 if($insert_user->execute()){
                     // Send OTP email after successful registration
-                    $mail = new PHPmailer(true);
+                    $mail = new PHPMailer(true);
                     
                     try {
                         // Server settings
@@ -110,3 +110,4 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     }
 }
 ?>
+
