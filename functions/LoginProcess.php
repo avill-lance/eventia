@@ -23,6 +23,7 @@
                 $row = $result->fetch_assoc();
 
                 if($row['status']==="inactive"){
+                    $_SESSION['email']=$row['email']; 
                     echo"inactive";
                 }
                 else{
