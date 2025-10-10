@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/bootstrap-icons-1.13.1/bootstrap-icons.css">
     <link rel="stylesheet" href="css/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/booking.css">
 </head>
 <body>
 
@@ -35,13 +36,10 @@
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="packages.php">Packages</a>
+                    <a class="nav-link" href="packages.php">Booking</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="services.php">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="shop.php">Shop</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="blogs.php">Blogs</a>

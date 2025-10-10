@@ -1,0 +1,927 @@
+[2025-10-10 05:28:43] Booking request received | Data: Array
+(
+    [method] => POST
+    [post_data] => Array
+        (
+            [booking_type] => self
+            [booking_reference] => EVT-878204882
+            [venue_type] => rental
+            [venue_id] => 1
+            [event_location] => The Garden Pavilion, Quezon City
+            [full_address] => Beautiful outdoor garden venue perfect for intimate gatherings and garden weddings
+            [alternate_phone] => +1 (592) 558-3187
+            [backup_email] => ciqy@mailinator.com
+            [package] => Wedding Event Package
+            [selected_venue] => 1
+            [venue_address] => 
+            [venue_city] => 
+            [venue_postal] => 
+            [services] => Array
+                (
+                    [0] => Entertainment
+                    [1] => Event Coordination
+                    [2] => Souvenirs & Giveaways
+                )
+
+            [full_name] => Isaiah Wright
+            [email] => lamejelyce@mailinator.com
+            [contact_number] => +1 (644) 392-3628
+            [alternate_contact] => +1 (592) 558-3187
+            [company_name] => Mcguire Reyes LLC
+            [event_date] => 2025-10-10
+            [event_time] => 08:47
+            [preferred_contact] => Any
+            [special_instructions] => Aut odit nesciunt p
+            [payment_method] => GCash
+        )
+
+    [files] => Array
+        (
+            [receipt] => Array
+                (
+                    [name] => Screenshot 2025-10-09 233025.png
+                    [full_path] => Screenshot 2025-10-09 233025.png
+                    [type] => image/png
+                    [tmp_name] => C:\xampp\tmp\php3540.tmp
+                    [error] => 0
+                    [size] => 32514
+                )
+
+        )
+
+)
+
+[2025-10-10 05:28:43] Parsed form data | Data: Array
+(
+    [booking_reference] => EVT-878204882
+    [package] => Wedding Event Package
+    [venue_type] => rental
+    [email] => lamejelyce@mailinator.com
+)
+
+[2025-10-10 05:28:43] File uploaded successfully | Data: C:\xampp\htdocs\Evensia/uploads/receipts/EVT-878204882_1760066923.png
+[2025-10-10 05:28:43] Preparing SQL | Data: INSERT INTO tbl_bookings (
+        booking_reference, user_id, booking_type, event_type, package_name, package_price,
+        venue_type, venue_id, venue_address, event_date, event_time, event_location, full_address,
+        contact_name, contact_email, contact_phone, alternate_phone, company_name, backup_email,
+        preferred_contact, special_instructions, payment_method, receipt_path, total_amount, booking_status, payment_status
+    ) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+[2025-10-10 05:28:43] Booking failed | Data: Array
+(
+    [success] => 
+    [message] => Column count doesn't match value count at row 1
+)
+
+[2025-10-10 05:28:51] Booking request received | Data: Array
+(
+    [method] => POST
+    [post_data] => Array
+        (
+            [booking_type] => self
+            [booking_reference] => EVT-878204882
+            [venue_type] => rental
+            [venue_id] => 1
+            [event_location] => The Garden Pavilion, Quezon City
+            [full_address] => Beautiful outdoor garden venue perfect for intimate gatherings and garden weddings
+            [alternate_phone] => +1 (592) 558-3187
+            [backup_email] => ciqy@mailinator.com
+            [package] => Wedding Event Package
+            [selected_venue] => 1
+            [venue_address] => 
+            [venue_city] => 
+            [venue_postal] => 
+            [services] => Array
+                (
+                    [0] => Entertainment
+                    [1] => Event Coordination
+                    [2] => Souvenirs & Giveaways
+                )
+
+            [full_name] => Isaiah Wright
+            [email] => lamejelyce@mailinator.com
+            [contact_number] => +1 (644) 392-3628
+            [alternate_contact] => +1 (592) 558-3187
+            [company_name] => Mcguire Reyes LLC
+            [event_date] => 2025-10-10
+            [event_time] => 08:47
+            [preferred_contact] => Any
+            [special_instructions] => Aut odit nesciunt p
+            [payment_method] => GCash
+        )
+
+    [files] => Array
+        (
+            [receipt] => Array
+                (
+                    [name] => Screenshot 2025-10-09 233025.png
+                    [full_path] => Screenshot 2025-10-09 233025.png
+                    [type] => image/png
+                    [tmp_name] => C:\xampp\tmp\php5397.tmp
+                    [error] => 0
+                    [size] => 32514
+                )
+
+        )
+
+)
+
+[2025-10-10 05:28:51] Parsed form data | Data: Array
+(
+    [booking_reference] => EVT-878204882
+    [package] => Wedding Event Package
+    [venue_type] => rental
+    [email] => lamejelyce@mailinator.com
+)
+
+[2025-10-10 05:28:51] File uploaded successfully | Data: C:\xampp\htdocs\Evensia/uploads/receipts/EVT-878204882_1760066931.png
+[2025-10-10 05:28:51] Preparing SQL | Data: INSERT INTO tbl_bookings (
+        booking_reference, user_id, booking_type, event_type, package_name, package_price,
+        venue_type, venue_id, venue_address, event_date, event_time, event_location, full_address,
+        contact_name, contact_email, contact_phone, alternate_phone, company_name, backup_email,
+        preferred_contact, special_instructions, payment_method, receipt_path, total_amount, booking_status, payment_status
+    ) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+[2025-10-10 05:28:51] Booking failed | Data: Array
+(
+    [success] => 
+    [message] => Column count doesn't match value count at row 1
+)
+
+[2025-10-10 05:30:05] Booking request received | Data: Array
+(
+    [method] => POST
+    [post_data] => Array
+        (
+            [booking_type] => self
+            [booking_reference] => EVT-878204882
+            [venue_type] => rental
+            [venue_id] => 1
+            [event_location] => The Garden Pavilion, Quezon City
+            [full_address] => Beautiful outdoor garden venue perfect for intimate gatherings and garden weddings
+            [alternate_phone] => +1 (592) 558-3187
+            [backup_email] => ciqy@mailinator.com
+            [package] => Wedding Event Package
+            [selected_venue] => 1
+            [venue_address] => 
+            [venue_city] => 
+            [venue_postal] => 
+            [services] => Array
+                (
+                    [0] => Entertainment
+                    [1] => Event Coordination
+                    [2] => Souvenirs & Giveaways
+                )
+
+            [full_name] => Isaiah Wright
+            [email] => lamejelyce@mailinator.com
+            [contact_number] => +1 (644) 392-3628
+            [alternate_contact] => +1 (592) 558-3187
+            [company_name] => Mcguire Reyes LLC
+            [event_date] => 2025-10-10
+            [event_time] => 08:47
+            [preferred_contact] => Any
+            [special_instructions] => Aut odit nesciunt p
+            [payment_method] => GCash
+        )
+
+    [files] => Array
+        (
+            [receipt] => Array
+                (
+                    [name] => Screenshot 2025-10-09 233025.png
+                    [full_path] => Screenshot 2025-10-09 233025.png
+                    [type] => image/png
+                    [tmp_name] => C:\xampp\tmp\php769C.tmp
+                    [error] => 0
+                    [size] => 32514
+                )
+
+        )
+
+)
+
+[2025-10-10 05:30:05] Parsed form data | Data: Array
+(
+    [booking_reference] => EVT-878204882
+    [package] => Wedding Event Package
+    [venue_type] => rental
+    [email] => lamejelyce@mailinator.com
+)
+
+[2025-10-10 05:30:05] File uploaded successfully | Data: C:\xampp\htdocs\Evensia/uploads/receipts/EVT-878204882_1760067005.png
+[2025-10-10 05:30:05] Preparing SQL | Data: INSERT INTO tbl_bookings (
+        booking_reference, user_id, booking_type, event_type, package_name, package_price,
+        venue_type, venue_id, venue_address, event_date, event_time, event_location, full_address,
+        contact_name, contact_email, contact_phone, alternate_phone, company_name, backup_email,
+        preferred_contact, special_instructions, payment_method, receipt_path, total_amount, booking_status, payment_status
+    ) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+[2025-10-10 05:30:05] Booking failed | Data: Array
+(
+    [success] => 
+    [message] => Column count doesn't match value count at row 1
+)
+
+[2025-10-10 05:30:10] Booking request received | Data: Array
+(
+    [method] => POST
+    [post_data] => Array
+        (
+            [booking_type] => self
+            [booking_reference] => EVT-878204882
+            [venue_type] => rental
+            [venue_id] => 1
+            [event_location] => The Garden Pavilion, Quezon City
+            [full_address] => Beautiful outdoor garden venue perfect for intimate gatherings and garden weddings
+            [alternate_phone] => +1 (592) 558-3187
+            [backup_email] => ciqy@mailinator.com
+            [package] => Wedding Event Package
+            [selected_venue] => 1
+            [venue_address] => 
+            [venue_city] => 
+            [venue_postal] => 
+            [services] => Array
+                (
+                    [0] => Entertainment
+                    [1] => Event Coordination
+                    [2] => Souvenirs & Giveaways
+                )
+
+            [full_name] => Isaiah Wright
+            [email] => lamejelyce@mailinator.com
+            [contact_number] => +1 (644) 392-3628
+            [alternate_contact] => +1 (592) 558-3187
+            [company_name] => Mcguire Reyes LLC
+            [event_date] => 2025-10-10
+            [event_time] => 08:47
+            [preferred_contact] => Any
+            [special_instructions] => Aut odit nesciunt p
+            [payment_method] => GCash
+        )
+
+    [files] => Array
+        (
+            [receipt] => Array
+                (
+                    [name] => Screenshot 2025-10-09 233025.png
+                    [full_path] => Screenshot 2025-10-09 233025.png
+                    [type] => image/png
+                    [tmp_name] => C:\xampp\tmp\php8A25.tmp
+                    [error] => 0
+                    [size] => 32514
+                )
+
+        )
+
+)
+
+[2025-10-10 05:30:10] Parsed form data | Data: Array
+(
+    [booking_reference] => EVT-878204882
+    [package] => Wedding Event Package
+    [venue_type] => rental
+    [email] => lamejelyce@mailinator.com
+)
+
+[2025-10-10 05:30:10] File uploaded successfully | Data: C:\xampp\htdocs\Evensia/uploads/receipts/EVT-878204882_1760067010.png
+[2025-10-10 05:30:10] Preparing SQL | Data: INSERT INTO tbl_bookings (
+        booking_reference, user_id, booking_type, event_type, package_name, package_price,
+        venue_type, venue_id, venue_address, event_date, event_time, event_location, full_address,
+        contact_name, contact_email, contact_phone, alternate_phone, company_name, backup_email,
+        preferred_contact, special_instructions, payment_method, receipt_path, total_amount, booking_status, payment_status
+    ) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+[2025-10-10 05:30:10] Booking failed | Data: Array
+(
+    [success] => 
+    [message] => Column count doesn't match value count at row 1
+)
+
+[2025-10-10 05:30:37] Booking request received | Data: Array
+(
+    [method] => POST
+    [post_data] => Array
+        (
+            [booking_type] => self
+            [booking_reference] => EVT-878204882
+            [venue_type] => rental
+            [venue_id] => 1
+            [event_location] => The Garden Pavilion, Quezon City
+            [full_address] => Beautiful outdoor garden venue perfect for intimate gatherings and garden weddings
+            [alternate_phone] => +1 (592) 558-3187
+            [backup_email] => ciqy@mailinator.com
+            [package] => Wedding Event Package
+            [selected_venue] => 1
+            [venue_address] => 
+            [venue_city] => 
+            [venue_postal] => 
+            [services] => Array
+                (
+                    [0] => Entertainment
+                    [1] => Event Coordination
+                    [2] => Souvenirs & Giveaways
+                )
+
+            [full_name] => Isaiah Wright
+            [email] => lamejelyce@mailinator.com
+            [contact_number] => +1 (644) 392-3628
+            [alternate_contact] => +1 (592) 558-3187
+            [company_name] => Mcguire Reyes LLC
+            [event_date] => 2025-10-10
+            [event_time] => 08:47
+            [preferred_contact] => Any
+            [special_instructions] => Aut odit nesciunt p
+            [payment_method] => GCash
+        )
+
+    [files] => Array
+        (
+            [receipt] => Array
+                (
+                    [name] => Screenshot 2025-10-09 233025.png
+                    [full_path] => Screenshot 2025-10-09 233025.png
+                    [type] => image/png
+                    [tmp_name] => C:\xampp\tmp\phpF004.tmp
+                    [error] => 0
+                    [size] => 32514
+                )
+
+        )
+
+)
+
+[2025-10-10 05:30:37] Parsed form data | Data: Array
+(
+    [booking_reference] => EVT-878204882
+    [package] => Wedding Event Package
+    [venue_type] => rental
+    [email] => lamejelyce@mailinator.com
+)
+
+[2025-10-10 05:30:37] File uploaded successfully | Data: C:\xampp\htdocs\Evensia/uploads/receipts/EVT-878204882_1760067037.png
+[2025-10-10 05:30:37] Preparing SQL | Data: INSERT INTO tbl_bookings (
+        booking_reference, user_id, booking_type, event_type, package_name, package_price,
+        venue_type, venue_id, venue_address, event_date, event_time, event_location, full_address,
+        contact_name, contact_email, contact_phone, alternate_phone, company_name, backup_email,
+        preferred_contact, special_instructions, payment_method, receipt_path, total_amount, booking_status, payment_status
+    ) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+[2025-10-10 05:30:37] Booking failed | Data: Array
+(
+    [success] => 
+    [message] => Column count doesn't match value count at row 1
+)
+
+[2025-10-10 05:33:37] Booking request received | Data: Array
+(
+    [method] => POST
+    [post_data] => Array
+        (
+            [booking_type] => self
+            [booking_reference] => EVT-173957751
+            [venue_type] => rental
+            [venue_id] => 5
+            [event_location] => Classic Conference Hall, Ortigas
+            [full_address] => Professional venue ideal for corporate events and seminars
+            [alternate_phone] => +1 (998) 756-4207
+            [backup_email] => hunipupydy@mailinator.com
+            [package] => Wedding Event Package
+            [selected_venue] => 5
+            [venue_address] => 
+            [venue_city] => 
+            [venue_postal] => 
+            [services] => Array
+                (
+                    [0] => Photography & Videography
+                    [1] => Sound System & Lights
+                    [2] => Event Coordination
+                )
+
+            [full_name] => Suki Mcconnell
+            [email] => pinifyhona@mailinator.com
+            [contact_number] => +1 (748) 304-5294
+            [alternate_contact] => +1 (998) 756-4207
+            [company_name] => Barnes Vega Inc
+            [event_date] => 2025-10-10
+            [event_time] => 15:28
+            [preferred_contact] => Phone
+            [special_instructions] => Mollit corrupti cil
+            [payment_method] => GCash
+        )
+
+    [files] => Array
+        (
+            [receipt] => Array
+                (
+                    [name] => Screenshot (1).png
+                    [full_path] => Screenshot (1).png
+                    [type] => image/png
+                    [tmp_name] => C:\xampp\tmp\phpAF93.tmp
+                    [error] => 0
+                    [size] => 114437
+                )
+
+        )
+
+)
+
+[2025-10-10 05:33:37] Parsed form data | Data: Array
+(
+    [booking_reference] => EVT-173957751
+    [package] => Wedding Event Package
+    [venue_type] => rental
+    [email] => pinifyhona@mailinator.com
+)
+
+[2025-10-10 05:33:37] File uploaded successfully | Data: C:\xampp\htdocs\Evensia/uploads/receipts/EVT-173957751_1760067217.png
+[2025-10-10 05:33:37] Preparing SQL | Data: INSERT INTO tbl_bookings (
+        booking_reference, user_id, booking_type, event_type, package_name, package_price,
+        venue_type, venue_id, venue_address, event_date, event_time, event_location, full_address,
+        contact_name, contact_email, contact_phone, alternate_phone, company_name, backup_email,
+        preferred_contact, special_instructions, payment_method, receipt_path, total_amount, booking_status, payment_status
+    ) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+[2025-10-10 05:33:37] Booking failed | Data: Array
+(
+    [success] => 
+    [message] => Column count doesn't match value count at row 1
+)
+
+[2025-10-10 05:39:36] Booking request received | Data: Array
+(
+    [method] => POST
+    [post_data] => Array
+        (
+            [booking_type] => self
+            [booking_reference] => EVT-514012948
+            [venue_type] => rental
+            [venue_id] => 5
+            [event_location] => Classic Conference Hall, Ortigas
+            [full_address] => Professional venue ideal for corporate events and seminars
+            [alternate_phone] => +1 (437) 841-7832
+            [backup_email] => xatahilo@mailinator.com
+            [package] => Wedding Event Package
+            [selected_venue] => 5
+            [venue_address] => 
+            [venue_city] => 
+            [venue_postal] => 
+            [services] => Array
+                (
+                    [0] => Decoration Setup
+                    [1] => Photography & Videography
+                    [2] => Sound System & Lights
+                )
+
+            [full_name] => Maile Bishop
+            [email] => nojofy@mailinator.com
+            [contact_number] => +1 (987) 352-4859
+            [alternate_contact] => +1 (437) 841-7832
+            [company_name] => Valentine and Monroe Associates
+            [event_date] => 2025-10-10
+            [event_time] => 22:26
+            [preferred_contact] => SMS
+            [special_instructions] => Est excepturi dolor
+            [payment_method] => GCash
+        )
+
+    [files] => Array
+        (
+            [receipt] => Array
+                (
+                    [name] => Screenshot (1).png
+                    [full_path] => Screenshot (1).png
+                    [type] => image/png
+                    [tmp_name] => C:\xampp\tmp\php2BEF.tmp
+                    [error] => 0
+                    [size] => 114437
+                )
+
+        )
+
+)
+
+[2025-10-10 05:39:36] SQL Query | Data: INSERT INTO tbl_bookings (
+        booking_reference, 
+        user_id, 
+        booking_type, 
+        event_type, 
+        package_name, 
+        package_price,
+        venue_type, 
+        venue_id, 
+        venue_address, 
+        event_date, 
+        event_time, 
+        event_location, 
+        full_address,
+        contact_name, 
+        contact_email, 
+        contact_phone, 
+        alternate_phone, 
+        company_name, 
+        backup_email,
+        preferred_contact, 
+        special_instructions, 
+        payment_method, 
+        receipt_path, 
+        total_amount, 
+        booking_status, 
+        payment_status
+    ) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+[2025-10-10 05:39:36] Parameters count | Data: Array
+(
+    [placeholders] => 23
+    [parameters] => 23
+    [parameters_list] => Array
+        (
+            [0] => EVT-514012948
+            [1] => self
+            [2] => Wedding Event Package
+            [3] => Wedding Event Package
+            [4] => 108190
+            [5] => rental
+            [6] => 5
+            [7] => 
+            [8] => 2025-10-10
+            [9] => 22:26
+            [10] => Classic Conference Hall, Ortigas
+            [11] => Professional venue ideal for corporate events and seminars
+            [12] => Maile Bishop
+            [13] => nojofy@mailinator.com
+            [14] => +1 (987) 352-4859
+            [15] => +1 (437) 841-7832
+            [16] => Valentine and Monroe Associates
+            [17] => xatahilo@mailinator.com
+            [18] => SMS
+            [19] => Est excepturi dolor
+            [20] => GCash
+            [21] => C:\xampp\htdocs\Evensia/uploads/receipts/EVT-514012948_1760067576.png
+            [22] => 108190
+        )
+
+)
+
+[2025-10-10 05:39:36] Booking inserted successfully | Data: Array
+(
+    [booking_id] => 2
+)
+
+[2025-10-10 05:39:37] Services processed | Data: Array
+(
+    [services_count] => 3
+    [new_total_amount] => 138190
+)
+
+[2025-10-10 05:39:37] Booking completed successfully | Data: Array
+(
+    [success] => 1
+    [message] => Booking submitted successfully
+    [booking_reference] => EVT-514012948
+    [total_amount] => 138190
+    [booking_id] => 2
+)
+
+[2025-10-10 05:42:45] Booking request received | Data: Array
+(
+    [method] => POST
+    [post_data] => Array
+        (
+            [booking_type] => self
+            [booking_reference] => EVT-718715162
+            [venue_type] => rental
+            [venue_id] => 5
+            [event_location] => Classic Conference Hall, Ortigas
+            [full_address] => Professional venue ideal for corporate events and seminars
+            [alternate_phone] => +1 (339) 681-3476
+            [backup_email] => lepijyla@mailinator.com
+            [package] => Wedding Event Package
+            [selected_venue] => 5
+            [venue_address] => 
+            [venue_city] => 
+            [venue_postal] => 
+            [services] => Array
+                (
+                    [0] => Decoration Setup
+                )
+
+            [full_name] => Laurel Baldwin
+            [email] => dyhan@mailinator.com
+            [contact_number] => +1 (824) 692-2422
+            [alternate_contact] => +1 (339) 681-3476
+            [company_name] => Casey and Peters Associates
+            [event_date] => 2025-10-10
+            [event_time] => 08:08
+            [preferred_contact] => SMS
+            [special_instructions] => Suscipit in incididu
+            [payment_method] => GCash
+        )
+
+    [files] => Array
+        (
+            [receipt] => Array
+                (
+                    [name] => Screenshot (1).png
+                    [full_path] => Screenshot (1).png
+                    [type] => image/png
+                    [tmp_name] => C:\xampp\tmp\phpE09.tmp
+                    [error] => 0
+                    [size] => 114437
+                )
+
+        )
+
+)
+
+[2025-10-10 05:42:45] SQL Query | Data: INSERT INTO tbl_bookings (
+        booking_reference, 
+        user_id, 
+        booking_type, 
+        event_type, 
+        package_name, 
+        package_price,
+        venue_type, 
+        venue_id, 
+        venue_address, 
+        event_date, 
+        event_time, 
+        event_location, 
+        full_address,
+        contact_name, 
+        contact_email, 
+        contact_phone, 
+        alternate_phone, 
+        company_name, 
+        backup_email,
+        preferred_contact, 
+        special_instructions, 
+        payment_method, 
+        receipt_path, 
+        total_amount, 
+        booking_status, 
+        payment_status
+    ) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+[2025-10-10 05:42:45] Parameters count | Data: Array
+(
+    [placeholders] => 23
+    [parameters] => 23
+    [parameters_list] => Array
+        (
+            [0] => EVT-718715162
+            [1] => self
+            [2] => Wedding Event Package
+            [3] => Wedding Event Package
+            [4] => 108190
+            [5] => rental
+            [6] => 5
+            [7] => 
+            [8] => 2025-10-10
+            [9] => 08:08
+            [10] => Classic Conference Hall, Ortigas
+            [11] => Professional venue ideal for corporate events and seminars
+            [12] => Laurel Baldwin
+            [13] => dyhan@mailinator.com
+            [14] => +1 (824) 692-2422
+            [15] => +1 (339) 681-3476
+            [16] => Casey and Peters Associates
+            [17] => lepijyla@mailinator.com
+            [18] => SMS
+            [19] => Suscipit in incididu
+            [20] => GCash
+            [21] => C:\xampp\htdocs\Evensia/uploads/receipts/EVT-718715162_1760067765.png
+            [22] => 108190
+        )
+
+)
+
+[2025-10-10 05:42:45] Booking inserted successfully | Data: Array
+(
+    [booking_id] => 3
+)
+
+[2025-10-10 05:42:45] Services processed | Data: Array
+(
+    [services_count] => 1
+    [new_total_amount] => 118190
+)
+
+[2025-10-10 05:42:45] Booking completed successfully | Data: Array
+(
+    [success] => 1
+    [message] => Booking submitted successfully
+    [booking_reference] => EVT-718715162
+    [total_amount] => 118190
+    [booking_id] => 3
+)
+
+[2025-10-10 05:49:43] Booking request received | Data: Array
+(
+    [method] => POST
+    [post_data] => Array
+        (
+            [booking_type] => self
+            [booking_reference] => EVT-145881120
+            [venue_type] => rental
+            [venue_id] => 5
+            [event_location] => Classic Conference Hall, Ortigas
+            [full_address] => Professional venue ideal for corporate events and seminars
+            [alternate_phone] => +1 (619) 884-2201
+            [backup_email] => huwe@mailinator.com
+            [package] => Wedding Event Package
+            [selected_venue] => 5
+            [venue_address] => 
+            [venue_city] => 
+            [venue_postal] => 
+            [services] => Array
+                (
+                    [0] => Photography & Videography
+                )
+
+            [full_name] => Idona Page
+            [email] => bijaty@mailinator.com
+            [contact_number] => +1 (636) 128-1505
+            [alternate_contact] => +1 (619) 884-2201
+            [company_name] => Rogers Patrick Co
+            [event_date] => 2025-10-10
+            [event_time] => 22:36
+            [preferred_contact] => Email
+            [special_instructions] => Eius dolore qui prov
+            [payment_method] => GCash
+        )
+
+    [files] => Array
+        (
+            [receipt] => Array
+                (
+                    [name] => Screenshot (1).png
+                    [full_path] => Screenshot (1).png
+                    [type] => image/png
+                    [tmp_name] => C:\xampp\tmp\php6F7A.tmp
+                    [error] => 0
+                    [size] => 114437
+                )
+
+        )
+
+)
+
+[2025-10-10 05:49:43] SQL Query | Data: INSERT INTO tbl_bookings (
+        booking_reference, 
+        user_id, 
+        booking_type, 
+        event_type, 
+        package_name, 
+        package_price,
+        venue_type, 
+        venue_id, 
+        venue_address, 
+        event_date, 
+        event_time, 
+        event_location, 
+        full_address,
+        contact_name, 
+        contact_email, 
+        contact_phone, 
+        alternate_phone, 
+        company_name, 
+        backup_email,
+        preferred_contact, 
+        special_instructions, 
+        payment_method, 
+        receipt_path, 
+        total_amount, 
+        booking_status, 
+        payment_status
+    ) VALUES (?, , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+[2025-10-10 05:49:43] Booking failed | Data: Array
+(
+    [success] => 
+    [message] => You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ' ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending',...' at line 28
+)
+
+[2025-10-10 05:50:23] Booking request received | Data: Array
+(
+    [method] => POST
+    [post_data] => Array
+        (
+            [booking_type] => self
+            [booking_reference] => EVT-145881120
+            [venue_type] => rental
+            [venue_id] => 5
+            [event_location] => Classic Conference Hall, Ortigas
+            [full_address] => Professional venue ideal for corporate events and seminars
+            [alternate_phone] => +1 (619) 884-2201
+            [backup_email] => huwe@mailinator.com
+            [package] => Wedding Event Package
+            [selected_venue] => 5
+            [venue_address] => 
+            [venue_city] => 
+            [venue_postal] => 
+            [services] => Array
+                (
+                    [0] => Photography & Videography
+                )
+
+            [full_name] => Idona Page
+            [email] => bijaty@mailinator.com
+            [contact_number] => +1 (636) 128-1505
+            [alternate_contact] => +1 (619) 884-2201
+            [company_name] => Rogers Patrick Co
+            [event_date] => 2025-10-10
+            [event_time] => 22:36
+            [preferred_contact] => Email
+            [special_instructions] => Eius dolore qui prov
+            [payment_method] => GCash
+        )
+
+    [files] => Array
+        (
+            [receipt] => Array
+                (
+                    [name] => Screenshot (1).png
+                    [full_path] => Screenshot (1).png
+                    [type] => image/png
+                    [tmp_name] => C:\xampp\tmp\phpC76.tmp
+                    [error] => 0
+                    [size] => 114437
+                )
+
+        )
+
+)
+
+[2025-10-10 05:50:23] SQL Query | Data: INSERT INTO tbl_bookings (
+        booking_reference, 
+        user_id, 
+        booking_type, 
+        event_type, 
+        package_name, 
+        package_price,
+        venue_type, 
+        venue_id, 
+        venue_address, 
+        event_date, 
+        event_time, 
+        event_location, 
+        full_address,
+        contact_name, 
+        contact_email, 
+        contact_phone, 
+        alternate_phone, 
+        company_name, 
+        backup_email,
+        preferred_contact, 
+        special_instructions, 
+        payment_method, 
+        receipt_path, 
+        total_amount, 
+        booking_status, 
+        payment_status
+    ) VALUES (?, 6, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending')
+[2025-10-10 05:50:23] Parameters count | Data: Array
+(
+    [placeholders] => 23
+    [parameters] => 23
+    [parameters_list] => Array
+        (
+            [0] => EVT-145881120
+            [1] => self
+            [2] => Wedding Event Package
+            [3] => Wedding Event Package
+            [4] => 108190
+            [5] => rental
+            [6] => 5
+            [7] => 
+            [8] => 2025-10-10
+            [9] => 22:36
+            [10] => Classic Conference Hall, Ortigas
+            [11] => Professional venue ideal for corporate events and seminars
+            [12] => Idona Page
+            [13] => bijaty@mailinator.com
+            [14] => +1 (636) 128-1505
+            [15] => +1 (619) 884-2201
+            [16] => Rogers Patrick Co
+            [17] => huwe@mailinator.com
+            [18] => Email
+            [19] => Eius dolore qui prov
+            [20] => GCash
+            [21] => C:\xampp\htdocs\Evensia/uploads/receipts/EVT-145881120_1760068223.png
+            [22] => 108190
+        )
+
+)
+
+[2025-10-10 05:50:23] Booking inserted successfully | Data: Array
+(
+    [booking_id] => 4
+)
+
+[2025-10-10 05:50:23] Services processed | Data: Array
+(
+    [services_count] => 1
+    [new_total_amount] => 120190
+)
+
+[2025-10-10 05:50:23] Booking completed successfully | Data: Array
+(
+    [success] => 1
+    [message] => Booking submitted successfully
+    [booking_reference] => EVT-145881120
+    [total_amount] => 120190
+    [booking_id] => 4
+)
+
