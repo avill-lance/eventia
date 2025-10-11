@@ -1,7 +1,7 @@
 <?php
     // ### Establish Session ###
     include  __DIR__ . "/../functions/session.php";
-    
+
     // ### Include functions compilation ###
     include  __DIR__ . "/../functions/FunctionCompilation.php";
     isLoggedIn();

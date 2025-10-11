@@ -50,10 +50,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-4y mt-2">
                             <button class="btn btn-secondary w-100" type="button" id="editBtn" name="editBtn">Edit Profile</button>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4y mt-2">
+                            <button class="btn btn-info w-100" type="button" id="changePassBtn" name="changePassBtn">Change Password</button>
+                        </div>
+                        <div class="col-4y mt-2">
                             <button class="btn btn-danger w-100" type="button" id="logoutBtn" name="logoutBtn">Logout</button>
                         </div>
                     </div>

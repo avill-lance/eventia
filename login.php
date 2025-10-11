@@ -1,6 +1,7 @@
 <?php 
     //Establish Session
     include __DIR__ . "/functions/session.php";
+    print_r($_SESSION);
 ?>
 
 <!DOCTYPE html>

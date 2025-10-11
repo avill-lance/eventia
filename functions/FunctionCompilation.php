@@ -6,6 +6,13 @@
 //Checks if there is an active session and log out if none.
 function isLoggedIn(){
     if(!isset($_SESSION['email']) || !isset($_SESSION['first_name']) || !isset($_SESSION['last_name'])){
+        header("Location: login.php");
+        exit(0);
+    }
+}
+//Checks if there is an active session for user to change their password.
+function checkToken(){
+    if(!isset($_SESSION['token'])){
     header("Location: login.php");
     exit(0);
     }
@@ -50,4 +57,6 @@ if(isset($_POST["passBtn"])){
     }
     }
 }
+
+
 ?>

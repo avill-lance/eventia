@@ -1,6 +1,9 @@
 <?php
 date_default_timezone_set('Asia/Manila'); // Adjust to your database timezone
 
+// ### Establish Session ###
+include  __DIR__ . "/session.php";
+
 // Establish database connection
 include  __DIR__ . "/../database/config.php";
 
@@ -67,8 +70,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 <p>Best regards,<br>Eventia Team</p>
             ";
             $mail->AltBody = "Your OTP verification code is: {$new_otp}. This code will expire in 10 minutes.";
-
+            $_SESSION['token']=1;
             $mail->send();
+            
             echo "sent";
         } catch (Exception $e) {
             echo "mail_error";

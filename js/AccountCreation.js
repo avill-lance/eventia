@@ -99,8 +99,13 @@ $(document).ready(function(){
                     alert("Invalid email or password");
                 }
                 else if(user.trim()==='success'){
-                    alert("Login Successful");
-                    window.location.href='index.php';
+                    Swal.fire({
+                    title: "Successful Login!",
+                    icon: "success"});
+                    setTimeout(() => {
+                        window.location.href='index.php';
+                    }, 2000);
+                    
                 }
                 else{
                     alert("Error: " + user);
@@ -112,7 +117,6 @@ $(document).ready(function(){
         })
     })
 })
-
 function getOTP(){
     // Get email from login form
     const email = $('#email').val();

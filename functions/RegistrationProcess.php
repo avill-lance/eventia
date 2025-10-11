@@ -3,13 +3,16 @@ date_default_timezone_set('Asia/Manila'); // Adjust to your database timezone
 // ### Establish Database Connection ###
 include   __DIR__ . "/../database/config.php";
 
+// ### Establish Database Connection ###
+include  "session.php";
+
 // Import PHPMailer classes
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 // Path to autoloader
-$autoloaderPath = __DIR__ . "/../vendor/autoload.php";
+$autoloaderPath = __DIR__ . "/../PHPmailer/vendor/autoload.php";
 
 if (file_exists($autoloaderPath)) {
     require $autoloaderPath;
@@ -60,6 +63,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 $insert_user->bind_param("ssssssssis", $first_name,$last_name,$email,$phone,$city,$zip,$address,$hash,$otp,$otp_expiry);
                 
                 if($insert_user->execute()){
+                    $_SESSION["token"]=1;
                     // Send OTP email after successful registration
                     $mail = new PHPMailer(true);
                     
