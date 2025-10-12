@@ -1,5 +1,4 @@
 <?php include __DIR__."/components/header.php"; ?>
-
     <div class="container d-flex vh-90 gap-4 align-items-center justify-content-center mt-5">
         <div class="card">
             <div class="card-header">
@@ -51,10 +50,13 @@
                     </div>
                     <div class="row">
                         <div class="col-4y mt-2">
-                            <button class="btn btn-secondary w-100" type="button" id="editBtn" name="editBtn">Edit Profile</button>
+                            <button class="btn btn-info w-100" type="button" id="changePassBtn" name="changePassBtn">Change Password</button>
                         </div>
                         <div class="col-4y mt-2">
-                            <button class="btn btn-info w-100" type="button" id="changePassBtn" name="changePassBtn">Change Password</button>
+                            <a class="btn btn-warning w-100" type="button" id="viewTransactions" name="viewTransactions" href="viewtransactions.php" >Transactions</a>
+                        </div>
+                        <div class="col-4y mt-2">
+                            <button class="btn btn-secondary w-100" type="button" id="editBtn" name="editBtn">Edit Profile</button>
                         </div>
                         <div class="col-4y mt-2">
                             <button class="btn btn-danger w-100" type="button" id="logoutBtn" name="logoutBtn">Logout</button>
@@ -64,5 +66,38 @@
             </form>
         </div>
     </div>
+    <script>
+        $(document).ready(function(){
+            $("#viewForm").submit(function(e){
+                e.preventDefault();
+                $.ajax({
+                    url:'functions/ViewTransactions.php',
+                    method:"POST",
+                    data: $("#viewForm").serialize(),
+
+                    success: function(phpresponse){
+                        if(phpresponse.message.trim()==='verified'){
+                            window.location.href='functions/ViewTransactions.php';
+                            exit(0);
+                        }
+                        else{
+                            Swal.fire({
+                                title: "User is cannot be found",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#d33",
+                                confirmButtonText: "okay",
+                            })
+                        }
+                    },
+                    error: function(){
+                        console.error('AJAX Error: ' + error);
+                        Swal.fire('Error!', 'Network error. Please check your connection.', 'error');
+                    }
+                })
+            })
+        })
+
+    </script>
 
 <?php include __DIR__."/components/footer.php" ?>

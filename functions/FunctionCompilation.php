@@ -12,7 +12,7 @@ function isLoggedIn(){
 }
 //Checks if there is an active session for user to change their password.
 function checkToken(){
-    if(!isset($_SESSION['token'])){
+    if(!isset($_SESSION['pending_verification'])){
     header("Location: login.php");
     exit(0);
     }

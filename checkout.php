@@ -66,27 +66,6 @@
             <div class="col-lg-8 order-lg-1">
                 <!-- Wrap everything in one form -->
                 <form id="checkOutForm" method="POST">
-                    <!-- Payment Method Selection -->
-                    <div class="card mb-4">
-                        <div class="card-header bg-light-custom">
-                            <h5 class="mb-0">Payment Method</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="realPayment" value="real" checked>
-                                <label class="form-check-label" for="realPayment">
-                                    Real Payment (PayMongo)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="testPayment" value="test">
-                                <label class="form-check-label" for="testPayment">
-                                    Test Payment (Simulate - Localhost)
-                                </label>
-                            </div>
-                            <input type="hidden" name="test_mode" id="testMode" value="false">
-                        </div>
-                    </div>
 
                     <div class="card mb-4">
                         <div class="card-header bg-light-custom">
@@ -199,10 +178,6 @@
         $("#checkOutForm")[0].reportValidity();
         return;
     }
-    
-    const isTestMode = $('#testMode').val() === 'true';
-    
-    console.log("Submitting payment - Test Mode:", isTestMode);
     
     // Show loading state
     const submitBtn = $('#checkOut');

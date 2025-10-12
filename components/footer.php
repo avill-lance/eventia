@@ -22,6 +22,7 @@
                     <li><a href="#contact" class="text-light text-decoration-none">Contact</a></li>
                 </ul>
             </div>
+        </div> <!-- Added missing closing div -->
         <hr class="mt-0 mb-4">
         <div class="row">
             <div class="col-md-12 text-center">
@@ -30,10 +31,15 @@
         </div>
     </div>
 </footer>
-<script src="js/admin/admin.js"></script>
+
+<!-- JavaScript Files -->
 <script src="js/jquery-3.7.1.js"></script>
-<script src="js/js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script> 
+<script src="js/datatables.js"></script>
 <script src="js/sweetalert2@11.js"></script>
 <script src="js/EditProfile.js"></script>
+<script src="js/viewtransactions.js"></script>
+<script src="js/self_booking.js"></script>
+<script src="js/admin/admin.js"></script>
 </body>
 </html>

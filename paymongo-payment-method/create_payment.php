@@ -3,28 +3,28 @@
 if($_SERVER['REQUEST_METHOD']=='POST'){
     
     // Check if this is a test payment
-    $isTest = isset($_POST['test_mode']) && $_POST['test_mode'] === 'true';
+    // $isTest = isset($_POST['test_mode']) && $_POST['test_mode'] === 'true';
     
-    if($isTest) {
-        // Simulate payment for local testing
-        $referenceNumber = 'TEST-' . uniqid();
-        $localUrl = "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/../payment-success.php?ref=" . $referenceNumber . "&test=true";
+    // if($isTest) {
+    //     // Simulate payment for local testing
+    //     $referenceNumber = 'TEST-' . uniqid();
+    //     $localUrl = "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/../payment-status.php?ref=" . $referenceNumber . "&test=true";
         
-        // Log the test payment
-        error_log("=== TEST PAYMENT ===");
-        error_log("Reference: " . $referenceNumber);
-        error_log("Redirect URL: " . $localUrl);
-        error_log("=== END TEST PAYMENT ===");
+    //     // Log the test payment
+    //     error_log("=== TEST PAYMENT ===");
+    //     error_log("Reference: " . $referenceNumber);
+    //     error_log("Redirect URL: " . $localUrl);
+    //     error_log("=== END TEST PAYMENT ===");
         
-        header('Content-Type: application/json');
-        echo json_encode([
-            'success' => true,
-            'checkout_url' => $localUrl,
-            'reference' => $referenceNumber,
-            'test_mode' => true
-        ]);
-        exit;
-    }
+    //     header('Content-Type: application/json');
+    //     echo json_encode([
+    //         'success' => true,
+    //         'checkout_url' => $localUrl,
+    //         'reference' => $referenceNumber,
+    //         'test_mode' => true
+    //     ]);
+    //     exit;
+    // }
     
     // Your PayMongo TEST Secret Key
     $secretKey = "sk_test_rj6TvFQRA4PKi88QGLraUWDv";

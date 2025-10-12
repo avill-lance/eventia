@@ -3,7 +3,7 @@ Response: Array
 (
     [data] => Array
         (
-            [id] => cs_p9Q66WqAXXmayWYwRW2iX5UE
+            [id] => cs_CSHtZEi1NNRNRRhoFwKaY7UF
             [type] => checkout_session
             [attributes] => Array
                 (
@@ -25,23 +25,23 @@ Response: Array
                         )
 
                     [billing_information_fields_editable] => enabled
-                    [cancel_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251012-095143-68eb5e0fa0c92
-                    [checkout_url] => https://checkout.paymongo.com/cs_p9Q66WqAXXmayWYwRW2iX5UE_client_na7ixNHqL65QwtGF4ckLT2PH#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
-                    [client_key] => cs_p9Q66WqAXXmayWYwRW2iX5UE_client_na7ixNHqL65QwtGF4ckLT2PH
+                    [cancel_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251012-192146-68ebe3aad7ae0
+                    [checkout_url] => https://checkout.paymongo.com/cs_CSHtZEi1NNRNRRhoFwKaY7UF_client_EdPvbS5HmBrLi8T5usDFbpcJ#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
+                    [client_key] => cs_CSHtZEi1NNRNRRhoFwKaY7UF_client_EdPvbS5HmBrLi8T5usDFbpcJ
                     [customer_email] => 
-                    [description] => Birthday Party Booking
+                    [description] => Wedding Event Package Booking
                     [line_items] => Array
                         (
                             [0] => Array
                                 (
-                                    [amount] => 9999900
+                                    [amount] => 11819000
                                     [currency] => PHP
                                     [description] => 
                                     [images] => Array
                                         (
                                         )
 
-                                    [name] => Birthday Party - Quinn Guerra
+                                    [name] => Wedding Event Package - Herrod Gardner
                                     [quantity] => 1
                                 )
 
@@ -55,24 +55,24 @@ Response: Array
 
                     [payment_intent] => Array
                         (
-                            [id] => pi_f3f76C2b9JFZ5sPQ2wJDKEue
+                            [id] => pi_2LVSGM5E7Baj8dRGvW5EEnYu
                             [type] => payment_intent
                             [attributes] => Array
                                 (
-                                    [amount] => 9999900
+                                    [amount] => 11819000
                                     [capture_type] => automatic
-                                    [client_key] => pi_f3f76C2b9JFZ5sPQ2wJDKEue_client_MF4JUxpdNTfZQ8bWSqebudeU
+                                    [client_key] => pi_2LVSGM5E7Baj8dRGvW5EEnYu_client_eLAaDcXC1T2QyNzDD2Ye3Yvt
                                     [currency] => PHP
-                                    [description] => Birthday Party Booking
+                                    [description] => Wedding Event Package Booking
                                     [livemode] => 
-                                    [original_amount] => 9999900
+                                    [original_amount] => 11819000
                                     [statement_descriptor] => Eventia Incorporation
                                     [status] => awaiting_payment_method
                                     [last_payment_error] => 
                                     [payment_method_allowed] => Array
                                         (
-                                            [0] => card
-                                            [1] => grab_pay
+                                            [0] => grab_pay
+                                            [1] => card
                                             [2] => gcash
                                         )
 
@@ -92,8 +92,8 @@ Response: Array
 
                                     [metadata] => 
                                     [setup_future_usage] => 
-                                    [created_at] => 1760255505
-                                    [updated_at] => 1760255505
+                                    [created_at] => 1760289707
+                                    [updated_at] => 1760289707
                                 )
 
                         )
@@ -101,18 +101,18 @@ Response: Array
                     [payment_method_types] => Array
                         (
                             [0] => gcash
-                            [1] => grab_pay
-                            [2] => card
+                            [1] => card
+                            [2] => grab_pay
                         )
 
-                    [reference_number] => EVT-20251012-095143-68eb5e0fa0c92
+                    [reference_number] => EVT-20251012-192146-68ebe3aad7ae0
                     [send_email_receipt] => 
                     [show_description] => 1
                     [show_line_items] => 1
                     [status] => active
-                    [success_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251012-095143-68eb5e0fa0c92
-                    [created_at] => 1760255505
-                    [updated_at] => 1760255505
+                    [success_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251012-192146-68ebe3aad7ae0
+                    [created_at] => 1760289707
+                    [updated_at] => 1760289707
                     [metadata] => 
                 )
 

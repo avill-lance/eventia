@@ -86,7 +86,7 @@ while ($row = $services_result->fetch_assoc()) {
             </div>
 
             <!-- Booking Form -->
-            <form id="bookingForm" method="POST" action="process_booking.php" enctype="multipart/form-data">
+            <form id="bookingForm" name="bookingForm" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="booking_type" value="self">
                 <input type="hidden" name="booking_reference" id="bookingReference">
                 <input type="hidden" name="venue_type" id="venueType">
@@ -375,7 +375,7 @@ while ($row = $services_result->fetch_assoc()) {
                 <div class="step" id="step-5">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="mb-0">Step 5: Payment Information</h4>
+                            <h4 class="mb-0">Step 5: Payment</h4>
                         </div>
                         <div class="card-body">
                             <!-- Order Summary -->
@@ -389,89 +389,11 @@ while ($row = $services_result->fetch_assoc()) {
                                     </table>
                                 </div>
                                 <div class="text-end">
-                                    <h4 class="text-primary" id="totalAmount">Total: ₱0.00</h4>
+                                    <h4 class="text-primary" id="amount">Total: ₱0.00</h4>
                                 </div>
                             </div>
 
-                            <!-- Payment Method -->
-                            <div class="mb-4">
-                                <h5 class="mb-3">Select Payment Method</h5>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card payment-option">
-                                            <div class="card-body">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="payment_method" id="payment1" value="GCash" required>
-                                                    <label class="form-check-label w-100" for="payment1">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bi bi-phone me-3 fs-4"></i>
-                                                            <div>
-                                                                <h6 class="mb-1">GCash</h6>
-                                                                <small class="text-muted">Pay using GCash mobile app</small>
-                                                            </div>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card payment-option">
-                                            <div class="card-body">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="payment_method" id="payment2" value="Bank Transfer" required>
-                                                    <label class="form-check-label w-100" for="payment2">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bi bi-bank me-3 fs-4"></i>
-                                                            <div>
-                                                                <h6 class="mb-1">Bank Transfer</h6>
-                                                                <small class="text-muted">Transfer to our bank account</small>
-                                                            </div>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card payment-option">
-                                            <div class="card-body">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="payment_method" id="payment3" value="PayPal" required>
-                                                    <label class="form-check-label w-100" for="payment3">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bi bi-paypal me-3 fs-4"></i>
-                                                            <div>
-                                                                <h6 class="mb-1">PayPal</h6>
-                                                                <small class="text-muted">Pay using PayPal</small>
-                                                            </div>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card payment-option">
-                                            <div class="card-body">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="payment_method" id="payment4" value="Installment" required>
-                                                    <label class="form-check-label w-100" for="payment4">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bi bi-calendar-check me-3 fs-4"></i>
-                                                            <div>
-                                                                <h6 class="mb-1">Installment Plan</h6>
-                                                                <small class="text-muted">Pay in multiple installments</small>
-                                                            </div>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                            
                             <!-- Receipt Upload -->
                             <div id="receiptUpload" class="mb-4" style="display: none;">
                                 <h5 class="mb-3">Upload Payment Receipt</h5>
@@ -496,7 +418,7 @@ while ($row = $services_result->fetch_assoc()) {
 
                             <div class="mt-4 d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" onclick="prevStep(4)">Previous</button>
-                                <button type="submit" class="btn btn-success" id="submitBooking">Complete Booking</button>
+                                <button type="button" class="btn btn-success" id="submitBooking" name="submitBooking">Proceed to Paymongo</button>
                             </div>
                         </div>
                     </div>
@@ -574,14 +496,21 @@ let currentCustomizingService = null;
 document.addEventListener('DOMContentLoaded', function() {
     generateBookingReference();
     updateOrderSummary();
+    updateTotalAmount();
     
     // Add event listeners for dynamic updates
     document.querySelectorAll('input[name="package"]').forEach(radio => {
-        radio.addEventListener('change', updateOrderSummary);
+        radio.addEventListener('change', function() {
+            updateOrderSummary();
+            updateTotalAmount();
+        });
     });
     
     document.querySelectorAll('.service-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', updateOrderSummary);
+        checkbox.addEventListener('change', function() {
+            updateOrderSummary();
+            updateTotalAmount();
+        });
     });
     
     document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
@@ -597,6 +526,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Function to calculate total amount
+function calculateTotalAmount() {
+    let total = 0;
+    
+    // Package price
+    const selectedPackage = document.querySelector('input[name="package"]:checked');
+    if(selectedPackage) {
+        total += parseFloat(selectedPackage.getAttribute('data-price')) || 0;
+    }
+    
+    // Services prices
+    document.querySelectorAll('.service-checkbox:checked').forEach(service => {
+        total += parseFloat(service.getAttribute('data-price')) || 0;
+    });
+    
+    return total;
+}
+
+// Function to update total amount display
+function updateTotalAmount() {
+    const total = calculateTotalAmount();
+    document.getElementById('amount').textContent = 'Total: ₱' + total.toLocaleString(undefined, { 
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2 
+    });
+}
 
 function generateBookingReference() {
     const timestamp = Date.now().toString();
@@ -804,6 +760,7 @@ function nextStep(step) {
     
     if (step === 5) {
         updateOrderSummary();
+        updateTotalAmount();
     }
 }
 
@@ -876,7 +833,7 @@ function validateStep(step) {
             }
         }
         
-        const email = document.getElementById('contact_email').value;
+                const email = document.getElementById('contact_email').value;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             alert('Please enter a valid email address.');
@@ -932,43 +889,43 @@ function updateOrderSummary() {
     });
     
     summaryContainer.innerHTML = summaryHTML || '<tr><td colspan="3" class="text-center text-muted">No items selected</td></tr>';
-    document.getElementById('totalAmount').textContent = `Total: ₱${total.toLocaleString()}`;
+    document.getElementById('amount').textContent = `Total: ₱${total.toLocaleString()}`;
 }
 
 // Form submission
-document.getElementById('bookingForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+// document.getElementById('bookingForm').addEventListener('submit', function(e) {
+//     e.preventDefault();
     
-    if (!validateStep(5)) {
-        return;
-    }
+//     if (!validateStep(5)) {
+//         return;
+//     }
     
-    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
-    loadingModal.show();
+//     const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+//     loadingModal.show();
     
-    const formData = new FormData(this);
+//     const formData = new FormData(this);
     
-    fetch('process_booking.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        loadingModal.hide();
+//     fetch('process_booking.php', {
+//         method: 'POST',
+//         body: formData
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         loadingModal.hide();
         
-        if (data.success) {
-            alert('Booking submitted successfully! Your reference number is: ' + data.booking_reference);
-            window.location.href = 'booking_success.php?reference=' + data.booking_reference;
-        } else {
-            alert('Error: ' + data.message);
-        }
-    })
-    .catch(error => {
-        loadingModal.hide();
-        alert('An error occurred while processing your booking. Please try again.');
-        console.error('Error:', error);
-    });
-});
+//         if (data.success) {
+//             alert('Booking submitted successfully! Your reference number is: ' + data.booking_reference);
+//             window.location.href = 'booking_success.php?reference=' + data.booking_reference;
+//         } else {
+//             alert('Error: ' + data.message);
+//         }
+//     })
+//     .catch(error => {
+//         loadingModal.hide();
+//         alert('An error occurred while processing your booking. Please try again.');
+//         console.error('Error:', error);
+//     });
+// });
 </script>
 
 <?php include __DIR__."/components/footer.php" ?>
