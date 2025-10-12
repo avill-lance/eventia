@@ -1,7 +1,7 @@
 <?php 
     //Establish Session
     include __DIR__ . "/functions/session.php";
-    print_r($_SESSION);
+    // Removed the print_r($_SESSION) that was causing issues
 ?>
 
 <!DOCTYPE html>

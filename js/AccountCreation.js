@@ -20,7 +20,6 @@ $(document).ready(function(){
                             confirmButtonText: 'Verify Email'
                         }).then((result) => {
                             if (result.isConfirmed) {
-
                                 window.location.href = 'verifyingemail.php?email=' + encodeURIComponent(response.email);
                             }
                         });
@@ -42,25 +41,26 @@ $(document).ready(function(){
                         });
                     }
                     else if(phpresponse.trim()==='existing'){
-                        alert('Email has already been used');
+                        Swal.fire('Error!', 'Email has already been used', 'error');
                     }
                     else if(phpresponse.trim()==='required'){
-                        alert('All fields are required!');
+                        Swal.fire('Error!', 'All fields are required!', 'error');
                     }
                     else if(phpresponse.trim()==='differentpassword'){
-                        alert('Passwords does not match!');
+                        Swal.fire('Error!', 'Passwords does not match!', 'error');
                     }
                     else if(phpresponse.trim()==='error'){
-                        alert('User was not added due to error...');
+                        Swal.fire('Error!', 'User was not added due to database error...', 'error');
                     }
                     else{
-                        alert('User was not added' + phpresponse);
-                        console.log(phpresponse);
+                        console.error('Unexpected response:', phpresponse);
+                        Swal.fire('Error!', 'An unexpected error occurred. Please try again.', 'error');
                     }
                 }
             },
             error: function(xhr, status, error){
-                alert("AJAX ERROR: " + error);
+                console.error('AJAX Error:', error);
+                Swal.fire('Error!', 'Network error. Please check your connection.', 'error');
             }
         })
     })
@@ -75,7 +75,7 @@ $(document).ready(function(){
             
             success: function(user){
                 if(user.trim()==='empty'){
-                    alert("Fields are required");
+                    Swal.fire('Error!', 'All fields are required', 'error');
                 }
                 else if(user.trim()==='inactive'){
                     Swal.fire({
@@ -93,10 +93,10 @@ $(document).ready(function(){
                     });
                 }
                 else if(user.trim()==='wrong'){
-                    alert("Wrong email or password");
+                    Swal.fire('Error!', 'Wrong email or password', 'error');
                 }
                 else if(user.trim()==='invalid'){
-                    alert("Invalid email or password");
+                    Swal.fire('Error!', 'Invalid email or password', 'error');
                 }
                 else if(user.trim()==='success'){
                     Swal.fire({
@@ -108,15 +108,18 @@ $(document).ready(function(){
                     
                 }
                 else{
-                    alert("Error: " + user);
+                    console.error('Login error:', user);
+                    Swal.fire('Error!', 'An unexpected error occurred. Please try again.', 'error');
                 }
             },
             error: function(xhr, status,error){
-                alert("AJAX ERROR: " + error);
+                console.error('AJAX Error:', error);
+                Swal.fire('Error!', 'Network error. Please check your connection.', 'error');
             }
         })
     })
 })
+
 function getOTP(){
     // Get email from login form
     const email = $('#email').val();
@@ -149,7 +152,8 @@ function getOTP(){
             } else if (response.trim() === 'database_error') {
                 Swal.fire('Error!', 'Database error. Please contact support.', 'error');
             } else {
-                Swal.fire('Error!', 'Failed to send OTP: ' + response, 'error');
+                console.error('OTP send error:', response);
+                Swal.fire('Error!', 'Failed to send OTP. Please try again.', 'error');
             }
         },
         error: function(xhr, status, error) {

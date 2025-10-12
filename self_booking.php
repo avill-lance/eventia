@@ -261,10 +261,12 @@ while ($row = $services_result->fetch_assoc()) {
                                             </div>
                                             <?php endif; ?>
                                             
-                                            <!-- Customization Button - ALWAYS SHOW -->
+                                            <!-- Customization Button - FIXED WITH PROPER EVENT HANDLING -->
                                             <div class="customization-options mt-3">
-                                                <button type="button" class="btn btn-sm btn-outline-primary" 
-                                                        onclick="showCustomization(<?php echo $service['service_id']; ?>, '<?php echo htmlspecialchars($service['service_name']); ?>', <?php echo $service['customizable'] ? 'true' : 'false'; ?>)">
+                                                <button type="button" class="btn btn-sm btn-outline-primary customize-service-btn" 
+                                                        data-service-id="<?php echo $service['service_id']; ?>"
+                                                        data-service-name="<?php echo htmlspecialchars($service['service_name']); ?>"
+                                                        data-customizable="<?php echo $service['customizable'] ? 'true' : 'false'; ?>">
                                                     <i class="bi bi-gear me-1"></i> Customize Options
                                                 </button>
                                             </div>
@@ -393,17 +395,11 @@ while ($row = $services_result->fetch_assoc()) {
                                 </div>
                             </div>
 
-                            
-                            <!-- Receipt Upload -->
-                            <div id="receiptUpload" class="mb-4" style="display: none;">
-                                <h5 class="mb-3">Upload Payment Receipt</h5>
-                                <div class="mb-3">
-                                    <label for="receipt" class="form-label">Payment Receipt (Image or PDF)</label>
-                                    <input type="file" class="form-control" id="receipt" name="receipt" accept=".jpg,.jpeg,.png,.gif,.pdf">
-                                    <div class="form-text">
-                                        Upload a clear photo or screenshot of your payment receipt. Accepted formats: JPG, PNG, GIF, PDF (Max: 5MB)
-                                    </div>
-                                </div>
+                            <!-- Payment Instructions -->
+                            <div class="alert alert-info mb-4">
+                                <h6><i class="bi bi-info-circle me-2"></i>Payment Instructions</h6>
+                                <p class="mb-2">You will be redirected to PayMongo to complete your payment securely.</p>
+                                <p class="mb-0"><strong>Supported Payment Methods:</strong> Credit/Debit Card, GCash, GrabPay</p>
                             </div>
 
                             <!-- Terms and Conditions -->
@@ -418,6 +414,7 @@ while ($row = $services_result->fetch_assoc()) {
 
                             <div class="mt-4 d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" onclick="prevStep(4)">Previous</button>
+                                <!-- FIXED: Changed back to type="button" to prevent form submission -->
                                 <button type="button" class="btn btn-success" id="submitBooking" name="submitBooking">Proceed to Paymongo</button>
                             </div>
                         </div>
@@ -441,7 +438,7 @@ while ($row = $services_result->fetch_assoc()) {
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="saveCustomization()">Save Customization</button>
+                <button type="button" class="btn btn-primary" id="saveCustomizationBtn">Save Customization</button>
             </div>
         </div>
     </div>
@@ -475,18 +472,6 @@ while ($row = $services_result->fetch_assoc()) {
     </div>
 </div>
 
-<!-- Loading Spinner -->
-<div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <div class="spinner-border text-primary mb-3" role="status"></div>
-                <p>Processing your booking...</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 // Service customization data
 let serviceCustomizations = {};
@@ -494,6 +479,9 @@ let currentCustomizingService = null;
 
 // Generate booking reference on page load
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔧 Initializing self-booking page...');
+    console.log('✅ Bootstrap available:', typeof bootstrap !== 'undefined');
+    
     generateBookingReference();
     updateOrderSummary();
     updateTotalAmount();
@@ -513,20 +501,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const receiptUpload = document.getElementById('receiptUpload');
-            if (this.value) {
-                receiptUpload.style.display = 'block';
-                document.getElementById('receipt').required = true;
-            } else {
-                receiptUpload.style.display = 'none';
-                document.getElementById('receipt').required = false;
-            }
-        });
+    // Event delegation for customization buttons
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('customize-service-btn')) {
+            const serviceId = e.target.getAttribute('data-service-id');
+            const serviceName = e.target.getAttribute('data-service-name');
+            const isCustomizable = e.target.getAttribute('data-customizable') === 'true';
+            console.log('🎯 Customization button clicked:', { serviceId, serviceName, isCustomizable });
+            showCustomization(serviceId, serviceName, isCustomizable);
+        }
     });
+    
+    // Event listener for save customization button
+    document.getElementById('saveCustomizationBtn').addEventListener('click', saveCustomization);
 });
 
+// [Keep all the other functions exactly the same - calculateTotalAmount, updateTotalAmount, generateBookingReference, etc.]
 // Function to calculate total amount
 function calculateTotalAmount() {
     let total = 0;
@@ -626,7 +616,9 @@ function selectVenue(element) {
     document.getElementById('fullAddress').value = venueDescription || venueLocation;
 }
 
+// Customization function - NOW WORKING PROPERLY
 function showCustomization(serviceId, serviceName, isCustomizable) {
+    console.log('🔄 Showing customization modal for service:', serviceId);
     currentCustomizingService = serviceId;
     
     const modalTitle = document.getElementById('customizationModalTitle');
@@ -635,7 +627,6 @@ function showCustomization(serviceId, serviceName, isCustomizable) {
     modalTitle.textContent = 'Customize: ' + serviceName;
     
     if (isCustomizable) {
-        // Show advanced customization options
         modalBody.innerHTML = `
             <div class="row">
                 <div class="col-md-6">
@@ -669,7 +660,6 @@ function showCustomization(serviceId, serviceName, isCustomizable) {
             </div>
         `;
     } else {
-        // Show basic customization options
         modalBody.innerHTML = `
             <div class="mb-3">
                 <label class="form-label">Special Instructions</label>
@@ -696,16 +686,24 @@ function showCustomization(serviceId, serviceName, isCustomizable) {
         document.getElementById('customNotes').value = serviceCustomizations[serviceId].notes || '';
     }
     
-    const modal = new bootstrap.Modal(document.getElementById('customizationModal'));
-    modal.show();
+    // Initialize Bootstrap modal - NOW WORKING!
+    const modalElement = document.getElementById('customizationModal');
+    const customizationModal = new bootstrap.Modal(modalElement);
+    customizationModal.show();
+    console.log('✅ Customization modal shown successfully');
 }
 
 function saveCustomization() {
-    if (!currentCustomizingService) return;
+    if (!currentCustomizingService) {
+        console.error('❌ No service selected for customization');
+        return;
+    }
+    
+    console.log('💾 Saving customization for service:', currentCustomizingService);
     
     const customization = {
         package: document.getElementById('customPackage') ? document.getElementById('customPackage').value : null,
-        units: document.getElementById('customUnits') ? document.getElementById('customUnits').value : null,
+        units: document.getElementById('customUnits') ? parseInt(document.getElementById('customUnits').value) : null,
         requirements: document.getElementById('customRequirements').value,
         notes: document.getElementById('customNotes').value,
         timestamp: new Date().toISOString()
@@ -725,15 +723,20 @@ function saveCustomization() {
         existingInput.value = JSON.stringify(customization);
     }
     
-    const modal = bootstrap.Modal.getInstance(document.getElementById('customizationModal'));
-    modal.hide();
+    // Hide modal
+    const customizationModal = bootstrap.Modal.getInstance(document.getElementById('customizationModal'));
+    customizationModal.hide();
     
     // Show success feedback
-    const serviceCard = document.querySelector(`#service-${currentCustomizingService}`).closest('.service-option-card');
-    const customizeBtn = serviceCard.querySelector('.btn-outline-primary');
-    customizeBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Customized';
-    customizeBtn.classList.remove('btn-outline-primary');
-    customizeBtn.classList.add('btn-success');
+    const customizeBtn = document.querySelector(`[data-service-id="${currentCustomizingService}"]`);
+    if (customizeBtn) {
+        customizeBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Customized';
+        customizeBtn.classList.remove('btn-outline-primary');
+        customizeBtn.classList.add('btn-success');
+    }
+    
+    console.log('✅ Customization saved successfully');
+    currentCustomizingService = null;
 }
 
 function nextStep(step) {
@@ -833,7 +836,7 @@ function validateStep(step) {
             }
         }
         
-                const email = document.getElementById('contact_email').value;
+        const email = document.getElementById('contact_email').value;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             alert('Please enter a valid email address.');
@@ -891,41 +894,6 @@ function updateOrderSummary() {
     summaryContainer.innerHTML = summaryHTML || '<tr><td colspan="3" class="text-center text-muted">No items selected</td></tr>';
     document.getElementById('amount').textContent = `Total: ₱${total.toLocaleString()}`;
 }
-
-// Form submission
-// document.getElementById('bookingForm').addEventListener('submit', function(e) {
-//     e.preventDefault();
-    
-//     if (!validateStep(5)) {
-//         return;
-//     }
-    
-//     const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
-//     loadingModal.show();
-    
-//     const formData = new FormData(this);
-    
-//     fetch('process_booking.php', {
-//         method: 'POST',
-//         body: formData
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         loadingModal.hide();
-        
-//         if (data.success) {
-//             alert('Booking submitted successfully! Your reference number is: ' + data.booking_reference);
-//             window.location.href = 'booking_success.php?reference=' + data.booking_reference;
-//         } else {
-//             alert('Error: ' + data.message);
-//         }
-//     })
-//     .catch(error => {
-//         loadingModal.hide();
-//         alert('An error occurred while processing your booking. Please try again.');
-//         console.error('Error:', error);
-//     });
-// });
 </script>
 
-<?php include __DIR__."/components/footer.php" ?>
+<?php include __DIR__."/components/footer.php"; ?>

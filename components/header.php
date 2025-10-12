@@ -23,6 +23,9 @@
 </head>
 <body>
 
+<!-- Load Bootstrap JS early for ALL pages -->
+<script src="js/js/bootstrap.bundle.min.js"></script>
+
 <!-- Navigation  -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
@@ -61,7 +64,9 @@
                     <i class="bi bi-cart3 cart-icon"></i>
                     <span class="badge">3</span>
                 </a>
-                <a class="nav-link p-0" id="userProfile" href="profile.php">Welcome, <?php echo $_SESSION["first_name"]; ?></a>
+                <a class="nav-link p-0" id="userProfile" href="profile.php">
+                    Welcome, <?php echo htmlspecialchars($_SESSION["first_name"] ?? 'User'); ?>
+                </a>
             </div>
         </div>
     </div>

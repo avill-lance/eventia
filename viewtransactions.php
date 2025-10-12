@@ -8,6 +8,7 @@
         <div class="card-body">
             <table id="TransactionsTable" class="display table table-striped" style="width:100%">
                 <thead>
+                    <!-- Columns will be loaded dynamically -->
                 </thead>
                 <tbody>
                     <!-- Data will be loaded dynamically -->
@@ -20,5 +21,10 @@
 <!-- Include DataTables CSS -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
 
-<script src="js/viewtransactions.js"></script>
+<!-- Set a flag to indicate this is a transactions page -->
+<script>
+    // Set a global flag to indicate this is a transactions page
+    window.isTransactionsPage = true;
+</script>
+
 <?php include __DIR__."/components/footer.php"; ?>

@@ -3,7 +3,7 @@ Response: Array
 (
     [data] => Array
         (
-            [id] => cs_CSHtZEi1NNRNRRhoFwKaY7UF
+            [id] => cs_WvtVE7fQLz9xCsydQwvQE1EH
             [type] => checkout_session
             [attributes] => Array
                 (
@@ -25,23 +25,23 @@ Response: Array
                         )
 
                     [billing_information_fields_editable] => enabled
-                    [cancel_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251012-192146-68ebe3aad7ae0
-                    [checkout_url] => https://checkout.paymongo.com/cs_CSHtZEi1NNRNRRhoFwKaY7UF_client_EdPvbS5HmBrLi8T5usDFbpcJ#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
-                    [client_key] => cs_CSHtZEi1NNRNRRhoFwKaY7UF_client_EdPvbS5HmBrLi8T5usDFbpcJ
+                    [cancel_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251012-230716-68ec18845d726
+                    [checkout_url] => https://checkout.paymongo.com/cs_WvtVE7fQLz9xCsydQwvQE1EH_client_dw7mKXgWn1v5jGS87jnfPhXS#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
+                    [client_key] => cs_WvtVE7fQLz9xCsydQwvQE1EH_client_dw7mKXgWn1v5jGS87jnfPhXS
                     [customer_email] => 
                     [description] => Wedding Event Package Booking
                     [line_items] => Array
                         (
                             [0] => Array
                                 (
-                                    [amount] => 11819000
+                                    [amount] => 10819000
                                     [currency] => PHP
                                     [description] => 
                                     [images] => Array
                                         (
                                         )
 
-                                    [name] => Wedding Event Package - Herrod Gardner
+                                    [name] => Wedding Event Package - Jolie Travis
                                     [quantity] => 1
                                 )
 
@@ -55,17 +55,17 @@ Response: Array
 
                     [payment_intent] => Array
                         (
-                            [id] => pi_2LVSGM5E7Baj8dRGvW5EEnYu
+                            [id] => pi_RekqMtAmXtQ7i1hgAdXC88Sx
                             [type] => payment_intent
                             [attributes] => Array
                                 (
-                                    [amount] => 11819000
+                                    [amount] => 10819000
                                     [capture_type] => automatic
-                                    [client_key] => pi_2LVSGM5E7Baj8dRGvW5EEnYu_client_eLAaDcXC1T2QyNzDD2Ye3Yvt
+                                    [client_key] => pi_RekqMtAmXtQ7i1hgAdXC88Sx_client_T28VeBJB56YLo17umLEvwDX9
                                     [currency] => PHP
                                     [description] => Wedding Event Package Booking
                                     [livemode] => 
-                                    [original_amount] => 11819000
+                                    [original_amount] => 10819000
                                     [statement_descriptor] => Eventia Incorporation
                                     [status] => awaiting_payment_method
                                     [last_payment_error] => 
@@ -92,8 +92,8 @@ Response: Array
 
                                     [metadata] => 
                                     [setup_future_usage] => 
-                                    [created_at] => 1760289707
-                                    [updated_at] => 1760289707
+                                    [created_at] => 1760303239
+                                    [updated_at] => 1760303239
                                 )
 
                         )
@@ -105,14 +105,14 @@ Response: Array
                             [2] => grab_pay
                         )
 
-                    [reference_number] => EVT-20251012-192146-68ebe3aad7ae0
+                    [reference_number] => EVT-20251012-230716-68ec18845d726
                     [send_email_receipt] => 
                     [show_description] => 1
                     [show_line_items] => 1
                     [status] => active
-                    [success_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251012-192146-68ebe3aad7ae0
-                    [created_at] => 1760289707
-                    [updated_at] => 1760289707
+                    [success_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251012-230716-68ec18845d726
+                    [created_at] => 1760303239
+                    [updated_at] => 1760303239
                     [metadata] => 
                 )
 
