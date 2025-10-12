@@ -34,8 +34,6 @@ $(document).ready(function() {
             purpose: $('#purpose').val()
         };
     
-        console.log("Form Data being sent:", formData);
-    
         $.ajax({
             url: 'functions/VerifyOTP.php',
             type: 'POST',
