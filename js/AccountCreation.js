@@ -8,25 +8,55 @@ $(document).ready(function(){
             data: $("#registrationForm").serialize(),
 
             success: function(phpresponse){
-                if(phpresponse.trim()==='added'){
-                    alert('User has been added');
-                    window.location.href='login.php';
-                }
-                else if(phpresponse.trim()==='existing'){
-                    alert('Email has already been used');
-                }
-                else if(phpresponse.trim()==='required'){
-                    alert('All fields are required!');
-                }
-                else if(phpresponse.trim()==='differentpassword'){
-                    alert('Passwords does not match!');
-                }
-                else if(phpresponse.trim()==='error'){
-                    alert('User was not added due to error...');
-                }
-                else{
-                    alert('User was not added' + phpresponse);
-                    console.log(phpresponse);
+                try {
+                    // Try to parse JSON response (new format)
+                    const response = JSON.parse(phpresponse);
+                    
+                    if(response.status === 'added'){
+                        Swal.fire({
+                            title: 'Registration Successful!',
+                            text: 'Please verify your email to continue.',
+                            icon: 'success',
+                            confirmButtonText: 'Verify Email'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+
+                                window.location.href = 'verifyingemail.php?email=' + encodeURIComponent(response.email);
+                            }
+                        });
+                    }
+                } catch (e) {
+                    // Fallback to old response format
+                    if(phpresponse.trim()==='added'){
+                        // Get email from form
+                        const email = $('#email').val();
+                        Swal.fire({
+                            title: 'Registration Successful!',
+                            text: 'Please verify your email to continue.',
+                            icon: 'success',
+                            confirmButtonText: 'Verify Email'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'verifyingemail.php?email=' + encodeURIComponent(email);
+                            }
+                        });
+                    }
+                    else if(phpresponse.trim()==='existing'){
+                        alert('Email has already been used');
+                    }
+                    else if(phpresponse.trim()==='required'){
+                        alert('All fields are required!');
+                    }
+                    else if(phpresponse.trim()==='differentpassword'){
+                        alert('Passwords does not match!');
+                    }
+                    else if(phpresponse.trim()==='error'){
+                        alert('User was not added due to error...');
+                    }
+                    else{
+                        alert('User was not added' + phpresponse);
+                        console.log(phpresponse);
+                    }
                 }
             },
             error: function(xhr, status, error){
@@ -34,10 +64,8 @@ $(document).ready(function(){
             }
         })
     })
-})
 
-//For login function
-$(document).ready(function(){
+    //For login function
     $('#login-btn').click(function(e){
         e.preventDefault();
         $.ajax({
@@ -49,6 +77,21 @@ $(document).ready(function(){
                 if(user.trim()==='empty'){
                     alert("Fields are required");
                 }
+                else if(user.trim()==='inactive'){
+                    Swal.fire({
+                    title: "Email has not been verified",
+                    text: "Verify your email now?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#ebcb3cff",
+                    cancelButtonColor: "rgba(110, 110, 110, 1)",
+                    confirmButtonText: "Yes"
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        getOTP();
+                    }
+                    });
+                }
                 else if(user.trim()==='wrong'){
                     alert("Wrong email or password");
                 }
@@ -56,8 +99,13 @@ $(document).ready(function(){
                     alert("Invalid email or password");
                 }
                 else if(user.trim()==='success'){
-                    alert("Login Successful");
-                    window.location.href='index.php';
+                    Swal.fire({
+                    title: "Successful Login!",
+                    icon: "success"});
+                    setTimeout(() => {
+                        window.location.href='index.php';
+                    }, 2000);
+                    
                 }
                 else{
                     alert("Error: " + user);
@@ -69,6 +117,47 @@ $(document).ready(function(){
         })
     })
 })
+function getOTP(){
+    // Get email from login form
+    const email = $('#email').val();
+    
+    if(!email) {
+        Swal.fire('Error!', 'Email is required to send OTP.', 'error');
+        return;
+    }
+    
+    $.ajax({
+        url: 'functions/SendOTP.php',
+        type: 'POST',
+        data: { email: email },
+        success: function(response) {
+            if (response.trim() === 'sent') {
+                Swal.fire({
+                    title: 'OTP Sent!',
+                    text: 'Verification code sent to your email. Please check your inbox.',
+                    icon: 'success',
+                    confirmButtonText: 'Proceed to Verification'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'verifyingemail.php?email=' + encodeURIComponent(email);
+                    }
+                });
+            } else if (response.trim() === 'invalid_email') {
+                Swal.fire('Error!', 'Invalid email address.', 'error');
+            } else if (response.trim() === 'mail_error') {
+                Swal.fire('Error!', 'Failed to send OTP. Please try again.', 'error');
+            } else if (response.trim() === 'database_error') {
+                Swal.fire('Error!', 'Database error. Please contact support.', 'error');
+            } else {
+                Swal.fire('Error!', 'Failed to send OTP: ' + response, 'error');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error: ' + error);
+            Swal.fire('Error!', 'Network error. Please check your connection.', 'error');
+        }
+    });
+}
 
 // Multi-step form functionality
 function nextStep(next) {
@@ -94,10 +183,3 @@ function prevStep(prev) {
     document.querySelector('.progress-bar').style.width = progressPercentage + '%';
     document.querySelector('.progress-bar').textContent = 'Step ' + prev + ' of 2';
 }
-
-// Form submission
-// document.getElementById('registrationForm').addEventListener('submit', function(e) {
-//     e.preventDefault();
-//     alert('Registration successful! You can now log in to your account.');
-//     window.location.href = 'login.html';
-// });

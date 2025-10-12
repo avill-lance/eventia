@@ -1,6 +1,7 @@
 <?php 
     //Establish Session
     include __DIR__ . "/functions/session.php";
+    print_r($_SESSION);
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +64,7 @@
             </div>
         </div>
     </div>
-    
+<script src="js/sweetalert2@11.js"></script>
 <script src="js/jquery-3.7.1.js"></script>
 <script src="js/js/bootstrap.bundle.min.js"></script>
 <script src="js/AccountCreation.js"></script>
