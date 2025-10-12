@@ -1,0 +1,121 @@
+HTTP Code: 200
+Response: Array
+(
+    [data] => Array
+        (
+            [id] => cs_wLQpZtQMoosAcp4ixM88R1gP
+            [type] => checkout_session
+            [attributes] => Array
+                (
+                    [billing] => Array
+                        (
+                            [address] => Array
+                                (
+                                    [city] => 
+                                    [country] => 
+                                    [line1] => 
+                                    [line2] => 
+                                    [postal_code] => 
+                                    [state] => 
+                                )
+
+                            [email] => 
+                            [name] => 
+                            [phone] => 
+                        )
+
+                    [billing_information_fields_editable] => enabled
+                    [cancel_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251012-094135-68eb5baf3f24f
+                    [checkout_url] => https://checkout.paymongo.com/cs_wLQpZtQMoosAcp4ixM88R1gP_client_VeXUWjxnKT4aGMNHrTYFXaVY#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
+                    [client_key] => cs_wLQpZtQMoosAcp4ixM88R1gP_client_VeXUWjxnKT4aGMNHrTYFXaVY
+                    [customer_email] => 
+                    [description] => Other Booking
+                    [line_items] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [amount] => 9999900
+                                    [currency] => PHP
+                                    [description] => 
+                                    [images] => Array
+                                        (
+                                        )
+
+                                    [name] => Other - Cora Lawrence
+                                    [quantity] => 1
+                                )
+
+                        )
+
+                    [livemode] => 
+                    [merchant] => Eventia Incorporation
+                    [payments] => Array
+                        (
+                        )
+
+                    [payment_intent] => Array
+                        (
+                            [id] => pi_NL57EP8or71HWgrVSEvo21R3
+                            [type] => payment_intent
+                            [attributes] => Array
+                                (
+                                    [amount] => 9999900
+                                    [capture_type] => automatic
+                                    [client_key] => pi_NL57EP8or71HWgrVSEvo21R3_client_dMaG3XGCBvRgdZkas9ANYv1A
+                                    [currency] => PHP
+                                    [description] => Other Booking
+                                    [livemode] => 
+                                    [original_amount] => 9999900
+                                    [statement_descriptor] => Eventia Incorporation
+                                    [status] => awaiting_payment_method
+                                    [last_payment_error] => 
+                                    [payment_method_allowed] => Array
+                                        (
+                                            [0] => gcash
+                                            [1] => card
+                                            [2] => grab_pay
+                                        )
+
+                                    [payments] => Array
+                                        (
+                                        )
+
+                                    [next_action] => 
+                                    [payment_method_options] => Array
+                                        (
+                                            [card] => Array
+                                                (
+                                                    [request_three_d_secure] => any
+                                                )
+
+                                        )
+
+                                    [metadata] => 
+                                    [setup_future_usage] => 
+                                    [created_at] => 1760254896
+                                    [updated_at] => 1760254896
+                                )
+
+                        )
+
+                    [payment_method_types] => Array
+                        (
+                            [0] => card
+                            [1] => gcash
+                            [2] => grab_pay
+                        )
+
+                    [reference_number] => EVT-20251012-094135-68eb5baf3f24f
+                    [send_email_receipt] => 
+                    [show_description] => 1
+                    [show_line_items] => 1
+                    [status] => active
+                    [success_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251012-094135-68eb5baf3f24f
+                    [created_at] => 1760254896
+                    [updated_at] => 1760254896
+                    [metadata] => 
+                )
+
+        )
+
+)
