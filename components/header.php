@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="css/bootstrap-icons-1.13.1/bootstrap-icons.css">
     <link rel="stylesheet" href="css/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/booking.css">
+    <link rel="stylesheet" href="css/self_booking.css">
 </head>
 <body>
 

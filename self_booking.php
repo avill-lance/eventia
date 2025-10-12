@@ -1,129 +1,41 @@
 <?php 
 session_start();
 include __DIR__."/components/header.php"; 
-?>
+require_once __DIR__ . '/database/config.php';
 
-<?php
-// Add this at the top of self_booking.php after session_start()
-$detailedServices = [
-    [
-        'id' => 'catering',
-        'name' => 'Catering Service',
-        'description' => 'Professional food and beverage service for your event',
-        'price_range' => '₱15,000 - ₱80,000',
-        'details' => [
-            'Buffet Style (₱15,000-₱35,000)',
-            'Plated Service (₱25,000-₱50,000)', 
-            'Cocktail Setup (₱20,000-₱40,000)',
-            'Dessert & Coffee Station (₱8,000-₱15,000)'
-        ],
-        'features' => ['Menu Planning', 'Professional Staff', 'Food Safety Certified', 'Setup & Cleanup'],
-        'popular_for' => ['Weddings', 'Corporate Events', 'Birthdays'],
-        'image' => 'assets/services/catering.jpg'
-    ],
-    [
-        'id' => 'decoration',
-        'name' => 'Decoration Setup',
-        'description' => 'Transform your venue with beautiful decor and themes',
-        'price_range' => '₱10,000 - ₱50,000',
-        'details' => [
-            'Classic Theme (₱10,000-₱25,000)',
-            'Rustic Theme (₱15,000-₱30,000)',
-            'Modern Theme (₱20,000-₱40,000)',
-            'Floral Arrangements (₱5,000-₱20,000)'
-        ],
-        'features' => ['Theme Consultation', 'Setup & Teardown', 'Custom Designs', 'Fresh Flowers'],
-        'popular_for' => ['Weddings', 'Debut', 'Anniversaries'],
-        'image' => 'assets/services/decoration.jpg'
-    ],
-    [
-        'id' => 'photography',
-        'name' => 'Photography & Videography',
-        'description' => 'Capture your special moments professionally',
-        'price_range' => '₱12,000 - ₱60,000',
-        'details' => [
-            'Basic Package (₱12,000-₱25,000)',
-            'Standard Package (₱20,000-₱35,000)',
-            'Premium Package (₱30,000-₱50,000)',
-            'Drone Coverage (₱8,000-₱15,000)'
-        ],
-        'features' => ['Professional Equipment', 'Edited Photos/Videos', 'Online Gallery', 'Print Options'],
-        'popular_for' => ['All Event Types'],
-        'image' => 'assets/services/photography.jpg'
-    ],
-    [
-        'id' => 'sound_light',
-        'name' => 'Sound System & Lights',
-        'description' => 'Professional audio and lighting for perfect ambiance',
-        'price_range' => '₱8,000 - ₱35,000',
-        'details' => [
-            'Basic Sound Setup (₱8,000-₱15,000)',
-            'Full DJ Equipment (₱15,000-₱25,000)',
-            'Stage Lighting (₱10,000-₱20,000)',
-            'LED Wall (₱20,000-₱35,000)'
-        ],
-        'features' => ['Professional Audio', 'Lighting Effects', 'Technician Support', 'Backup Equipment'],
-        'popular_for' => ['Parties', 'Corporate Events', 'Weddings'],
-        'image' => 'assets/services/sound.jpg'
-    ],
-    [
-        'id' => 'entertainment',
-        'name' => 'Entertainment',
-        'description' => 'Keep your guests entertained throughout the event',
-        'price_range' => '₱10,000 - ₱100,000',
-        'details' => [
-            'Live Band (₱25,000-₱100,000)',
-            'DJ Services (₱10,000-₱30,000)',
-            'Magician (₱15,000-₱25,000)',
-            'Photo Booth (₱8,000-₱15,000)'
-        ],
-        'features' => ['Professional Performers', 'Equipment Included', 'Music Coordination', 'Interactive Elements'],
-        'popular_for' => ['Birthdays', 'Corporate Parties', 'Weddings'],
-        'image' => 'assets/services/entertainment.jpg'
-    ],
-    [
-        'id' => 'coordination',
-        'name' => 'Event Coordination',
-        'description' => 'Professional event management and coordination',
-        'price_range' => '₱15,000 - ₱50,000',
-        'details' => [
-            'On-the-day Coordination (₱15,000-₱25,000)',
-            'Partial Planning (₱25,000-₱35,000)',
-            'Full Planning (₱35,000-₱50,000)'
-        ],
-        'features' => ['Timeline Management', 'Vendor Coordination', 'Problem Solving', 'Day-of Supervision'],
-        'popular_for' => ['Weddings', 'Large Events', 'Corporate Functions'],
-        'image' => 'assets/services/coordination.jpg'
-    ],
-    [
-        'id' => 'invitations',
-        'name' => 'Invitation Design & Printing',
-        'description' => 'Beautiful custom invitations for your guests',
-        'price_range' => '₱5,000 - ₱20,000',
-        'details' => [
-            'Digital Invitations (₱5,000-₱8,000)',
-            'Printed Invitations (₱8,000-₱15,000)',
-            'Luxury Suite (₱15,000-₱20,000)'
-        ],
-        'features' => ['Custom Design', 'Multiple Revisions', 'RSVP Management', 'Quality Printing'],
-        'popular_for' => ['Weddings', 'Formal Events', 'Corporate Launches'],
-        'image' => 'assets/services/invitations.jpg'
-    ],
-    [
-        'id' => 'souvenirs',
-        'name' => 'Souvenirs & Giveaways',
-        'description' => 'Memorable tokens for your guests',
-        'price_range' => '₱3,000 - ₱25,000',
-        'details' => [
-            'Basic Souvenirs (₱3,000-₱8,000)',
-            'Customized Items (₱8,000-₱15,000)',
-            'Premium Giveaways (₱15,000-₱25,000)'
-        ],
-        'features' => ['Custom Branding', 'Various Options', 'Gift Wrapping', 'Delivery Setup'],
-        'popular_for' => ['All Event Types'],
-        'image' => 'assets/services/souvenirs.jpg'
-    ]
-];
+// Fetch packages from database
+$packages = [];
+$packages_result = $conn->query("SELECT package_id, package_name, package_description, base_price, event_type FROM tbl_packages WHERE status = 'active'");
+while ($row = $packages_result->fetch_assoc()) {
+    $packages[] = $row;
+}
+
+// Fetch services from database with details and features
+$services = [];
+$services_result = $conn->query("
+    SELECT s.service_id, s.service_name, s.service_description, s.base_price, s.category, s.customizable, s.customization_options
+    FROM tbl_services s 
+    WHERE s.status = 'active'
+");
+while ($row = $services_result->fetch_assoc()) {
+    // Get service details
+    $details = [];
+    $details_result = $conn->query("SELECT detail_name, price_min, price_max FROM tbl_service_details WHERE service_id = " . $row['service_id']);
+    while ($detail = $details_result->fetch_assoc()) {
+        $details[] = $detail;
+    }
+    $row['details'] = $details;
+    
+    // Get service features
+    $features = [];
+    $features_result = $conn->query("SELECT feature_name FROM tbl_service_features WHERE service_id = " . $row['service_id']);
+    while ($feature = $features_result->fetch_assoc()) {
+        $features[] = $feature['feature_name'];
+    }
+    $row['features'] = $features;
+    
+    $services[] = $row;
+}
 ?>
 
 <!-- Additional CSS -->
@@ -181,8 +93,6 @@ $detailedServices = [
                 <input type="hidden" name="venue_id" id="venueId">
                 <input type="hidden" name="event_location" id="eventLocation">
                 <input type="hidden" name="full_address" id="fullAddress">
-                <input type="hidden" name="alternate_phone" id="alternatePhone">
-                <input type="hidden" name="backup_email" id="backupEmail">
                 
                 <!-- Step 1: Choose Package -->
                 <div class="step active" id="step-1">
@@ -192,146 +102,25 @@ $detailedServices = [
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <?php foreach ($packages as $package): ?>
                                 <div class="col-md-6 mb-3">
                                     <div class="card service-card">
                                         <div class="card-body">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="package" id="package1" value="Wedding Event Package" data-price="108190" required>
-                                                <label class="form-check-label w-100" for="package1">
-                                                    <h5>Wedding Event Package</h5>
-                                                    <p class="text-muted mb-2">Complete wedding planning with catering, floral design, and full coordination.</p>
-                                                    <h5 class="text-primary">₱108,190</h5>
+                                                <input class="form-check-input" type="radio" name="package" 
+                                                       id="package<?php echo $package['package_id']; ?>" 
+                                                       value="<?php echo htmlspecialchars($package['package_name']); ?>" 
+                                                       data-price="<?php echo $package['base_price']; ?>" required>
+                                                <label class="form-check-label w-100" for="package<?php echo $package['package_id']; ?>">
+                                                    <h5><?php echo htmlspecialchars($package['package_name']); ?></h5>
+                                                    <p class="text-muted mb-2"><?php echo htmlspecialchars($package['package_description']); ?></p>
+                                                    <h5 class="text-primary">₱<?php echo number_format($package['base_price'], 2); ?></h5>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card service-card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="package" id="package2" value="Birthday Celebration Package" data-price="50000" required>
-                                                <label class="form-check-label w-100" for="package2">
-                                                    <h5>Birthday Celebration Package</h5>
-                                                    <p class="text-muted mb-2">Perfect for kids or adults, with cake, decorations, and entertainment add-ons.</p>
-                                                    <h5 class="text-primary">₱50,000</h5>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card service-card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="package" id="package3" value="Corporate Event Package" data-price="140500" required>
-                                                <label class="form-check-label w-100" for="package3">
-                                                    <h5>Corporate Event Package</h5>
-                                                    <p class="text-muted mb-2">Professional setup for seminars, product launches, or company parties.</p>
-                                                    <h5 class="text-primary">₱140,500</h5>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card service-card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="package" id="package4" value="Debut Package" data-price="95000" required>
-                                                <label class="form-check-label w-100" for="package4">
-                                                    <h5>Debut Package</h5>
-                                                    <p class="text-muted mb-2">Includes 18 roses & candles setup, photography, and custom stage backdrop.</p>
-                                                    <h5 class="text-primary">₱95,000</h5>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card service-card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="package" id="package5" value="Christening Package" data-price="45000" required>
-                                                <label class="form-check-label w-100" for="package5">
-                                                    <h5>Christening Package</h5>
-                                                    <p class="text-muted mb-2">Includes catering for 50 guests, souvenirs, and floral setup.</p>
-                                                    <h5 class="text-primary">₱45,000</h5>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card service-card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="package" id="package6" value="Anniversary Celebration" data-price="75000" required>
-                                                <label class="form-check-label w-100" for="package6">
-                                                    <h5>Anniversary Celebration</h5>
-                                                    <p class="text-muted mb-2">Romantic dinner setting with live music and custom themes.</p>
-                                                    <h5 class="text-primary">₱75,000</h5>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card service-card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="package" id="package7" value="Holiday Party Package" data-price="85000" required>
-                                                <label class="form-check-label w-100" for="package7">
-                                                    <h5>Holiday Party Package</h5>
-                                                    <p class="text-muted mb-2">Christmas or New Year party with buffet and entertainment options.</p>
-                                                    <h5 class="text-primary">₱85,000</h5>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card service-card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="package" id="package8" value="Graduation Party Package" data-price="35000" required>
-                                                <label class="form-check-label w-100" for="package8">
-                                                    <h5>Graduation Party Package</h5>
-                                                    <p class="text-muted mb-2">Includes simple catering, tarpaulin, and sound system.</p>
-                                                    <h5 class="text-primary">₱35,000</h5>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card service-card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="package" id="package9" value="Engagement Party Package" data-price="65000" required>
-                                                <label class="form-check-label w-100" for="package9">
-                                                    <h5>Engagement Party Package</h5>
-                                                    <p class="text-muted mb-2">Intimate gathering with floral arrangements and photography.</p>
-                                                    <h5 class="text-primary">₱65,000</h5>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card service-card">
-                                        <div class="card-body">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="package" id="package10" value="Reunion Event Package" data-price="55000" required>
-                                                <label class="form-check-label w-100" for="package10">
-                                                    <h5>Reunion Event Package</h5>
-                                                    <p class="text-muted mb-2">Perfect for family or class reunions with buffet and photo booth.</p>
-                                                    <h5 class="text-primary">₱55,000</h5>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php endforeach; ?>
                             </div>
                             <div class="mt-4">
                                 <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next: Choose Venue</button>
@@ -378,7 +167,7 @@ $detailedServices = [
                             <div id="venueSelection" class="venue-selection" style="display: none;">
                                 <h5 class="mb-3">Available Venues</h5>
                                 <div class="row" id="venuesContainer">
-                                    <!-- Venues will be loaded here -->
+                                    <!-- Venues will be loaded here via AJAX -->
                                 </div>
                             </div>
 
@@ -429,40 +218,55 @@ $detailedServices = [
                             <p class="text-muted mb-4">Enhance your event with these popular add-ons (optional)</p>
                             
                             <div class="row">
-                                <?php foreach ($detailedServices as $service): ?>
+                                <?php foreach ($services as $service): ?>
                                 <div class="col-md-6 mb-4">
                                     <div class="card service-option-card h-100">
                                         <div class="card-body">
                                             <div class="form-check mb-3">
-                                                <input class="form-check-input service-checkbox" type="checkbox" name="services[]" value="<?php echo $service['name']; ?>" id="service-<?php echo $service['id']; ?>">
-                                                <label class="form-check-label fw-bold" for="service-<?php echo $service['id']; ?>">
-                                                    <?php echo $service['name']; ?>
+                                                <input class="form-check-input service-checkbox" type="checkbox" 
+                                                       name="services[]" value="<?php echo htmlspecialchars($service['service_name']); ?>" 
+                                                       id="service-<?php echo $service['service_id']; ?>"
+                                                       data-price="<?php echo $service['base_price']; ?>">
+                                                <label class="form-check-label fw-bold" for="service-<?php echo $service['service_id']; ?>">
+                                                    <?php echo htmlspecialchars($service['service_name']); ?>
                                                 </label>
                                             </div>
-                                            <p class="text-muted small mb-2"><?php echo $service['description']; ?></p>
-                                            <p class="text-primary fw-bold mb-3"><?php echo $service['price_range']; ?></p>
+                                            <p class="text-muted small mb-2"><?php echo htmlspecialchars($service['service_description']); ?></p>
+                                            <p class="text-primary fw-bold mb-3">₱<?php echo number_format($service['base_price'], 2); ?></p>
                                             
+                                            <!-- Service Details -->
+                                            <?php if (!empty($service['details'])): ?>
                                             <div class="service-details">
                                                 <h6 class="mb-2">Options:</h6>
                                                 <ul class="small text-muted mb-3">
                                                     <?php foreach ($service['details'] as $detail): ?>
-                                                    <li><?php echo $detail; ?></li>
+                                                    <li>
+                                                        <?php echo htmlspecialchars($detail['detail_name']); ?>
+                                                        (₱<?php echo number_format($detail['price_min'], 2); ?> - ₱<?php echo number_format($detail['price_max'], 2); ?>)
+                                                    </li>
                                                     <?php endforeach; ?>
                                                 </ul>
-                                                
+                                            </div>
+                                            <?php endif; ?>
+                                            
+                                            <!-- Service Features -->
+                                            <?php if (!empty($service['features'])): ?>
+                                            <div class="service-features">
                                                 <h6 class="mb-2">Includes:</h6>
                                                 <div class="d-flex flex-wrap gap-1 mb-3">
                                                     <?php foreach ($service['features'] as $feature): ?>
-                                                    <span class="badge bg-light text-dark"><?php echo $feature; ?></span>
+                                                    <span class="badge bg-light text-dark"><?php echo htmlspecialchars($feature); ?></span>
                                                     <?php endforeach; ?>
                                                 </div>
-                                                
-                                                <h6 class="mb-2">Popular For:</h6>
-                                                <div class="d-flex flex-wrap gap-1">
-                                                    <?php foreach ($service['popular_for'] as $event): ?>
-                                                    <span class="badge bg-primary"><?php echo $event; ?></span>
-                                                    <?php endforeach; ?>
-                                                </div>
+                                            </div>
+                                            <?php endif; ?>
+                                            
+                                            <!-- Customization Button - ALWAYS SHOW -->
+                                            <div class="customization-options mt-3">
+                                                <button type="button" class="btn btn-sm btn-outline-primary" 
+                                                        onclick="showCustomization(<?php echo $service['service_id']; ?>, '<?php echo htmlspecialchars($service['service_name']); ?>', <?php echo $service['customizable'] ? 'true' : 'false'; ?>)">
+                                                    <i class="bi bi-gear me-1"></i> Customize Options
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -488,26 +292,26 @@ $detailedServices = [
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="full_name" class="form-label">Full Name *</label>
-                                        <input type="text" class="form-control" id="full_name" name="full_name" required>
+                                        <label for="contact_name" class="form-label">Full Name *</label>
+                                        <input type="text" class="form-control" id="contact_name" name="contact_name" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="email" class="form-label">Email Address *</label>
-                                        <input type="email" class="form-control" id="email" name="email" required>
+                                        <label for="contact_email" class="form-label">Email Address *</label>
+                                        <input type="email" class="form-control" id="contact_email" name="contact_email" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="contact_number" class="form-label">Contact Number *</label>
-                                        <input type="tel" class="form-control" id="contact_number" name="contact_number" required>
+                                        <label for="contact_phone" class="form-label">Contact Number *</label>
+                                        <input type="tel" class="form-control" id="contact_phone" name="contact_phone" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="alternate_contact" class="form-label">Alternate Contact Number</label>
-                                        <input type="tel" class="form-control" id="alternate_contact" name="alternate_contact">
+                                        <label for="alternate_phone" class="form-label">Alternate Contact Number</label>
+                                        <input type="tel" class="form-control" id="alternate_phone" name="alternate_phone">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -534,7 +338,13 @@ $detailedServices = [
                                         <input type="time" class="form-control" id="event_time" name="event_time" required>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="guest_count" class="form-label">Number of Guests</label>
+                                        <input type="number" class="form-control" id="guest_count" name="guest_count" min="1" value="50">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="preferred_contact" class="form-label">Preferred Contact Method</label>
                                         <select class="form-select" id="preferred_contact" name="preferred_contact">
@@ -696,6 +506,25 @@ $detailedServices = [
     </div>
 </div>
 
+<!-- Customization Modal -->
+<div class="modal fade" id="customizationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="customizationModalTitle">Customize Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="customizationModalBody">
+                <!-- Customization options will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveCustomization()">Save Customization</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Terms and Conditions Modal -->
 <div class="modal fade" id="termsModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -737,6 +566,10 @@ $detailedServices = [
 </div>
 
 <script>
+// Service customization data
+let serviceCustomizations = {};
+let currentCustomizingService = null;
+
 // Generate booking reference on page load
 document.addEventListener('DOMContentLoaded', function() {
     generateBookingReference();
@@ -754,8 +587,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
         radio.addEventListener('change', function() {
             const receiptUpload = document.getElementById('receiptUpload');
-            const methodsRequiringReceipt = ['GCash', 'Bank Transfer', 'PayPal', 'Installment'];
-            if (methodsRequiringReceipt.includes(this.value)) {
+            if (this.value) {
                 receiptUpload.style.display = 'block';
                 document.getElementById('receipt').required = true;
             } else {
@@ -810,7 +642,7 @@ function loadVenues() {
                                         <p class="text-muted mb-1">${venue.venue_type}</p>
                                         <p class="text-muted mb-1">Capacity: ${venue.capacity} people</p>
                                         <p class="text-muted mb-1">${venue.location}</p>
-                                        <p class="text-primary fw-bold">₱${venue.price.toLocaleString()}</p>
+                                        <p class="text-primary fw-bold">₱${parseFloat(venue.price).toLocaleString()}</p>
                                     </label>
                                 </div>
                             </div>
@@ -838,25 +670,130 @@ function selectVenue(element) {
     document.getElementById('fullAddress').value = venueDescription || venueLocation;
 }
 
+function showCustomization(serviceId, serviceName, isCustomizable) {
+    currentCustomizingService = serviceId;
+    
+    const modalTitle = document.getElementById('customizationModalTitle');
+    const modalBody = document.getElementById('customizationModalBody');
+    
+    modalTitle.textContent = 'Customize: ' + serviceName;
+    
+    if (isCustomizable) {
+        // Show advanced customization options
+        modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Service Package</label>
+                        <select class="form-select" id="customPackage">
+                            <option value="basic">Basic Package</option>
+                            <option value="standard">Standard Package</option>
+                            <option value="premium">Premium Package</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Number of Hours/Units</label>
+                        <input type="number" class="form-control" id="customUnits" min="1" max="12" value="4">
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Special Requirements</label>
+                <textarea class="form-control" id="customRequirements" rows="3" placeholder="Any specific requirements or preferences..."></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Additional Notes</label>
+                <input type="text" class="form-control" id="customNotes" placeholder="Any additional notes...">
+            </div>
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                Your customization requests will be reviewed and confirmed by our team. Additional charges may apply.
+            </div>
+        `;
+    } else {
+        // Show basic customization options
+        modalBody.innerHTML = `
+            <div class="mb-3">
+                <label class="form-label">Special Instructions</label>
+                <textarea class="form-control" id="customRequirements" rows="4" placeholder="Enter any special instructions or preferences for this service..."></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Additional Notes</label>
+                <input type="text" class="form-control" id="customNotes" placeholder="Any additional notes...">
+            </div>
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                Your requests will be forwarded to our service team for confirmation.
+            </div>
+        `;
+    }
+    
+    // Load existing customization if any
+    if (serviceCustomizations[serviceId]) {
+        if (isCustomizable) {
+            document.getElementById('customPackage').value = serviceCustomizations[serviceId].package || 'basic';
+            document.getElementById('customUnits').value = serviceCustomizations[serviceId].units || 4;
+        }
+        document.getElementById('customRequirements').value = serviceCustomizations[serviceId].requirements || '';
+        document.getElementById('customNotes').value = serviceCustomizations[serviceId].notes || '';
+    }
+    
+    const modal = new bootstrap.Modal(document.getElementById('customizationModal'));
+    modal.show();
+}
+
+function saveCustomization() {
+    if (!currentCustomizingService) return;
+    
+    const customization = {
+        package: document.getElementById('customPackage') ? document.getElementById('customPackage').value : null,
+        units: document.getElementById('customUnits') ? document.getElementById('customUnits').value : null,
+        requirements: document.getElementById('customRequirements').value,
+        notes: document.getElementById('customNotes').value,
+        timestamp: new Date().toISOString()
+    };
+    
+    serviceCustomizations[currentCustomizingService] = customization;
+    
+    // Add hidden input for customization data
+    let existingInput = document.querySelector(`input[name="customization[${currentCustomizingService}]"]`);
+    if (!existingInput) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = `customization[${currentCustomizingService}]`;
+        input.value = JSON.stringify(customization);
+        document.getElementById('bookingForm').appendChild(input);
+    } else {
+        existingInput.value = JSON.stringify(customization);
+    }
+    
+    const modal = bootstrap.Modal.getInstance(document.getElementById('customizationModal'));
+    modal.hide();
+    
+    // Show success feedback
+    const serviceCard = document.querySelector(`#service-${currentCustomizingService}`).closest('.service-option-card');
+    const customizeBtn = serviceCard.querySelector('.btn-outline-primary');
+    customizeBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Customized';
+    customizeBtn.classList.remove('btn-outline-primary');
+    customizeBtn.classList.add('btn-success');
+}
+
 function nextStep(step) {
-    // Validate current step before proceeding
     if (!validateStep(step - 1)) {
         return;
     }
     
-    // Hide all steps
     document.querySelectorAll('.step').forEach(stepEl => {
         stepEl.classList.remove('active');
     });
     
-    // Show target step
     document.getElementById('step-' + step).classList.add('active');
     
-    // Update progress bar
     const progress = (step - 1) * 25;
     document.getElementById('progress-bar').style.width = progress + '%';
     
-    // Update step indicators
     document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
         if (index < step) {
             indicator.classList.add('active');
@@ -865,26 +802,21 @@ function nextStep(step) {
         }
     });
     
-    // Update order summary when reaching payment step
     if (step === 5) {
         updateOrderSummary();
     }
 }
 
 function prevStep(step) {
-    // Hide all steps
     document.querySelectorAll('.step').forEach(stepEl => {
         stepEl.classList.remove('active');
     });
     
-    // Show target step
     document.getElementById('step-' + step).classList.add('active');
     
-    // Update progress bar
     const progress = (step - 1) * 25;
     document.getElementById('progress-bar').style.width = progress + '%';
     
-    // Update step indicators
     document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
         if (index < step) {
             indicator.classList.add('active');
@@ -897,7 +829,6 @@ function prevStep(step) {
 function validateStep(step) {
     const currentStep = document.getElementById('step-' + step);
     
-    // Step 1: Package selection
     if (step === 1) {
         const packageSelected = document.querySelector('input[name="package"]:checked');
         if (!packageSelected) {
@@ -906,7 +837,6 @@ function validateStep(step) {
         }
     }
     
-    // Step 2: Venue selection
     if (step === 2) {
         const venueType = document.getElementById('venueType').value;
         if (!venueType) {
@@ -930,15 +860,13 @@ function validateStep(step) {
                 return false;
             }
             
-            // Set the location and address for own venue
             document.getElementById('eventLocation').value = venueAddress;
             document.getElementById('fullAddress').value = `${venueAddress}, ${venueCity}, ${venuePostal}`;
         }
     }
     
-    // Step 4: Contact information
     if (step === 4) {
-        const requiredFields = ['full_name', 'email', 'contact_number', 'event_date', 'event_time'];
+        const requiredFields = ['contact_name', 'contact_email', 'contact_phone', 'event_date', 'event_time'];
         for (let field of requiredFields) {
             const element = document.getElementById(field);
             if (!element.value.trim()) {
@@ -948,16 +876,14 @@ function validateStep(step) {
             }
         }
         
-        // Validate email format
-        const email = document.getElementById('email').value;
+        const email = document.getElementById('contact_email').value;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             alert('Please enter a valid email address.');
-            document.getElementById('email').focus();
+            document.getElementById('contact_email').focus();
             return false;
         }
         
-        // Validate event date is not in the past
         const eventDate = new Date(document.getElementById('event_date').value);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -966,10 +892,6 @@ function validateStep(step) {
             document.getElementById('event_date').focus();
             return false;
         }
-        
-        // Set alternate contact and backup email in hidden fields
-        document.getElementById('alternatePhone').value = document.getElementById('alternate_contact').value;
-        document.getElementById('backupEmail').value = document.getElementById('backup_email').value;
     }
     
     return true;
@@ -998,8 +920,7 @@ function updateOrderSummary() {
     const selectedServices = document.querySelectorAll('.service-checkbox:checked');
     selectedServices.forEach(service => {
         const serviceName = service.value;
-        // You would need to add data-price attributes to your service checkboxes
-        const servicePrice = getServicePrice(serviceName);
+        const servicePrice = parseFloat(service.getAttribute('data-price')) || 0;
         total += servicePrice;
         summaryHTML += `
             <tr>
@@ -1010,33 +931,8 @@ function updateOrderSummary() {
         `;
     });
     
-    // Venue (if rental)
-    const venueType = document.getElementById('venueType').value;
-    if (venueType === 'rental') {
-        const selectedVenue = document.querySelector('input[name="selected_venue"]:checked');
-        if (selectedVenue) {
-            // Venue price would need to be included in the venue data
-            // For now, we'll assume it's included in the package
-        }
-    }
-    
     summaryContainer.innerHTML = summaryHTML || '<tr><td colspan="3" class="text-center text-muted">No items selected</td></tr>';
     document.getElementById('totalAmount').textContent = `Total: ₱${total.toLocaleString()}`;
-}
-
-function getServicePrice(serviceName) {
-    const servicePrices = {
-        'Catering Service': 15000,
-        'Decoration Setup': 10000,
-        'Photography & Videography': 12000,
-        'Sound System & Lights': 8000,
-        'Entertainment': 10000,
-        'Event Coordination': 15000,
-        'Invitation Design & Printing': 5000,
-        'Souvenirs & Giveaways': 3000
-    };
-    
-    return servicePrices[serviceName] || 0;
 }
 
 // Form submission
@@ -1047,7 +943,6 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
         return;
     }
     
-    // Show loading modal
     const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
     loadingModal.show();
     
@@ -1062,7 +957,6 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
         loadingModal.hide();
         
         if (data.success) {
-            // Show success message and redirect
             alert('Booking submitted successfully! Your reference number is: ' + data.booking_reference);
             window.location.href = 'booking_success.php?reference=' + data.booking_reference;
         } else {

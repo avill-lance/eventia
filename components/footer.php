@@ -35,8 +35,5 @@
 <script src="js/js/bootstrap.bundle.min.js"></script>
 <script src="js/sweetalert2@11.js"></script>
 <script src="js/EditProfile.js"></script>
-<script src="js/booking-system.js"></script>
-<script src="js/guided-booking-enhanced.js"></script>
-<script src="js/services.js"></script>
 </body>
 </html>
