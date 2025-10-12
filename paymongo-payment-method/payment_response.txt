@@ -3,7 +3,7 @@ Response: Array
 (
     [data] => Array
         (
-            [id] => cs_wLQpZtQMoosAcp4ixM88R1gP
+            [id] => cs_p9Q66WqAXXmayWYwRW2iX5UE
             [type] => checkout_session
             [attributes] => Array
                 (
@@ -25,11 +25,11 @@ Response: Array
                         )
 
                     [billing_information_fields_editable] => enabled
-                    [cancel_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251012-094135-68eb5baf3f24f
-                    [checkout_url] => https://checkout.paymongo.com/cs_wLQpZtQMoosAcp4ixM88R1gP_client_VeXUWjxnKT4aGMNHrTYFXaVY#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
-                    [client_key] => cs_wLQpZtQMoosAcp4ixM88R1gP_client_VeXUWjxnKT4aGMNHrTYFXaVY
+                    [cancel_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251012-095143-68eb5e0fa0c92
+                    [checkout_url] => https://checkout.paymongo.com/cs_p9Q66WqAXXmayWYwRW2iX5UE_client_na7ixNHqL65QwtGF4ckLT2PH#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
+                    [client_key] => cs_p9Q66WqAXXmayWYwRW2iX5UE_client_na7ixNHqL65QwtGF4ckLT2PH
                     [customer_email] => 
-                    [description] => Other Booking
+                    [description] => Birthday Party Booking
                     [line_items] => Array
                         (
                             [0] => Array
@@ -41,7 +41,7 @@ Response: Array
                                         (
                                         )
 
-                                    [name] => Other - Cora Lawrence
+                                    [name] => Birthday Party - Quinn Guerra
                                     [quantity] => 1
                                 )
 
@@ -55,15 +55,15 @@ Response: Array
 
                     [payment_intent] => Array
                         (
-                            [id] => pi_NL57EP8or71HWgrVSEvo21R3
+                            [id] => pi_f3f76C2b9JFZ5sPQ2wJDKEue
                             [type] => payment_intent
                             [attributes] => Array
                                 (
                                     [amount] => 9999900
                                     [capture_type] => automatic
-                                    [client_key] => pi_NL57EP8or71HWgrVSEvo21R3_client_dMaG3XGCBvRgdZkas9ANYv1A
+                                    [client_key] => pi_f3f76C2b9JFZ5sPQ2wJDKEue_client_MF4JUxpdNTfZQ8bWSqebudeU
                                     [currency] => PHP
-                                    [description] => Other Booking
+                                    [description] => Birthday Party Booking
                                     [livemode] => 
                                     [original_amount] => 9999900
                                     [statement_descriptor] => Eventia Incorporation
@@ -71,9 +71,9 @@ Response: Array
                                     [last_payment_error] => 
                                     [payment_method_allowed] => Array
                                         (
-                                            [0] => gcash
-                                            [1] => card
-                                            [2] => grab_pay
+                                            [0] => card
+                                            [1] => grab_pay
+                                            [2] => gcash
                                         )
 
                                     [payments] => Array
@@ -92,27 +92,27 @@ Response: Array
 
                                     [metadata] => 
                                     [setup_future_usage] => 
-                                    [created_at] => 1760254896
-                                    [updated_at] => 1760254896
+                                    [created_at] => 1760255505
+                                    [updated_at] => 1760255505
                                 )
 
                         )
 
                     [payment_method_types] => Array
                         (
-                            [0] => card
-                            [1] => gcash
-                            [2] => grab_pay
+                            [0] => gcash
+                            [1] => grab_pay
+                            [2] => card
                         )
 
-                    [reference_number] => EVT-20251012-094135-68eb5baf3f24f
+                    [reference_number] => EVT-20251012-095143-68eb5e0fa0c92
                     [send_email_receipt] => 
                     [show_description] => 1
                     [show_line_items] => 1
                     [status] => active
-                    [success_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251012-094135-68eb5baf3f24f
-                    [created_at] => 1760254896
-                    [updated_at] => 1760254896
+                    [success_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251012-095143-68eb5e0fa0c92
+                    [created_at] => 1760255505
+                    [updated_at] => 1760255505
                     [metadata] => 
                 )
 
