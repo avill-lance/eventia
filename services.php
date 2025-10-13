@@ -77,29 +77,29 @@
             <div class="col-md-3">
                 <div class="process-step">
                     <div class="step-number">1</div>
-                    <h5>Consultation</h5>
-                    <p>We begin with a detailed consultation to understand your vision, needs, and budget.</p>
+                    <h5>Booking</h5>
+                    <p>You start by booking your event with us, providing all the necessary details and preferences.</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="process-step">
                     <div class="step-number">2</div>
-                    <h5>Planning</h5>
-                    <p>Our team creates a customized plan and timeline for your event.</p>
+                    <h5>Confirmation</h5>
+                    <p>Once we review your request, we’ll confirm your booking and finalize the event plan and schedule.</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="process-step">
                     <div class="step-number">3</div>
                     <h5>Execution</h5>
-                    <p>We handle all the details and coordinate with vendors to bring your event to life.</p>
+                    <p>Our dedicated team takes full charge of planning and executing your event, ensuring everything runs perfectly.</p>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="process-step">
                     <div class="step-number">4</div>
                     <h5>Follow-up</h5>
-                    <p>After the event, we ensure everything is wrapped up perfectly and gather feedback.</p>
+                    <p>Once the event is over, we reach out to ensure your satisfaction and gather feedback for future improvements.</p>
                 </div>
             </div>
         </div>

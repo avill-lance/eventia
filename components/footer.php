@@ -9,17 +9,15 @@
             <div class="col-md-4 mb-4">
                 <h5>Quick Links</h5>
                 <ul class="list-unstyled">
-                    <li><a href="index.html" class="text-light text-decoration-none">Home</a></li>
-                    <li><a href="packages.html" class="text-light text-decoration-none">Packages</a></li>
-                    <li><a href="#services" class="text-light text-decoration-none">Services</a></li>
-                    <li><a href="shop.html" class="text-light text-decoration-none">Shop</a></li>
+                    <li><a href="index.php" class="text-light text-decoration-none">Home</a></li>
+                    <li><a href="packages.php" class="text-light text-decoration-none">Booking</a></li>
+                    <li><a href="services.php" class="text-light text-decoration-none">Services</a></li>
                 </ul>
             </div>
             <div class="col-md-4 mb-4">
                 <h5>Support</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#faq" class="text-light text-decoration-none">FAQ</a></li>
-                    <li><a href="#contact" class="text-light text-decoration-none">Contact</a></li>
+                    <li><a href="contact.php" class="text-light text-decoration-none">Contact</a></li>
                 </ul>
             </div>
         </div> <!-- Added missing closing div -->
