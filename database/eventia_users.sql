@@ -146,6 +146,28 @@ INSERT INTO `tbl_events` (`event_id`, `event_title`, `event_name`, `event_descri
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_feedback`
+--
+
+CREATE TABLE `tbl_feedback` (
+  `feedback_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `feedback_type` varchar(100) NOT NULL,
+  `order_reference` varchar(50) DEFAULT NULL,
+  `rating` int(1) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `photos` longblob DEFAULT NULL,
+  `photo_names` varchar(500) DEFAULT NULL,
+  `permission_granted` tinyint(1) DEFAULT 0,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_packages`
 --
 
@@ -446,6 +468,15 @@ ALTER TABLE `tbl_events`
   ADD PRIMARY KEY (`event_id`);
 
 --
+-- Indexes for table `tbl_feedback`
+--
+ALTER TABLE `tbl_feedback`
+  ADD PRIMARY KEY (`feedback_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `idx_feedback_status` (`status`),
+  ADD KEY `idx_feedback_created` (`created_at`);
+
+--
 -- Indexes for table `tbl_packages`
 --
 ALTER TABLE `tbl_packages`
@@ -522,6 +553,12 @@ ALTER TABLE `tbl_events`
   MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `tbl_feedback`
+--
+ALTER TABLE `tbl_feedback`
+  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbl_packages`
 --
 ALTER TABLE `tbl_packages`
@@ -581,6 +618,12 @@ ALTER TABLE `tbl_bookings`
 ALTER TABLE `tbl_booking_services`
   ADD CONSTRAINT `tbl_booking_services_ibfk_1` FOREIGN KEY (`booking_id`) REFERENCES `tbl_bookings` (`booking_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `tbl_booking_services_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `tbl_services` (`service_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `tbl_feedback`
+--
+ALTER TABLE `tbl_feedback`
+  ADD CONSTRAINT `tbl_feedback_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `tbl_service_details`
