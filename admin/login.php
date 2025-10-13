@@ -13,23 +13,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
     
-    // Use MySQLi prepared statement instead of PDO
-    $stmt = $conn->prepare("SELECT * FROM tbl_admin WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $admin = $result->fetch_assoc();
+    // Debug: Check if we're getting the form data
+    error_log("Login attempt - Username: $username");
     
-    if ($admin && password_verify($password, $admin['password'])) {
-        $_SESSION['admin_id'] = $admin['id'];
-        $_SESSION['admin_username'] = $admin['username'];
-        header('Location: dashboard.php');
-        exit();
+    if (empty($username) || empty($password)) {
+        $error = 'Please enter both username and password';
     } else {
-        $error = 'Invalid username or password';
+        // Use MySQLi prepared statement for security
+        $stmt = $conn->prepare("SELECT id, username, password FROM tbl_admin WHERE username = ?");
+        if ($stmt) {
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows === 1) {
+                $admin = $result->fetch_assoc();
+                
+                // Debug: Check what we found
+                error_log("Found admin: " . $admin['username']);
+                error_log("Stored hash: " . $admin['password']);
+                
+                // Verify the password - using password_verify for bcrypt
+                if (password_verify($password, $admin['password'])) {
+                    // Password is correct, create session
+                    $_SESSION['admin_id'] = $admin['id'];
+                    $_SESSION['admin_username'] = $admin['username'];
+                    
+                    // Debug: Session created
+                    error_log("Login successful for user: " . $admin['username']);
+                    
+                    header('Location: dashboard.php');
+                    exit();
+                } else {
+                    // Debug: Password verification failed
+                    error_log("Password verification failed for user: $username");
+                    $error = 'Invalid username or password';
+                }
+            } else {
+                // Debug: No user found
+                error_log("No admin found with username: $username");
+                $error = 'Invalid username or password';
+            }
+            
+            $stmt->close();
+        } else {
+            $error = 'Database error: Unable to prepare statement';
+            error_log("Prepare statement failed: " . $conn->error);
+        }
     }
-    
-    $stmt->close();
 }
 ?>
 
@@ -50,7 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input[type="text"], input[type="password"] { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; }
         .btn { width: 100%; padding: 0.75rem; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
         .btn:hover { background: #2563eb; }
-        .error { color: #dc2626; text-align: center; margin-bottom: 1rem; }
+        .error { color: #dc2626; text-align: center; margin-bottom: 1rem; padding: 0.5rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; }
+        .debug-info { color: #6b7280; font-size: 0.875rem; margin-top: 1rem; text-align: center; }
     </style>
 </head>
 <body>
@@ -63,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
@@ -71,6 +103,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <button type="submit" class="btn">Login</button>
             </form>
+            <div class="debug-info">
+                Default credentials: admin / password
+            </div>
         </div>
     </div>
 </body>

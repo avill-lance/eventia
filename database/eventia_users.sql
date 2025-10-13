@@ -603,3 +603,15 @@ ALTER TABLE `tbl_transactions`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Create admin account for Eventia
+-- Username: admin
+-- Password: admin123
+
+INSERT INTO `tbl_admin` (`username`, `password`, `time_created`) 
+VALUES ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NOW());
+
+-- This will create an admin account with:
+-- Username: admin
+-- Password: admin123 (hashed securely)
+-- Time created: current timestamp
