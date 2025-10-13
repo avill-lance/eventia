@@ -1,4 +1,26 @@
-<?php include __DIR__."/components/header.php"; ?>
+<?php 
+    //Establish Session
+    include __DIR__ . "/functions/session.php";
+    // Removed the print_r($_SESSION) that was causing issues
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Eventia</title>
+    <link rel="icon" type="image/png" href="assets/Logo_BG.png">
+    <link rel="stylesheet" href="css/bootstrap-icons-1.13.1/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body{
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
 
     <div class="container d-flex vh-90 gap-4 align-items-center justify-content-center mt-5">
         <div class="card">
@@ -32,10 +54,10 @@
             </form>
         </div>
     </div>
-
-<?php include __DIR__."/components/footer.php" ?>
+<script src="js/sweetalert2@11.js"></script>
+<script src="js/jquery-3.7.1.js"></script>
+<script src="js/js/bootstrap.bundle.min.js"></script>
 <script>
-
 $(document).ready(function(){
     $("#changepassword").submit(function(e){
         e.preventDefault();
@@ -141,3 +163,5 @@ if (typeof jQuery !== 'undefined' && form) {
 }
 console.log("=== END DEBUG ===");
 </script>
+</body>
+</html>
