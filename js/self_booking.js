@@ -1,153 +1,194 @@
-$(document).ready(function(){
-$("#submitBooking").click(function(e){
-    e.preventDefault();
-    console.log("🔴 Submit button clicked!");
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing Transactions DataTable...');
     
-    // Validate form first
-    if(!$("#bookingForm")[0].checkValidity()) {
-        console.log("❌ Form validation failed");
-        $("#bookingForm")[0].reportValidity();
-        return;
-    }
-    console.log("✅ Form validation passed");
-    
-    // Check if terms are accepted
-    if(!$("#terms").is(":checked")) {
-        console.log("❌ Terms not accepted");
-        Swal.fire('Error!', 'Please accept the terms and conditions to continue.', 'error');
-        return;
-    }
-    console.log("✅ Terms accepted");
-    
-    // Show loading state
-    const submitBtn = $('#submitBooking');
-    const originalText = submitBtn.html();
-    submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...').prop('disabled', true);
-    console.log("🔄 Loading state activated");
-    
-    // Collect all form data properly
-    const formData = new FormData();
-    
-    // Add basic form data
-    const formInputs = $("#bookingForm").serializeArray();
-    console.log("📝 Form inputs:", formInputs);
-    formInputs.forEach(function(input) {
-        formData.append(input.name, input.value);
-    });
-    
-    // Add calculated amount
-    const totalAmount = calculateTotalAmount();
-    console.log("💰 Calculated amount:", totalAmount);
-    formData.append('amount', totalAmount);
-    
-    // Add event type (from package)
-    const selectedPackage = $('input[name="package"]:checked');
-    if(selectedPackage.length) {
-        formData.append('eventType', selectedPackage.val());
-        console.log("🎯 Event type:", selectedPackage.val());
-    }
-    
-    // Add customer info
-    const contactName = $('#contact_name').val();
-    formData.append('firstName', contactName.split(' ')[0]);
-    formData.append('lastName', contactName.split(' ').slice(1).join(' '));
-    formData.append('email', $('#contact_email').val());
-    formData.append('phone', $('#contact_phone').val());
-    
-    console.log("👤 Customer info:", {
-        firstName: contactName.split(' ')[0],
-        lastName: contactName.split(' ').slice(1).join(' '),
-        email: $('#contact_email').val(),
-        phone: $('#contact_phone').val()
-    });
-    
-    // For testing - uncomment this line to use test mode
-    formData.append('test_mode', 'true');
-    console.log("🧪 Test mode enabled");
-    
-    console.log("📤 Sending AJAX request...");
-    
-    $.ajax({
-        url: "paymongo-payment-method/create_payment.php",
-        method: "POST",
-        dataType: "json",
-        data: formData,
-        processData: false, // Important for FormData
-        contentType: false, // Important for FormData
-        success: function(response){
-            console.log("✅ AJAX Success - Full response:", response);
-            submitBtn.html(originalText).prop('disabled', false);
-            
-            if(response.success && response.checkout_url) {
-                console.log("🎉 Payment created successfully");
-                // Store reference in sessionStorage for verification
-                sessionStorage.setItem('paymentRef', response.reference);
-                if(response.test_mode) {
-                    sessionStorage.setItem('testMode', 'true');
-                    console.log("🧪 Test payment created - Reference:", response.reference);
-                    window.location.href = response.checkout_url;
-                } else {
-                    console.log("💳 Real payment created - Reference:", response.reference);
-                    
-                    // Show instructions for real payment
-                    Swal.fire({
-                        title: 'Redirecting to PayMongo',
-                        html: 'You will be redirected to PayMongo to complete your payment.<br><br>' +
-                              '<strong>Reference Number:</strong> ' + response.reference + '<br><br>' +
-                              'Please complete the payment process and return to this site.',
-                        icon: 'info',
-                        showCancelButton: true,
-                        confirmButtonText: 'Proceed to PayMongo',
-                        cancelButtonText: 'Stay Here',
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            console.log("🔄 Redirecting to:", response.checkout_url);
-                            window.location.href = response.checkout_url;
-                        } else {
-                            console.log("🚫 User cancelled redirect");
-                        }
-                    });
-                }
-            } else {
-                console.log("❌ Payment creation failed:", response);
-                Swal.fire('Error!', response.error || 'Failed to create payment', 'error');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('❌ AJAX Error:', error);
-            console.log('Status:', xhr.status);
-            console.log('Response Text:', xhr.responseText);
-            submitBtn.html(originalText).prop('disabled', false);
-            
-            try {
-                var errorResponse = JSON.parse(xhr.responseText);
-                console.log('Error details:', errorResponse);
-                Swal.fire('Error!', errorResponse.error || 'Network error: ' + error, 'error');
-            } catch(e) {
-                Swal.fire('Error!', 'Server error: ' + xhr.responseText, 'error');
-            }
-        }
-    });
+    // Initialize DataTable with correct path
+    initializeDataTable();
 });
 
-// Function to calculate total amount
-function calculateTotalAmount() {
-    let total = 0;
-    
-    // Package price
-    const selectedPackage = $('input[name="package"]:checked');
-    if(selectedPackage.length) {
-        total += parseFloat(selectedPackage.data('price')) || 0;
+function initializeDataTable() {
+    // Clear table
+    $('#TransactionsTable tbody').html(`
+        <tr>
+            <td colspan="6" class="text-center text-muted py-4">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                Loading transactions...
+            </td>
+        </tr>
+    `);
+
+    try {
+        const table = $('#TransactionsTable').DataTable({
+            "ajax": {
+                "url": "functions/ViewTransactions.php", // ← CORRECT PATH
+                "type": "GET",
+                "dataType": "json",
+                "dataSrc": function (json) {
+                    console.log('DataTables received:', json);
+                    
+                    if (json && json.success) {
+                        console.log(`✅ Successfully loaded ${json.data.length} transactions`);
+                        return json.data;
+                    } else {
+                        console.error('❌ API returned error:', json?.message);
+                        showErrorMessage(json?.message || 'Failed to load transactions');
+                        return [];
+                    }
+                },
+                "error": function(xhr, status, error) {
+                    console.error('❌ AJAX Error:', error);
+                    console.log('Response preview:', xhr.responseText?.substring(0, 200));
+                    
+                    if (xhr.status === 404) {
+                        showErrorMessage('API endpoint not found. Check the file path.');
+                    } else if (xhr.responseText && xhr.responseText.includes('<!DOCTYPE')) {
+                        showErrorMessage('Server returned HTML instead of JSON. Check PHP execution.');
+                    } else {
+                        showErrorMessage('Network error: ' + error);
+                    }
+                }
+            },
+            "columns": [
+                { 
+                    "data": "transaction_id",
+                    "className": "fw-bold"
+                },
+                { 
+                    "data": "ref_id",
+                    "className": "text-muted"
+                },
+                { 
+                    "data": "date_time",
+                    "render": function(data) {
+                        if (!data) return 'N/A';
+                        try {
+                            const date = new Date(data);
+                            return date.toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+                        } catch (e) {
+                            return data;
+                        }
+                    }
+                },
+                { 
+                    "data": "status",
+                    "render": function(data) {
+                        const statusMap = {
+                            'completed': 'status-success',
+                            'success': 'status-success',
+                            'paid': 'status-success',
+                            'pending': 'status-pending',
+                            'failed': 'status-failed',
+                            'cancelled': 'status-failed',
+                            'processing': 'status-processing'
+                        };
+                        
+                        const statusClass = statusMap[data?.toLowerCase()] || 'status-pending';
+                        const statusText = data?.charAt(0).toUpperCase() + data?.slice(1).toLowerCase() || 'Pending';
+                        
+                        return `<span class="status-badge ${statusClass}">${statusText}</span>`;
+                    }
+                },
+                { 
+                    "data": "price",
+                    "render": function(data) {
+                        if (!data) return '₱0.00';
+                        const amount = parseFloat(data);
+                        if (isNaN(amount)) return '₱0.00';
+                        return `<span class="price-amount">₱${amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>`;
+                    },
+                    "className": "text-end"
+                },
+                { 
+                    "data": "transaction_id",
+                    "render": function(data, type, row) {
+                        let buttons = `
+                            <button class="btn btn-action btn-view" onclick="viewTransaction('${data}')" title="View Details">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        `;
+                        
+                        if (row.status && row.status.toLowerCase() === 'pending') {
+                            buttons += `
+                                <button class="btn btn-action btn-cancel" onclick="cancelTransaction('${data}')" title="Cancel">
+                                    <i class="bi bi-x-circle"></i>
+                                </button>
+                            `;
+                        }
+                        
+                        return `<div class="d-flex justify-content-center gap-1">${buttons}</div>`;
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "className": "text-center"
+                }
+            ],
+            "language": {
+                "emptyTable": "No transactions found",
+                "zeroRecords": "No matching transactions found",
+                "info": "Showing _START_ to _END_ of _TOTAL_ transactions",
+                "infoEmpty": "Showing 0 to 0 of 0 transactions",
+                "infoFiltered": "(filtered from _MAX_ total transactions)",
+                "search": "Search transactions:",
+                "paginate": {
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Next",
+                    "previous": "Previous"
+                },
+                "lengthMenu": "Show _MENU_ transactions",
+                "processing": "Loading transactions..."
+            },
+            "order": [[0, 'desc']],
+            "responsive": true,
+            "processing": true,
+            "serverSide": false,
+            "lengthMenu": [10, 25, 50, 100],
+            "pageLength": 10
+        });
+
+        // Refresh button
+        $('#refreshTable').on('click', function() {
+            const $btn = $(this);
+            const originalHtml = $btn.html();
+            
+            $btn.prop('disabled', true).html('<i class="bi bi-arrow-clockwise me-1"></i> Refreshing...');
+            
+            table.ajax.reload(function() {
+                $btn.prop('disabled', false).html(originalHtml);
+            });
+        });
+        
+    } catch (error) {
+        console.error('DataTable initialization error:', error);
+        showErrorMessage('Error initializing table: ' + error.message);
     }
-    
-    // Services prices
-    $('.service-checkbox:checked').each(function() {
-        total += parseFloat($(this).data('price')) || 0;
-    });
-    
-    console.log("🧮 Total calculated:", total);
-    return total;
 }
-});
+
+function showErrorMessage(message) {
+    $('#TransactionsTable tbody').html(`
+        <tr>
+            <td colspan="6" class="text-center text-danger py-4">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                ${message}
+            </td>
+        </tr>
+    `);
+}
+
+// Global functions
+function viewTransaction(transactionId) {
+    console.log('View transaction:', transactionId);
+    alert('View transaction: ' + transactionId);
+}
+
+function cancelTransaction(transactionId) {
+    if (confirm('Are you sure you want to cancel this transaction?')) {
+        console.log('Cancel transaction:', transactionId);
+        alert('Cancel transaction: ' + transactionId);
+    }
+}

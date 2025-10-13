@@ -1,12 +1,9 @@
 <?php include __DIR__."/components/header.php"; ?>
 <?php
-
 $success = isset($_GET['success']) && $_GET['success'] === 'true';
 $ref = $_GET['ref'] ?? '';
 $user_id =$_SESSION['id'];
 $price =$_SESSION['amount'];
-
-print_r($_SESSION);
 if ($success) {
     $status='PAID';
     $title = "Payment Successful!";
@@ -23,7 +20,11 @@ if ($success) {
 
 $insertsql= $conn->prepare("INSERT INTO tbl_transactions (user_id,ref_id,status,price) VALUES (?,?,?,?)");
 $insertsql->bind_param("issi", $user_id,$ref,$status,$price);
-$insertsql->execute();
+if($insertsql->execute()){
+    if( isset($_SESSION['amount'])){
+        unset($_SESSION['amount']);
+    }
+}
 $insertsql->close();
 ?>  
 

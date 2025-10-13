@@ -3,11 +3,7 @@ Response: Array
 (
     [data] => Array
         (
-<<<<<<< HEAD
-            [id] => cs_tVdQkQ2K5eGvRk14cWnAzdvW
-=======
-            [id] => cs_CSxFU7sEBQF17QZQZqaPs5sG
->>>>>>> origin/FORGOT-PASSWORD-DONE
+            [id] => cs_4qMJSvZY9atcyqT1e5k2VLBp
             [type] => checkout_session
             [attributes] => Array
                 (
@@ -29,39 +25,23 @@ Response: Array
                         )
 
                     [billing_information_fields_editable] => enabled
-<<<<<<< HEAD
-                    [cancel_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251013-083105-68ec9ca93e6a5
-                    [checkout_url] => https://checkout.paymongo.com/cs_tVdQkQ2K5eGvRk14cWnAzdvW_client_hdGd9qpirjg6W4hZWYPkJuBs#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
-                    [client_key] => cs_tVdQkQ2K5eGvRk14cWnAzdvW_client_hdGd9qpirjg6W4hZWYPkJuBs
+                    [cancel_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251013-165726-68ed1356d7055
+                    [checkout_url] => https://checkout.paymongo.com/cs_4qMJSvZY9atcyqT1e5k2VLBp_client_JtmETcU2WLt3SKCDQNdJatur#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
+                    [client_key] => cs_4qMJSvZY9atcyqT1e5k2VLBp_client_JtmETcU2WLt3SKCDQNdJatur
                     [customer_email] => 
-                    [description] => Wedding Event Package Booking
-=======
-                    [cancel_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251013-050105-68ec6b711196a
-                    [checkout_url] => https://checkout.paymongo.com/cs_CSxFU7sEBQF17QZQZqaPs5sG_client_2RRNVjetr8g21VrSCRuvVtfn#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
-                    [client_key] => cs_CSxFU7sEBQF17QZQZqaPs5sG_client_2RRNVjetr8g21VrSCRuvVtfn
-                    [customer_email] => 
-                    [description] => Holiday Party Package Booking
->>>>>>> origin/FORGOT-PASSWORD-DONE
+                    [description] => Christening Package Booking
                     [line_items] => Array
                         (
                             [0] => Array
                                 (
-<<<<<<< HEAD
-                                    [amount] => 11819000
-=======
-                                    [amount] => 9500000
->>>>>>> origin/FORGOT-PASSWORD-DONE
+                                    [amount] => 5700000
                                     [currency] => PHP
                                     [description] => 
                                     [images] => Array
                                         (
                                         )
 
-<<<<<<< HEAD
-                                    [name] => Wedding Event Package - Yeo Padilla
-=======
-                                    [name] => Holiday Party Package - Fatima Meyer
->>>>>>> origin/FORGOT-PASSWORD-DONE
+                                    [name] => Christening Package - Martin Hicks
                                     [quantity] => 1
                                 )
 
@@ -75,45 +55,25 @@ Response: Array
 
                     [payment_intent] => Array
                         (
-<<<<<<< HEAD
-                            [id] => pi_8Cv4SCiDFFGtpa5CGCNse3a8
+                            [id] => pi_UUjswL5myyMSFqQHK8ik45aj
                             [type] => payment_intent
                             [attributes] => Array
                                 (
-                                    [amount] => 11819000
+                                    [amount] => 5700000
                                     [capture_type] => automatic
-                                    [client_key] => pi_8Cv4SCiDFFGtpa5CGCNse3a8_client_MAGKuJVKmQpuq5AQtbFbAwVN
+                                    [client_key] => pi_UUjswL5myyMSFqQHK8ik45aj_client_8FbZPex6XzaFdhcGt56M9dFh
                                     [currency] => PHP
-                                    [description] => Wedding Event Package Booking
+                                    [description] => Christening Package Booking
                                     [livemode] => 
-                                    [original_amount] => 11819000
-=======
-                            [id] => pi_SmzkbA9j2oATcr7e8PB85a5E
-                            [type] => payment_intent
-                            [attributes] => Array
-                                (
-                                    [amount] => 9500000
-                                    [capture_type] => automatic
-                                    [client_key] => pi_SmzkbA9j2oATcr7e8PB85a5E_client_bgy4RUtB8ytEpRvNx3xRgjaG
-                                    [currency] => PHP
-                                    [description] => Holiday Party Package Booking
-                                    [livemode] => 
-                                    [original_amount] => 9500000
->>>>>>> origin/FORGOT-PASSWORD-DONE
+                                    [original_amount] => 5700000
                                     [statement_descriptor] => Eventia Incorporation
                                     [status] => awaiting_payment_method
                                     [last_payment_error] => 
                                     [payment_method_allowed] => Array
                                         (
-<<<<<<< HEAD
-                                            [0] => card
-                                            [1] => gcash
-                                            [2] => grab_pay
-=======
-                                            [0] => grab_pay
+                                            [0] => gcash
                                             [1] => card
-                                            [2] => gcash
->>>>>>> origin/FORGOT-PASSWORD-DONE
+                                            [2] => grab_pay
                                         )
 
                                     [payments] => Array
@@ -132,47 +92,27 @@ Response: Array
 
                                     [metadata] => 
                                     [setup_future_usage] => 
-<<<<<<< HEAD
-                                    [created_at] => 1760337067
-                                    [updated_at] => 1760337067
-=======
-                                    [created_at] => 1760324465
-                                    [updated_at] => 1760324465
->>>>>>> origin/FORGOT-PASSWORD-DONE
+                                    [created_at] => 1760367448
+                                    [updated_at] => 1760367448
                                 )
 
                         )
 
                     [payment_method_types] => Array
                         (
-<<<<<<< HEAD
-                            [0] => gcash
-                            [1] => grab_pay
-                            [2] => card
-                        )
-
-                    [reference_number] => EVT-20251013-083105-68ec9ca93e6a5
-=======
                             [0] => card
-                            [1] => gcash
-                            [2] => grab_pay
+                            [1] => grab_pay
+                            [2] => gcash
                         )
 
-                    [reference_number] => EVT-20251013-050105-68ec6b711196a
->>>>>>> origin/FORGOT-PASSWORD-DONE
+                    [reference_number] => EVT-20251013-165726-68ed1356d7055
                     [send_email_receipt] => 
                     [show_description] => 1
                     [show_line_items] => 1
                     [status] => active
-<<<<<<< HEAD
-                    [success_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251013-083105-68ec9ca93e6a5
-                    [created_at] => 1760337067
-                    [updated_at] => 1760337067
-=======
-                    [success_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251013-050105-68ec6b711196a
-                    [created_at] => 1760324465
-                    [updated_at] => 1760324465
->>>>>>> origin/FORGOT-PASSWORD-DONE
+                    [success_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251013-165726-68ed1356d7055
+                    [created_at] => 1760367448
+                    [updated_at] => 1760367448
                     [metadata] => 
                 )
 

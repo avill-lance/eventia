@@ -104,7 +104,7 @@
             </div>
         </div>
         <div class="text-center mt-4">
-            <a href="packages.html" class="btn btn-primary">Start Planning Your Event</a>
+            <a href="packages.php" class="btn btn-primary">Start Planning Your Event</a>
         </div>
     </div>
 

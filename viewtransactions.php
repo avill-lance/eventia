@@ -1,14 +1,28 @@
 <?php include __DIR__."/components/header.php"; ?>
 
+<link rel="stylesheet" href="css/viewtransactions.css">
+
 <div class="container d-flex vh-90 gap-4 align-items-center justify-content-center mt-5">
     <div class="card w-100">
         <div class="card-header">
-            <h1 class="section-title text-center">Transactions</h1>
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="section-title">Transactions</h1>
+                <button class="btn btn-refresh" id="refreshTable">
+                    <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                </button>
+            </div>
         </div>
         <div class="card-body">
             <table id="TransactionsTable" class="display table table-striped" style="width:100%">
                 <thead>
-                    <!-- Columns will be loaded dynamically -->
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Reference ID</th>
+                        <th>Date & Time</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <!-- Data will be loaded dynamically -->
@@ -19,12 +33,5 @@
 </div>
 
 <!-- Include DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-
-<!-- Set a flag to indicate this is a transactions page -->
-<script>
-    // Set a global flag to indicate this is a transactions page
-    window.isTransactionsPage = true;
-</script>
-
+<link rel="stylesheet" type="text/css" href="css/datatables.min.css">
 <?php include __DIR__."/components/footer.php"; ?>
