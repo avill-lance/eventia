@@ -604,3 +604,56 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+-- Add to eventia_users.sql
+CREATE TABLE `tbl_feedback` (
+  `feedback_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `feedback_type` varchar(100) NOT NULL,
+  `order_reference` varchar(50) DEFAULT NULL,
+  `rating` int(1) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `photos` longblob DEFAULT NULL,
+  `photo_names` varchar(500) DEFAULT NULL,
+  `permission_granted` tinyint(1) DEFAULT 0,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`feedback_id`),
+  KEY `user_id` (`user_id`),
+  KEY `idx_feedback_status` (`status`),
+  KEY `idx_feedback_created` (`created_at`),
+  CONSTRAINT `tbl_feedback_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- Add to eventia_users.sql after the existing tables
+
+-- Create blog table
+CREATE TABLE `tbl_blog` (
+  `blog_id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `excerpt` text NOT NULL,
+  `content` longtext NOT NULL,
+  `featured_image` varchar(500) DEFAULT NULL,
+  `status` enum('published','draft') DEFAULT 'draft',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `published_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`blog_id`),
+  KEY `admin_id` (`admin_id`),
+  KEY `idx_blog_status` (`status`),
+  CONSTRAINT `tbl_blog_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `tbl_admin` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Insert default admin account (password: admin123)
+INSERT INTO `tbl_admin` (`id`, `username`, `password`, `time_created`) VALUES
+(1, 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NOW());
+
+-- Insert sample blog posts
+INSERT INTO `tbl_blog` (`blog_id`, `admin_id`, `title`, `excerpt`, `content`, `featured_image`, `status`, `published_at`) VALUES
+(1, 1, 'Corporate Event Planning Tips', 'Learn how to plan successful corporate events that impress clients and motivate employees with professional strategies.', '<p>Full content about corporate event planning...</p>', 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'published', '2023-06-10 00:00:00'),
+(2, 1, 'Budget-Friendly Birthday Party Ideas', 'Throw an amazing birthday party without breaking the bank with these creative and affordable celebration ideas.', '<p>Full content about budget birthday parties...</p>', 'https://images.unsplash.com/photo-1532117182044-031e7cd916ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'published', '2023-06-05 00:00:00');
