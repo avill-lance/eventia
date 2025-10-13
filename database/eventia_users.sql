@@ -284,7 +284,7 @@ CREATE TABLE `tbl_transactions` (
   `ref_id` varchar(50) DEFAULT NULL,
   `date_time` timestamp NOT NULL DEFAULT current_timestamp(),
   `status` enum('PAID','PENDING','CANCELLED') NOT NULL,
-  `price` int(10) NOT NULL
+  `price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -292,29 +292,29 @@ CREATE TABLE `tbl_transactions` (
 --
 
 INSERT INTO `tbl_transactions` (`transaction_id`, `user_id`, `ref_id`, `date_time`, `status`, `price`) VALUES
-(1, 19, 'TX8M1P3Q', '2025-10-12 13:49:39', 'PAID', 0),
-(2, 19, 'REF-45821', '2025-10-12 13:49:39', 'PAID', 0),
-(3, 19, 'ID-9J7A2L5', '2025-10-12 13:49:39', 'PAID', 0),
-(4, 1, 'REF-7B2K9F4R', '2024-01-15 02:30:00', '', 150),
-(5, 1, 'REF-TX8M1P3Q', '2024-01-16 06:45:00', '', 300),
-(6, 1, 'REF-9J7A2L5M', '2024-01-17 01:15:00', 'PENDING', 76),
-(7, 1, 'REF-45821903', '2024-01-18 08:20:00', '', 420),
-(8, 1, 'REF-16408572', '2024-01-19 03:00:00', '', 200),
-(9, 1, 'REF-73049216', '2024-01-20 05:30:00', '', 90),
-(10, 1, 'REF-28517364', '2024-01-21 07:45:00', 'PENDING', 325),
-(11, 1, 'REF-57291834', '2024-01-22 00:00:00', '', 156),
-(12, 19, 'REF-7B2K9F4R', '2024-01-15 02:30:00', '', 150),
-(13, 19, 'REF-TX8M1P3Q', '2024-01-16 06:45:00', '', 300),
-(14, 19, 'REF-9J7A2L5M', '2024-01-17 01:15:00', 'PENDING', 76),
-(15, 19, 'REF-45821903', '2024-01-18 08:20:00', '', 420),
-(16, 19, 'REF-16408572', '2024-01-19 03:00:00', '', 200),
-(17, 19, 'REF-73049216', '2024-01-20 05:30:00', '', 90),
-(18, 19, 'REF-28517364', '2024-01-21 07:45:00', 'PENDING', 325),
-(19, 19, 'REF-57291834', '2024-01-22 00:00:00', '', 156),
-(20, 19, 'EVT-20251013-031953-68ec53b97710a', '2025-10-13 01:20:09', 'PAID', 9500000),
-(21, 19, 'EVT-20251013-031953-68ec53b97710a', '2025-10-13 01:20:09', 'PAID', 9500000),
-(22, 19, 'EVT-20251013-032107-68ec5403ef022', '2025-10-13 01:21:12', 'CANCELLED', 7500000),
-(23, 19, 'EVT-20251013-032107-68ec5403ef022', '2025-10-13 01:21:12', 'CANCELLED', 7500000);
+(1, 19, 'TX8M1P3Q', '2025-10-12 13:49:39', 'PAID', 0.00),
+(2, 19, 'REF-45821', '2025-10-12 13:49:39', 'PAID', 0.00),
+(3, 19, 'ID-9J7A2L5', '2025-10-12 13:49:39', 'PAID', 0.00),
+(4, 1, 'REF-7B2K9F4R', '2024-01-15 02:30:00', 'PAID', 150.00),
+(5, 1, 'REF-TX8M1P3Q', '2024-01-16 06:45:00', 'PAID', 300.00),
+(6, 1, 'REF-9J7A2L5M', '2024-01-17 01:15:00', 'PENDING', 76.00),
+(7, 1, 'REF-45821903', '2024-01-18 08:20:00', 'PAID', 420.00),
+(8, 1, 'REF-16408572', '2024-01-19 03:00:00', 'PAID', 200.00),
+(9, 1, 'REF-73049216', '2024-01-20 05:30:00', 'PAID', 90.00),
+(10, 1, 'REF-28517364', '2024-01-21 07:45:00', 'PENDING', 325.00),
+(11, 1, 'REF-57291834', '2024-01-22 00:00:00', 'PAID', 156.00),
+(12, 19, 'REF-7B2K9F4R', '2024-01-15 02:30:00', 'PAID', 150.00),
+(13, 19, 'REF-TX8M1P3Q', '2024-01-16 06:45:00', 'PAID', 300.00),
+(14, 19, 'REF-9J7A2L5M', '2024-01-17 01:15:00', 'PENDING', 76.00),
+(15, 19, 'REF-45821903', '2024-01-18 08:20:00', 'PAID', 420.00),
+(16, 19, 'REF-16408572', '2024-01-19 03:00:00', 'PAID', 200.00),
+(17, 19, 'REF-73049216', '2024-01-20 05:30:00', 'PAID', 90.00),
+(18, 19, 'REF-28517364', '2024-01-21 07:45:00', 'PENDING', 325.00),
+(19, 19, 'REF-57291834', '2024-01-22 00:00:00', 'PAID', 156.00),
+(20, 19, 'EVT-20251013-031953-68ec53b97710a', '2025-10-13 01:20:09', 'PAID', 9500000.00),
+(21, 19, 'EVT-20251013-031953-68ec53b97710a', '2025-10-13 01:20:09', 'PAID', 9500000.00),
+(22, 19, 'EVT-20251013-032107-68ec5403ef022', '2025-10-13 01:21:12', 'CANCELLED', 7500000.00),
+(23, 19, 'EVT-20251013-032107-68ec5403ef022', '2025-10-13 01:21:12', 'CANCELLED', 7500000.00);
 
 -- --------------------------------------------------------
 
@@ -599,61 +599,7 @@ ALTER TABLE `tbl_service_features`
 --
 ALTER TABLE `tbl_transactions`
   ADD CONSTRAINT `tbl_transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`user_id`);
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-
--- Add to eventia_users.sql
-CREATE TABLE `tbl_feedback` (
-  `feedback_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `feedback_type` varchar(100) NOT NULL,
-  `order_reference` varchar(50) DEFAULT NULL,
-  `rating` int(1) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `message` text NOT NULL,
-  `photos` longblob DEFAULT NULL,
-  `photo_names` varchar(500) DEFAULT NULL,
-  `permission_granted` tinyint(1) DEFAULT 0,
-  `status` enum('pending','approved','rejected') DEFAULT 'pending',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`feedback_id`),
-  KEY `user_id` (`user_id`),
-  KEY `idx_feedback_status` (`status`),
-  KEY `idx_feedback_created` (`created_at`),
-  CONSTRAINT `tbl_feedback_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
--- Add to eventia_users.sql after the existing tables
-
--- Create blog table
-CREATE TABLE `tbl_blog` (
-  `blog_id` int(11) NOT NULL AUTO_INCREMENT,
-  `admin_id` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `excerpt` text NOT NULL,
-  `content` longtext NOT NULL,
-  `featured_image` varchar(500) DEFAULT NULL,
-  `status` enum('published','draft') DEFAULT 'draft',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `published_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`blog_id`),
-  KEY `admin_id` (`admin_id`),
-  KEY `idx_blog_status` (`status`),
-  CONSTRAINT `tbl_blog_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `tbl_admin` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Insert default admin account (password: admin123)
-INSERT INTO `tbl_admin` (`id`, `username`, `password`, `time_created`) VALUES
-(1, 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NOW());
-
--- Insert sample blog posts
-INSERT INTO `tbl_blog` (`blog_id`, `admin_id`, `title`, `excerpt`, `content`, `featured_image`, `status`, `published_at`) VALUES
-(1, 1, 'Corporate Event Planning Tips', 'Learn how to plan successful corporate events that impress clients and motivate employees with professional strategies.', '<p>Full content about corporate event planning...</p>', 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'published', '2023-06-10 00:00:00'),
-(2, 1, 'Budget-Friendly Birthday Party Ideas', 'Throw an amazing birthday party without breaking the bank with these creative and affordable celebration ideas.', '<p>Full content about budget birthday parties...</p>', 'https://images.unsplash.com/photo-1532117182044-031e7cd916ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 'published', '2023-06-05 00:00:00');

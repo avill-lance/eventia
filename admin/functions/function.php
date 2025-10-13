@@ -15,7 +15,7 @@ function getServicesCount($conn) {
 
 function getRecentBookings($conn, $limit = 5) {
     $stmt = $conn->prepare("
-        SELECT booking_reference, contact_name, event_type, event_date, total_amount 
+        SELECT booking_reference, contact_name, event_type, event_date, total_amount, booking_status
         FROM tbl_bookings 
         ORDER BY created_at DESC 
         LIMIT ?
@@ -33,6 +33,49 @@ function getPendingInquiries($conn) {
 
 function getActiveVenues($conn) {
     $result = $conn->query("SELECT COUNT(*) as total FROM tbl_venues WHERE status = 'available'");
+    return $result->fetch_assoc()['total'] ?? 0;
+}
+
+// NEW: Get pending bookings count
+function getPendingBookingsCount($conn) {
+    $result = $conn->query("SELECT COUNT(*) as total FROM tbl_bookings WHERE booking_status = 'pending'");
+    return $result->fetch_assoc()['total'] ?? 0;
+}
+
+// NEW: Get today's revenue from both bookings and transactions
+function getTodaysRevenue($conn) {
+    $today = date('Y-m-d');
+    
+    // Revenue from bookings (paid today)
+    $booking_revenue = 0;
+    $result = $conn->query("
+        SELECT COALESCE(SUM(total_amount), 0) as total 
+        FROM tbl_bookings 
+        WHERE payment_status = 'paid' 
+        AND DATE(created_at) = '$today'
+    ");
+    if ($result) {
+        $booking_revenue = $result->fetch_assoc()['total'] ?? 0;
+    }
+    
+    // Revenue from transactions (paid today)
+    $transaction_revenue = 0;
+    $result = $conn->query("
+        SELECT COALESCE(SUM(price), 0) as total 
+        FROM tbl_transactions 
+        WHERE status = 'PAID' 
+        AND DATE(date_time) = '$today'
+    ");
+    if ($result) {
+        $transaction_revenue = $result->fetch_assoc()['total'] ?? 0;
+    }
+    
+    return $booking_revenue + $transaction_revenue;
+}
+
+// NEW: Get total paid bookings count for success rate calculation
+function getPaidBookingsCount($conn) {
+    $result = $conn->query("SELECT COUNT(*) as total FROM tbl_bookings WHERE payment_status = 'paid'");
     return $result->fetch_assoc()['total'] ?? 0;
 }
 

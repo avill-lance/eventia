@@ -47,20 +47,11 @@ if (empty($_SESSION['csrf_token'])) {
                 <a href="bookings/index.php" class="nav-item">
                     <i class="fas fa-calendar-check"></i> Bookings
                 </a>
-                <a href="products/index.php" class="nav-item">
-                    <i class="fas fa-shopping-bag"></i> Products
-                </a>
-                <a href="inquiries/index.php" class="nav-item">
-                    <i class="fas fa-envelope"></i> Inquiries
-                </a>
                 <a href="reviews/index.php" class="nav-item">
                     <i class="fas fa-star"></i> Reviews
                 </a>
                 <a href="users/index.php" class="nav-item">
                     <i class="fas fa-users"></i> Users
-                </a>
-                <a href="settings.php" class="nav-item">
-                    <i class="fas fa-cog"></i> Settings
                 </a>
                 <a href="logout.php" class="nav-item" style="color: var(--danger);">
                     <i class="fas fa-sign-out-alt"></i> Logout

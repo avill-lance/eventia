@@ -13,9 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
     
-    $stmt = $pdo->prepare("SELECT * FROM tbl_admin WHERE username = ?");
-    $stmt->execute([$username]);
-    $admin = $stmt->fetch();
+    // Use MySQLi prepared statement instead of PDO
+    $stmt = $conn->prepare("SELECT * FROM tbl_admin WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $admin = $result->fetch_assoc();
     
     if ($admin && password_verify($password, $admin['password'])) {
         $_SESSION['admin_id'] = $admin['id'];
@@ -25,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $error = 'Invalid username or password';
     }
+    
+    $stmt->close();
 }
 ?>
 

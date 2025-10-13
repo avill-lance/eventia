@@ -19,13 +19,31 @@ try {
     $result = $conn->query("SELECT COUNT(*) as total FROM tbl_packages WHERE status = 'active'");
     $stats['totalPackages'] = $result->fetch_assoc()['total'];
     
+    // Calculate total revenue from both sources
+    $booking_revenue = 0;
     $result = $conn->query("SELECT COALESCE(SUM(total_amount), 0) as total FROM tbl_bookings WHERE payment_status = 'paid'");
-    $stats['totalRevenue'] = $result->fetch_assoc()['total'];
+    if ($result) {
+        $booking_revenue = $result->fetch_assoc()['total'];
+    }
+    
+    $transaction_revenue = 0;
+    $result = $conn->query("SELECT COALESCE(SUM(price), 0) as total FROM tbl_transactions WHERE status = 'PAID'");
+    if ($result) {
+        $transaction_revenue = $result->fetch_assoc()['total'];
+    }
+    
+    $stats['totalRevenue'] = $booking_revenue + $transaction_revenue;
     
     // Fetch additional statistics using functions
     $stats['totalServices'] = getServicesCount($conn);
     $stats['totalVenues'] = getActiveVenues($conn);
     $stats['pendingInquiries'] = getPendingInquiries($conn);
+    
+    // NEW: Enhanced statistics
+    $stats['pendingBookings'] = getPendingBookingsCount($conn);
+    $stats['todaysRevenue'] = getTodaysRevenue($conn);
+    $stats['paidBookings'] = getPaidBookingsCount($conn);
+    
     $recentBookings = getRecentBookings($conn, 5);
     
     // Fetch recent payments
@@ -69,9 +87,40 @@ $conn->close();
             <div class="muted">Available packages</div>
         </div>
         <div class="card">
-            <h3>Revenue</h3>
+            <h3>Total Revenue</h3>
             <div class="big" id="totalRevenue">₱<?php echo number_format($stats['totalRevenue'] ?? 0, 2); ?></div>
-            <div class="muted">Total income</div>
+            <div class="muted">All-time income</div>
+        </div>
+    </div>
+    
+    <!-- NEW: Enhanced Statistics Row -->
+    <div class="cards" style="margin-top:16px">
+        <div class="card">
+            <h3>Pending Bookings</h3>
+            <div class="big" id="pendingBookings"><?php echo htmlspecialchars($stats['pendingBookings'] ?? 0); ?></div>
+            <div class="muted">Awaiting confirmation</div>
+        </div>
+        <div class="card">
+            <h3>Today's Revenue</h3>
+            <div class="big" id="todaysRevenue">₱<?php echo number_format($stats['todaysRevenue'] ?? 0, 2); ?></div>
+            <div class="muted">Income today</div>
+        </div>
+        <div class="card">
+            <h3>Paid Bookings</h3>
+            <div class="big" id="paidBookings"><?php echo htmlspecialchars($stats['paidBookings'] ?? 0); ?></div>
+            <div class="muted">Confirmed payments</div>
+        </div>
+        <div class="card">
+            <h3>Success Rate</h3>
+            <div class="big" id="successRate">
+                <?php 
+                $successRate = ($stats['totalUsers'] > 0 && isset($stats['paidBookings'])) 
+                    ? round(($stats['paidBookings'] / $stats['totalUsers']) * 100) 
+                    : 0;
+                echo htmlspecialchars($successRate) . '%'; 
+                ?>
+            </div>
+            <div class="muted">Booking conversion</div>
         </div>
     </div>
     
@@ -122,7 +171,10 @@ $conn->close();
                                     <?php echo date('M j, Y', strtotime($booking['event_date'])); ?>
                                 </div>
                                 <div class="muted" style="font-size: 0.75rem;">
-                                    Ref: <?php echo htmlspecialchars($booking['booking_reference']); ?>
+                                    Ref: <?php echo htmlspecialchars($booking['booking_reference']); ?> •
+                                    Status: <span style="color: <?php echo $booking['booking_status'] == 'confirmed' ? 'green' : 'orange'; ?>">
+                                        <?php echo ucfirst($booking['booking_status']); ?>
+                                    </span>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -153,9 +205,16 @@ $conn->close();
             <div class="muted">Customer inquiries</div>
         </div>
         <div class="card">
-            <h3>Success Rate</h3>
-            <div class="big"><?php echo $stats['totalBookings'] > 0 ? round(($stats['totalBookings'] / max($stats['totalUsers'], 1)) * 100) : 0; ?>%</div>
-            <div class="muted">Booking conversion</div>
+            <h3>Booking Rate</h3>
+            <div class="big">
+                <?php 
+                $bookingRate = ($stats['totalUsers'] > 0) 
+                    ? round(($stats['totalBookings'] / $stats['totalUsers']) * 100) 
+                    : 0;
+                echo htmlspecialchars($bookingRate) . '%'; 
+                ?>
+            </div>
+            <div class="muted">Overall booking rate</div>
         </div>
     </div>
 </section>
