@@ -20,7 +20,7 @@
         }
     </style>
 </head>
-<body>
+<body class="d-flex align-items-center justify-content-center min-vh-100">
     <!-- Login Content -->
     <div class="container">
         <div class="row justify-content-center">
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="rememberMe">
+                                <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
                                 <label class="form-check-label" for="rememberMe">
                                     Remember me
                                 </label>

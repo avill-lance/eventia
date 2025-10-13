@@ -1,0 +1,101 @@
+/* Calendar Styles */
+.calendar-container {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.calendar-weekdays {
+    display: flex;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.weekday {
+    flex: 1;
+    padding: 8px 0;
+    font-weight: 600;
+    color: #495057;
+}
+
+.calendar-days {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.calendar-day {
+    flex: 0 0 calc(100% / 7);
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.calendar-day:hover {
+    background-color: #e9ecef;
+}
+
+.calendar-day.available {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.calendar-day.booked {
+    background-color: #f8d7da;
+    color: #721c24;
+    cursor: not-allowed;
+}
+
+.calendar-day.selected {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.calendar-day.today {
+    border: 2px solid #198754;
+}
+
+.calendar-day.other-month {
+    color: #6c757d;
+    background-color: #f8f9fa;
+}
+
+.calendar-day.other-month.booked {
+    background-color: #f8d7da;
+    opacity: 0.6;
+}
+
+.calendar-day.other-month.available {
+    background-color: #d1e7dd;
+    opacity: 0.6;
+}
+
+/* Calendar Legend */
+.legend-available, .legend-booked, .legend-selected, .legend-today {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+}
+
+.legend-available {
+    background-color: #d1e7dd;
+}
+
+.legend-booked {
+    background-color: #f8d7da;
+}
+
+.legend-selected {
+    background-color: #0d6efd;
+}
+
+.legend-today {
+    border: 2px solid #198754;
+    background-color: transparent;
+}
+
+/* Make event date field clickable */
+#event_date {
+    cursor: pointer;
+}
