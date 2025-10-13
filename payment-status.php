@@ -23,6 +23,7 @@ if ($success) {
 
 $insertsql= $conn->prepare("INSERT INTO tbl_transactions (user_id,ref_id,status,price) VALUES (?,?,?,?)");
 $insertsql->bind_param("issi", $user_id,$ref,$status,$price);
+$insertsql->execute();
 $insertsql->close();
 ?>  
 

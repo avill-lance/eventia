@@ -43,7 +43,7 @@
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" placeholder="Enter your password" name="password" required>
                                 <div class="form-text">
-                                    <a href="#forgotPassword" class="text-decoration-none">Forgot password?</a>
+                                    <a href="get_email.php" class="text-decoration-none">Forgot password?</a>
                                 </div>
                             </div>
                             <div class="form-check mb-3">
