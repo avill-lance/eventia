@@ -1,5 +1,86 @@
 <?php include __DIR__."/components/header.php"; ?>
 
+<?php
+// Database connection for featured packages
+include __DIR__."/database/config.php";
+
+$featuredPackages = [];
+try {
+    if ($conn) {
+        $sql = "SELECT package_id, package_name, package_description, base_price 
+                FROM tbl_packages 
+                WHERE status = 'active' 
+                ORDER BY RAND() 
+                LIMIT 3";
+        $result = $conn->query($sql);
+        
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $featuredPackages[] = $row;
+            }
+        }
+    }
+} catch (Exception $e) {
+    // Show nothing as requested if database fails
+    $featuredPackages = [];
+}
+
+// Database connection for feedback
+$approvedFeedback = [];
+try {
+    if ($conn) {
+        $sql = "SELECT f.feedback_id, f.rating, f.title, f.message, 
+                       u.first_name, u.last_name 
+                FROM tbl_feedback f 
+                JOIN tbl_users u ON f.user_id = u.user_id 
+                WHERE f.status = 'approved' 
+                ORDER BY f.created_at DESC 
+                LIMIT 3";
+        $result = $conn->query($sql);
+        
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $approvedFeedback[] = $row;
+            }
+        }
+    }
+} catch (Exception $e) {
+    // Show nothing if database fails
+    $approvedFeedback = [];
+}
+
+// Function to generate star rating HTML
+function generateStarRating($rating) {
+    $stars = '';
+    $fullStars = floor($rating);
+    $hasHalfStar = ($rating - $fullStars) >= 0.5;
+    
+    // Add full stars
+    for ($i = 0; $i < $fullStars; $i++) {
+        $stars .= '<i class="bi bi-star-fill"></i>';
+    }
+    
+    // Add half star if needed
+    if ($hasHalfStar) {
+        $stars .= '<i class="bi bi-star-half"></i>';
+        $fullStars++; // Count half star as one for empty stars calculation
+    }
+    
+    // Add empty stars
+    $emptyStars = 5 - $fullStars;
+    for ($i = 0; $i < $emptyStars; $i++) {
+        $stars .= '<i class="bi bi-star"></i>';
+    }
+    
+    return $stars;
+}
+
+// Function to generate user initials
+function generateUserInitials($firstName, $lastName) {
+    return strtoupper(substr($firstName, 0, 1) . substr($lastName, 0, 1));
+}
+?>
+
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="container text-center">
@@ -12,69 +93,23 @@
     <div class="container my-5">
         <h2 class="section-title">Featured Packages</h2>
         <div class="row">
-            <div class="col-md-4">
-                <div class="card package-card">
-                    <div class="card-header">Wedding Package</div>
-                    <div class="card-body">
-                        <h5 class="card-title">Elegant Wedding</h5>
-                        <p class="card-text">Complete wedding planning with venue decoration, catering, and photography.</p>
-                        <div class="mb-3">
-                            <span class="rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
-                            </span>
-                            <span class="ms-1">4.5/5</span>
+            <?php if (!empty($featuredPackages)): ?>
+                <?php foreach ($featuredPackages as $package): ?>
+                    <div class="col-md-4">
+                        <div class="card package-card">
+                            <div class="card-header"><?php echo htmlspecialchars($package['package_name']); ?></div>
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo htmlspecialchars($package['package_name']); ?></h5>
+                                <p class="card-text"><?php echo htmlspecialchars($package['package_description'] ?? 'Complete event planning package'); ?></p>
+                                <h4 class="text-primary">₱<?php echo number_format($package['base_price'], 2); ?></h4>
+                                <a href="packages.php" class="btn btn-primary mt-2">Book Now</a>
+                            </div>
                         </div>
-                        <h4 class="text-primary">₱140,500.00</h4>
-                        <a href="packages.html" class="btn btn-primary mt-2">View Details</a>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card package-card">
-                    <div class="card-header">Corporate Package</div>
-                    <div class="card-body">
-                        <h5 class="card-title">Business Events</h5>
-                        <p class="card-text">Professional event planning for conferences, seminars, and corporate gatherings.</p>
-                        <div class="mb-3">
-                            <span class="rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star"></i>
-                            </span>
-                            <span class="ms-1">4/5</span>
-                        </div>
-                        <h4 class="text-primary">₱108,190.00</h4>
-                        <a href="packages.html" class="btn btn-primary mt-2">View Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card package-card">
-                    <div class="card-header">Birthday Package</div>
-                    <div class="card-body">
-                        <h5 class="card-title">Kids Birthday</h5>
-                        <p class="card-text">Fun and creative birthday parties with themes, entertainment, and catering.</p>
-                        <div class="mb-3">
-                            <span class="rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                            </span>
-                            <span class="ms-1">5/5</span>
-                        </div>
-                        <h4 class="text-primary">₱50,000</h4>
-                        <a href="packages.html" class="btn btn-primary mt-2">View Details</a>
-                    </div>
-                </div>
-            </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <!-- Show nothing as requested if no packages available -->
+            <?php endif; ?>
         </div>
     </div>
 
@@ -126,60 +161,88 @@
     <div class="container my-5">
         <h2 class="section-title">Client Reviews</h2>
         <div class="row">
-            <div class="col-md-4">
-                <div class="testimonial-card">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Client" class="testimonial-img me-3">
-                        <div>
-                            <h5 class="mb-0">Jennifer L.</h5>
-                            <div class="rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
+            <?php if (!empty($approvedFeedback)): ?>
+                <?php foreach ($approvedFeedback as $feedback): ?>
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                    <?php echo generateUserInitials($feedback['first_name'], $feedback['last_name']); ?>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0"><?php echo htmlspecialchars($feedback['first_name'] . ' ' . $feedback['last_name']); ?></h5>
+                                    <div class="rating">
+                                        <?php echo generateStarRating($feedback['rating']); ?>
+                                    </div>
+                                </div>
                             </div>
+                            <p class="mb-0">"<?php echo htmlspecialchars($feedback['message']); ?>"</p>
                         </div>
                     </div>
-                    <p class="mb-0">"Eventia made my wedding day absolutely perfect! Their attention to detail and professional service exceeded all my expectations."</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="testimonial-card">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Client" class="testimonial-img me-3">
-                        <div>
-                            <h5 class="mb-0">Robert T.</h5>
-                            <div class="rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <!-- Fallback to static testimonials if no feedback in database -->
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                JL
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Jennifer L.</h5>
+                                <div class="rating">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
                             </div>
                         </div>
+                        <p class="mb-0">"Eventia made my wedding day absolutely perfect! Their attention to detail and professional service exceeded all my expectations."</p>
                     </div>
-                    <p class="mb-0">"The corporate event they organized for our company was flawless. Everything from venue selection to catering was perfect."</p>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="testimonial-card">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Client" class="testimonial-img me-3">
-                        <div>
-                            <h5 class="mb-0">Amanda P.</h5>
-                            <div class="rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                RT
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Robert T.</h5>
+                                <div class="rating">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                </div>
                             </div>
                         </div>
+                        <p class="mb-0">"The corporate event they organized for our company was flawless. Everything from venue selection to catering was perfect."</p>
                     </div>
-                    <p class="mb-0">"My daughter's birthday party was magical thanks to Eventia. The theme execution was incredible and the children had a wonderful time."</p>
                 </div>
-            </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                AP
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Amanda P.</h5>
+                                <div class="rating">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mb-0">"My daughter's birthday party was magical thanks to Eventia. The theme execution was incredible and the children had a wonderful time."</p>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 

@@ -3,7 +3,7 @@ Response: Array
 (
     [data] => Array
         (
-            [id] => cs_p9Q66WqAXXmayWYwRW2iX5UE
+            [id] => cs_4qMJSvZY9atcyqT1e5k2VLBp
             [type] => checkout_session
             [attributes] => Array
                 (
@@ -25,23 +25,23 @@ Response: Array
                         )
 
                     [billing_information_fields_editable] => enabled
-                    [cancel_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251012-095143-68eb5e0fa0c92
-                    [checkout_url] => https://checkout.paymongo.com/cs_p9Q66WqAXXmayWYwRW2iX5UE_client_na7ixNHqL65QwtGF4ckLT2PH#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
-                    [client_key] => cs_p9Q66WqAXXmayWYwRW2iX5UE_client_na7ixNHqL65QwtGF4ckLT2PH
+                    [cancel_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251013-165726-68ed1356d7055
+                    [checkout_url] => https://checkout.paymongo.com/cs_4qMJSvZY9atcyqT1e5k2VLBp_client_JtmETcU2WLt3SKCDQNdJatur#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
+                    [client_key] => cs_4qMJSvZY9atcyqT1e5k2VLBp_client_JtmETcU2WLt3SKCDQNdJatur
                     [customer_email] => 
-                    [description] => Birthday Party Booking
+                    [description] => Christening Package Booking
                     [line_items] => Array
                         (
                             [0] => Array
                                 (
-                                    [amount] => 9999900
+                                    [amount] => 5700000
                                     [currency] => PHP
                                     [description] => 
                                     [images] => Array
                                         (
                                         )
 
-                                    [name] => Birthday Party - Quinn Guerra
+                                    [name] => Christening Package - Martin Hicks
                                     [quantity] => 1
                                 )
 
@@ -55,25 +55,25 @@ Response: Array
 
                     [payment_intent] => Array
                         (
-                            [id] => pi_f3f76C2b9JFZ5sPQ2wJDKEue
+                            [id] => pi_UUjswL5myyMSFqQHK8ik45aj
                             [type] => payment_intent
                             [attributes] => Array
                                 (
-                                    [amount] => 9999900
+                                    [amount] => 5700000
                                     [capture_type] => automatic
-                                    [client_key] => pi_f3f76C2b9JFZ5sPQ2wJDKEue_client_MF4JUxpdNTfZQ8bWSqebudeU
+                                    [client_key] => pi_UUjswL5myyMSFqQHK8ik45aj_client_8FbZPex6XzaFdhcGt56M9dFh
                                     [currency] => PHP
-                                    [description] => Birthday Party Booking
+                                    [description] => Christening Package Booking
                                     [livemode] => 
-                                    [original_amount] => 9999900
+                                    [original_amount] => 5700000
                                     [statement_descriptor] => Eventia Incorporation
                                     [status] => awaiting_payment_method
                                     [last_payment_error] => 
                                     [payment_method_allowed] => Array
                                         (
-                                            [0] => card
-                                            [1] => grab_pay
-                                            [2] => gcash
+                                            [0] => gcash
+                                            [1] => card
+                                            [2] => grab_pay
                                         )
 
                                     [payments] => Array
@@ -92,27 +92,27 @@ Response: Array
 
                                     [metadata] => 
                                     [setup_future_usage] => 
-                                    [created_at] => 1760255505
-                                    [updated_at] => 1760255505
+                                    [created_at] => 1760367448
+                                    [updated_at] => 1760367448
                                 )
 
                         )
 
                     [payment_method_types] => Array
                         (
-                            [0] => gcash
+                            [0] => card
                             [1] => grab_pay
-                            [2] => card
+                            [2] => gcash
                         )
 
-                    [reference_number] => EVT-20251012-095143-68eb5e0fa0c92
+                    [reference_number] => EVT-20251013-165726-68ed1356d7055
                     [send_email_receipt] => 
                     [show_description] => 1
                     [show_line_items] => 1
                     [status] => active
-                    [success_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251012-095143-68eb5e0fa0c92
-                    [created_at] => 1760255505
-                    [updated_at] => 1760255505
+                    [success_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251013-165726-68ed1356d7055
+                    [created_at] => 1760367448
+                    [updated_at] => 1760367448
                     [metadata] => 
                 )
 

@@ -12,6 +12,8 @@
         }
     ],
     "require": {
-        "phpmailer/phpmailer": "^6.11"
+        "phpmailer/phpmailer": "^6.11",
+        "datatables.net/datatables.net-bs5": "^2.3",
+        "datatables/datatables": "^1.10"
     }
 }

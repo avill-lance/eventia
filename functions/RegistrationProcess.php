@@ -12,7 +12,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 // Path to autoloader
-$autoloaderPath = __DIR__ . "/../PHPmailer/vendor/autoload.php";
+$autoloaderPath = __DIR__ . "/../vendor/autoload.php";
 
 if (file_exists($autoloaderPath)) {
     require $autoloaderPath;
@@ -63,7 +63,15 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 $insert_user->bind_param("ssssssssis", $first_name,$last_name,$email,$phone,$city,$zip,$address,$hash,$otp,$otp_expiry);
                 
                 if($insert_user->execute()){
-                    $_SESSION["token"]=1;
+                    $_SESSION['pending_verification'] = [
+                        'email' => $email,  
+                        'created_at' => time(),
+                        'expires_at' => time() + 600, // 10 minutes
+                        'expires_at_readable' => date('Y-m-d H:i:s', time() + 600) // For debugging
+                    ];
+                    
+                    // Set verification cookie
+                    setcookie('pending_verification', 'true', time() + 600, '/');
                     // Send OTP email after successful registration
                     $mail = new PHPMailer(true);
                     

@@ -16,10 +16,15 @@
     <link rel="icon" type="image/png" href="assets/Logo_BG.png">
     <link rel="stylesheet" href="css/bootstrap-icons-1.13.1/bootstrap-icons.css">
     <link rel="stylesheet" href="css/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/css/datatables.min.css">
+    <link rel="stylesheet" href="css/style.css">    
     <link rel="stylesheet" href="css/self_booking.css">
+    
 </head>
 <body>
+
+<!-- Load Bootstrap JS early for ALL pages -->
+<script src="js/js/bootstrap.bundle.min.js"></script>
 
 <!-- Navigation  -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -55,11 +60,19 @@
                 </li>
             </ul>
             <div class="d-flex ms-auto align-items-center">
-                <a href="cart.php" class="cart-btn-v3 me-3">
-                    <i class="bi bi-cart3 cart-icon"></i>
-                    <span class="badge">3</span>
-                </a>
-                <a class="nav-link p-0" id="userProfile" href="profile.php">Welcome, <?php echo $_SESSION["first_name"]; ?></a>
+                <div class="dropdown">
+                    <a class="nav-link p-0 dropdown-toggle" href="#" role="button" id="userProfile" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-4"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userProfile">
+                        <li><span class="dropdown-item-text">Welcome, <?php echo htmlspecialchars($_SESSION["first_name"] ?? 'User'); ?></span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="viewtransactions.php"><i class="bi bi-bag me-2"></i>Transactions</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="functions/LogoutFunction.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

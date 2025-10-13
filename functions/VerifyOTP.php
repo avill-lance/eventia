@@ -42,6 +42,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if($purpose === 'changepassword') {
                 echo 'changepassword';
             } else {
+                if(isset($_SESSION["token"])) {
+                    unset($_SESSION["token"]);
+                }
                 echo 'verified';
             }
         } 

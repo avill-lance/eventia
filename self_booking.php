@@ -37,10 +37,8 @@ while ($row = $services_result->fetch_assoc()) {
     $services[] = $row;
 }
 ?>
-
 <!-- Additional CSS -->
 <link rel="stylesheet" href="css/booking-improvements.css">
-
 <!-- Hero Section -->
 <div class="hero-section">
     <div class="container text-center">
@@ -86,7 +84,7 @@ while ($row = $services_result->fetch_assoc()) {
             </div>
 
             <!-- Booking Form -->
-            <form id="bookingForm" method="POST" action="process_booking.php" enctype="multipart/form-data">
+            <form id="bookingForm" name="bookingForm" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="booking_type" value="self">
                 <input type="hidden" name="booking_reference" id="bookingReference">
                 <input type="hidden" name="venue_type" id="venueType">
@@ -261,10 +259,12 @@ while ($row = $services_result->fetch_assoc()) {
                                             </div>
                                             <?php endif; ?>
                                             
-                                            <!-- Customization Button - ALWAYS SHOW -->
+                                            <!-- Customization Button -->
                                             <div class="customization-options mt-3">
-                                                <button type="button" class="btn btn-sm btn-outline-primary" 
-                                                        onclick="showCustomization(<?php echo $service['service_id']; ?>, '<?php echo htmlspecialchars($service['service_name']); ?>', <?php echo $service['customizable'] ? 'true' : 'false'; ?>)">
+                                                <button type="button" class="btn btn-sm btn-outline-primary customize-service-btn" 
+                                                        data-service-id="<?php echo $service['service_id']; ?>"
+                                                        data-service-name="<?php echo htmlspecialchars($service['service_name']); ?>"
+                                                        data-customizable="<?php echo $service['customizable'] ? 'true' : 'false'; ?>">
                                                     <i class="bi bi-gear me-1"></i> Customize Options
                                                 </button>
                                             </div>
@@ -375,7 +375,7 @@ while ($row = $services_result->fetch_assoc()) {
                 <div class="step" id="step-5">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="mb-0">Step 5: Payment Information</h4>
+                            <h4 class="mb-0">Step 5: Payment</h4>
                         </div>
                         <div class="card-body">
                             <!-- Order Summary -->
@@ -383,105 +383,21 @@ while ($row = $services_result->fetch_assoc()) {
                                 <h5 class="mb-3">Order Summary</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
-                                        <tbody id="orderSummary">
+                                        <tbody id="orderSummary" name="orderSummary">
                                             <!-- Order summary will be populated here -->
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="text-end">
-                                    <h4 class="text-primary" id="totalAmount">Total: ₱0.00</h4>
+                                    <h4 class="text-primary" id="amount">Total: ₱0.00</h4>
                                 </div>
                             </div>
 
-                            <!-- Payment Method -->
-                            <div class="mb-4">
-                                <h5 class="mb-3">Select Payment Method</h5>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card payment-option">
-                                            <div class="card-body">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="payment_method" id="payment1" value="GCash" required>
-                                                    <label class="form-check-label w-100" for="payment1">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bi bi-phone me-3 fs-4"></i>
-                                                            <div>
-                                                                <h6 class="mb-1">GCash</h6>
-                                                                <small class="text-muted">Pay using GCash mobile app</small>
-                                                            </div>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card payment-option">
-                                            <div class="card-body">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="payment_method" id="payment2" value="Bank Transfer" required>
-                                                    <label class="form-check-label w-100" for="payment2">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bi bi-bank me-3 fs-4"></i>
-                                                            <div>
-                                                                <h6 class="mb-1">Bank Transfer</h6>
-                                                                <small class="text-muted">Transfer to our bank account</small>
-                                                            </div>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card payment-option">
-                                            <div class="card-body">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="payment_method" id="payment3" value="PayPal" required>
-                                                    <label class="form-check-label w-100" for="payment3">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bi bi-paypal me-3 fs-4"></i>
-                                                            <div>
-                                                                <h6 class="mb-1">PayPal</h6>
-                                                                <small class="text-muted">Pay using PayPal</small>
-                                                            </div>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card payment-option">
-                                            <div class="card-body">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="payment_method" id="payment4" value="Installment" required>
-                                                    <label class="form-check-label w-100" for="payment4">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bi bi-calendar-check me-3 fs-4"></i>
-                                                            <div>
-                                                                <h6 class="mb-1">Installment Plan</h6>
-                                                                <small class="text-muted">Pay in multiple installments</small>
-                                                            </div>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Receipt Upload -->
-                            <div id="receiptUpload" class="mb-4" style="display: none;">
-                                <h5 class="mb-3">Upload Payment Receipt</h5>
-                                <div class="mb-3">
-                                    <label for="receipt" class="form-label">Payment Receipt (Image or PDF)</label>
-                                    <input type="file" class="form-control" id="receipt" name="receipt" accept=".jpg,.jpeg,.png,.gif,.pdf">
-                                    <div class="form-text">
-                                        Upload a clear photo or screenshot of your payment receipt. Accepted formats: JPG, PNG, GIF, PDF (Max: 5MB)
-                                    </div>
-                                </div>
+                            <!-- Payment Instructions -->
+                            <div class="alert alert-info mb-4">
+                                <h6><i class="bi bi-info-circle me-2"></i>Payment Instructions</h6>
+                                <p class="mb-2">You will be redirected to PayMongo to complete your payment securely.</p>
+                                <p class="mb-0"><strong>Supported Payment Methods:</strong> Credit/Debit Card, GCash, GrabPay</p>
                             </div>
 
                             <!-- Terms and Conditions -->
@@ -496,7 +412,7 @@ while ($row = $services_result->fetch_assoc()) {
 
                             <div class="mt-4 d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" onclick="prevStep(4)">Previous</button>
-                                <button type="submit" class="btn btn-success" id="submitBooking">Complete Booking</button>
+                                <button type="button" class="btn btn-success" id="submitBooking" name="submitBooking">Proceed to Paymongo</button>
                             </div>
                         </div>
                     </div>
@@ -519,7 +435,7 @@ while ($row = $services_result->fetch_assoc()) {
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="saveCustomization()">Save Customization</button>
+                <button type="button" class="btn btn-primary" id="saveCustomizationBtn">Save Customization</button>
             </div>
         </div>
     </div>
@@ -553,422 +469,6 @@ while ($row = $services_result->fetch_assoc()) {
     </div>
 </div>
 
-<!-- Loading Spinner -->
-<div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <div class="spinner-border text-primary mb-3" role="status"></div>
-                <p>Processing your booking...</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-// Service customization data
-let serviceCustomizations = {};
-let currentCustomizingService = null;
-
-// Generate booking reference on page load
-document.addEventListener('DOMContentLoaded', function() {
-    generateBookingReference();
-    updateOrderSummary();
-    
-    // Add event listeners for dynamic updates
-    document.querySelectorAll('input[name="package"]').forEach(radio => {
-        radio.addEventListener('change', updateOrderSummary);
-    });
-    
-    document.querySelectorAll('.service-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', updateOrderSummary);
-    });
-    
-    document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const receiptUpload = document.getElementById('receiptUpload');
-            if (this.value) {
-                receiptUpload.style.display = 'block';
-                document.getElementById('receipt').required = true;
-            } else {
-                receiptUpload.style.display = 'none';
-                document.getElementById('receipt').required = false;
-            }
-        });
-    });
-});
-
-function generateBookingReference() {
-    const timestamp = Date.now().toString();
-    const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-    const reference = 'EVT-' + timestamp.slice(-6) + random;
-    document.getElementById('bookingReference').value = reference;
-}
-
-function selectVenueType(type) {
-    document.getElementById('venueType').value = type;
-    
-    if (type === 'rental') {
-        document.getElementById('venueSelection').style.display = 'block';
-        document.getElementById('ownVenueForm').style.display = 'none';
-        loadVenues();
-    } else {
-        document.getElementById('venueSelection').style.display = 'none';
-        document.getElementById('ownVenueForm').style.display = 'block';
-        document.getElementById('venueId').value = '';
-        document.getElementById('eventLocation').value = '';
-        document.getElementById('fullAddress').value = '';
-    }
-}
-
-function loadVenues() {
-    fetch('get_venues.php')
-        .then(response => response.json())
-        .then(venues => {
-            const container = document.getElementById('venuesContainer');
-            container.innerHTML = '';
-            
-            venues.forEach(venue => {
-                const venueCard = `
-                    <div class="col-md-6 mb-3">
-                        <div class="card venue-card">
-                            <div class="card-body">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="selected_venue" value="${venue.venue_id}" 
-                                           data-name="${venue.venue_name}" data-location="${venue.location}" 
-                                           data-description="${venue.description}" onchange="selectVenue(this)">
-                                    <label class="form-check-label w-100">
-                                        <h6>${venue.venue_name}</h6>
-                                        <p class="text-muted mb-1">${venue.venue_type}</p>
-                                        <p class="text-muted mb-1">Capacity: ${venue.capacity} people</p>
-                                        <p class="text-muted mb-1">${venue.location}</p>
-                                        <p class="text-primary fw-bold">₱${parseFloat(venue.price).toLocaleString()}</p>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += venueCard;
-            });
-        })
-        .catch(error => {
-            console.error('Error loading venues:', error);
-            document.getElementById('venuesContainer').innerHTML = 
-                '<div class="col-12 text-center text-muted">Unable to load venues. Please try again.</div>';
-        });
-}
-
-function selectVenue(element) {
-    const venueId = element.value;
-    const venueName = element.getAttribute('data-name');
-    const venueLocation = element.getAttribute('data-location');
-    const venueDescription = element.getAttribute('data-description');
-    
-    document.getElementById('venueId').value = venueId;
-    document.getElementById('eventLocation').value = venueName + ', ' + venueLocation;
-    document.getElementById('fullAddress').value = venueDescription || venueLocation;
-}
-
-function showCustomization(serviceId, serviceName, isCustomizable) {
-    currentCustomizingService = serviceId;
-    
-    const modalTitle = document.getElementById('customizationModalTitle');
-    const modalBody = document.getElementById('customizationModalBody');
-    
-    modalTitle.textContent = 'Customize: ' + serviceName;
-    
-    if (isCustomizable) {
-        // Show advanced customization options
-        modalBody.innerHTML = `
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label">Service Package</label>
-                        <select class="form-select" id="customPackage">
-                            <option value="basic">Basic Package</option>
-                            <option value="standard">Standard Package</option>
-                            <option value="premium">Premium Package</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label">Number of Hours/Units</label>
-                        <input type="number" class="form-control" id="customUnits" min="1" max="12" value="4">
-                    </div>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Special Requirements</label>
-                <textarea class="form-control" id="customRequirements" rows="3" placeholder="Any specific requirements or preferences..."></textarea>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Additional Notes</label>
-                <input type="text" class="form-control" id="customNotes" placeholder="Any additional notes...">
-            </div>
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle me-2"></i>
-                Your customization requests will be reviewed and confirmed by our team. Additional charges may apply.
-            </div>
-        `;
-    } else {
-        // Show basic customization options
-        modalBody.innerHTML = `
-            <div class="mb-3">
-                <label class="form-label">Special Instructions</label>
-                <textarea class="form-control" id="customRequirements" rows="4" placeholder="Enter any special instructions or preferences for this service..."></textarea>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Additional Notes</label>
-                <input type="text" class="form-control" id="customNotes" placeholder="Any additional notes...">
-            </div>
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle me-2"></i>
-                Your requests will be forwarded to our service team for confirmation.
-            </div>
-        `;
-    }
-    
-    // Load existing customization if any
-    if (serviceCustomizations[serviceId]) {
-        if (isCustomizable) {
-            document.getElementById('customPackage').value = serviceCustomizations[serviceId].package || 'basic';
-            document.getElementById('customUnits').value = serviceCustomizations[serviceId].units || 4;
-        }
-        document.getElementById('customRequirements').value = serviceCustomizations[serviceId].requirements || '';
-        document.getElementById('customNotes').value = serviceCustomizations[serviceId].notes || '';
-    }
-    
-    const modal = new bootstrap.Modal(document.getElementById('customizationModal'));
-    modal.show();
-}
-
-function saveCustomization() {
-    if (!currentCustomizingService) return;
-    
-    const customization = {
-        package: document.getElementById('customPackage') ? document.getElementById('customPackage').value : null,
-        units: document.getElementById('customUnits') ? document.getElementById('customUnits').value : null,
-        requirements: document.getElementById('customRequirements').value,
-        notes: document.getElementById('customNotes').value,
-        timestamp: new Date().toISOString()
-    };
-    
-    serviceCustomizations[currentCustomizingService] = customization;
-    
-    // Add hidden input for customization data
-    let existingInput = document.querySelector(`input[name="customization[${currentCustomizingService}]"]`);
-    if (!existingInput) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = `customization[${currentCustomizingService}]`;
-        input.value = JSON.stringify(customization);
-        document.getElementById('bookingForm').appendChild(input);
-    } else {
-        existingInput.value = JSON.stringify(customization);
-    }
-    
-    const modal = bootstrap.Modal.getInstance(document.getElementById('customizationModal'));
-    modal.hide();
-    
-    // Show success feedback
-    const serviceCard = document.querySelector(`#service-${currentCustomizingService}`).closest('.service-option-card');
-    const customizeBtn = serviceCard.querySelector('.btn-outline-primary');
-    customizeBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Customized';
-    customizeBtn.classList.remove('btn-outline-primary');
-    customizeBtn.classList.add('btn-success');
-}
-
-function nextStep(step) {
-    if (!validateStep(step - 1)) {
-        return;
-    }
-    
-    document.querySelectorAll('.step').forEach(stepEl => {
-        stepEl.classList.remove('active');
-    });
-    
-    document.getElementById('step-' + step).classList.add('active');
-    
-    const progress = (step - 1) * 25;
-    document.getElementById('progress-bar').style.width = progress + '%';
-    
-    document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
-        if (index < step) {
-            indicator.classList.add('active');
-        } else {
-            indicator.classList.remove('active');
-        }
-    });
-    
-    if (step === 5) {
-        updateOrderSummary();
-    }
-}
-
-function prevStep(step) {
-    document.querySelectorAll('.step').forEach(stepEl => {
-        stepEl.classList.remove('active');
-    });
-    
-    document.getElementById('step-' + step).classList.add('active');
-    
-    const progress = (step - 1) * 25;
-    document.getElementById('progress-bar').style.width = progress + '%';
-    
-    document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
-        if (index < step) {
-            indicator.classList.add('active');
-        } else {
-            indicator.classList.remove('active');
-        }
-    });
-}
-
-function validateStep(step) {
-    const currentStep = document.getElementById('step-' + step);
-    
-    if (step === 1) {
-        const packageSelected = document.querySelector('input[name="package"]:checked');
-        if (!packageSelected) {
-            alert('Please select an event package to continue.');
-            return false;
-        }
-    }
-    
-    if (step === 2) {
-        const venueType = document.getElementById('venueType').value;
-        if (!venueType) {
-            alert('Please select a venue option to continue.');
-            return false;
-        }
-        
-        if (venueType === 'rental') {
-            const venueSelected = document.querySelector('input[name="selected_venue"]:checked');
-            if (!venueSelected) {
-                alert('Please select a venue to continue.');
-                return false;
-            }
-        } else if (venueType === 'own') {
-            const venueAddress = document.getElementById('venue_address').value;
-            const venueCity = document.getElementById('venue_city').value;
-            const venuePostal = document.getElementById('venue_postal').value;
-            
-            if (!venueAddress || !venueCity || !venuePostal) {
-                alert('Please complete all venue address fields to continue.');
-                return false;
-            }
-            
-            document.getElementById('eventLocation').value = venueAddress;
-            document.getElementById('fullAddress').value = `${venueAddress}, ${venueCity}, ${venuePostal}`;
-        }
-    }
-    
-    if (step === 4) {
-        const requiredFields = ['contact_name', 'contact_email', 'contact_phone', 'event_date', 'event_time'];
-        for (let field of requiredFields) {
-            const element = document.getElementById(field);
-            if (!element.value.trim()) {
-                alert('Please complete all required fields to continue.');
-                element.focus();
-                return false;
-            }
-        }
-        
-        const email = document.getElementById('contact_email').value;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert('Please enter a valid email address.');
-            document.getElementById('contact_email').focus();
-            return false;
-        }
-        
-        const eventDate = new Date(document.getElementById('event_date').value);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        if (eventDate < today) {
-            alert('Event date cannot be in the past.');
-            document.getElementById('event_date').focus();
-            return false;
-        }
-    }
-    
-    return true;
-}
-
-function updateOrderSummary() {
-    const summaryContainer = document.getElementById('orderSummary');
-    let total = 0;
-    let summaryHTML = '';
-    
-    // Package
-    const selectedPackage = document.querySelector('input[name="package"]:checked');
-    if (selectedPackage) {
-        const packagePrice = parseFloat(selectedPackage.getAttribute('data-price'));
-        total += packagePrice;
-        summaryHTML += `
-            <tr>
-                <td><strong>Package</strong></td>
-                <td>${selectedPackage.value}</td>
-                <td class="text-end">₱${packagePrice.toLocaleString()}</td>
-            </tr>
-        `;
-    }
-    
-    // Services
-    const selectedServices = document.querySelectorAll('.service-checkbox:checked');
-    selectedServices.forEach(service => {
-        const serviceName = service.value;
-        const servicePrice = parseFloat(service.getAttribute('data-price')) || 0;
-        total += servicePrice;
-        summaryHTML += `
-            <tr>
-                <td><strong>Service</strong></td>
-                <td>${serviceName}</td>
-                <td class="text-end">₱${servicePrice.toLocaleString()}</td>
-            </tr>
-        `;
-    });
-    
-    summaryContainer.innerHTML = summaryHTML || '<tr><td colspan="3" class="text-center text-muted">No items selected</td></tr>';
-    document.getElementById('totalAmount').textContent = `Total: ₱${total.toLocaleString()}`;
-}
-
-// Form submission
-document.getElementById('bookingForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    if (!validateStep(5)) {
-        return;
-    }
-    
-    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
-    loadingModal.show();
-    
-    const formData = new FormData(this);
-    
-    fetch('process_booking.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        loadingModal.hide();
-        
-        if (data.success) {
-            alert('Booking submitted successfully! Your reference number is: ' + data.booking_reference);
-            window.location.href = 'booking_success.php?reference=' + data.booking_reference;
-        } else {
-            alert('Error: ' + data.message);
-        }
-    })
-    .catch(error => {
-        loadingModal.hide();
-        alert('An error occurred while processing your booking. Please try again.');
-        console.error('Error:', error);
-    });
-});
-</script>
-
-<?php include __DIR__."/components/footer.php" ?>
+<script src="js/jquery-3.7.1.js"></script>
+<script src="js/sweetalert2@11.js"></script>
+<script src="js/self_booking.js"></script>

@@ -6,14 +6,8 @@ const zip = document.getElementById("zip");
 const city = document.getElementById("city");
 const address = document.getElementById("address");
 
-const editBtn = document.getElementById("editBtn");
-const logoutBtn = document.getElementById("logoutBtn");
-const cancelBtn = document.getElementById("cancelBtn");
-const passBtn = document.getElementById("passBtn");
-const changePassBtn = document.getElementById("changePassBtn");
-
-cancelBtn.style.display = "none";
-passBtn.style.display = "none";
+$("#cancelBtn").hide();
+$("#passBtn").hide();
 
 // To store original values before editing
 let originalValues = {};
@@ -36,10 +30,12 @@ editBtn.addEventListener("click", function () {
     });
 
     // Toggle buttons
-    editBtn.style.display = "none";
-    logoutBtn.style.display = "none";
-    cancelBtn.style.display = "block";
-    passBtn.style.display = "block";
+    $("#viewTransactions").hide();
+    $("#editBtn").hide();
+    $("#logoutBtn").hide();
+    $("#changePassBtn").hide();
+    $("#cancelBtn").css('display', 'block');
+    $("#passBtn").css('display', 'block');
 });
 
 cancelBtn.addEventListener("click", function (e) {
@@ -60,10 +56,12 @@ cancelBtn.addEventListener("click", function (e) {
     address.value = originalValues.address;
 
     // Toggle buttons back
-    editBtn.style.display = "block";
-    logoutBtn.style.display = "block";
-    cancelBtn.style.display = "none";
-    passBtn.style.display = "none";
+    $("#viewTransactions").show();
+    $("#editBtn").show();
+    $("#logoutBtn").show();
+    $("#changePassBtn").show();
+    $("#cancelBtn").hide();
+    $("#passBtn").hide();
 });
 
 document.getElementById("logoutBtn").addEventListener("click", function () {

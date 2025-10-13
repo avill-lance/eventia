@@ -1,7 +1,7 @@
 <?php 
     //Establish Session
     include __DIR__ . "/functions/session.php";
-    print_r($_SESSION);
+    // Removed the print_r($_SESSION) that was causing issues
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +20,7 @@
         }
     </style>
 </head>
-<body>
+<body class="d-flex align-items-center justify-content-center min-vh-100">
     <!-- Login Content -->
     <div class="container">
         <div class="row justify-content-center">
@@ -43,11 +43,11 @@
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" placeholder="Enter your password" name="password" required>
                                 <div class="form-text">
-                                    <a href="#forgotPassword" class="text-decoration-none">Forgot password?</a>
+                                    <a href="get_email.php" class="text-decoration-none">Forgot password?</a>
                                 </div>
                             </div>
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="rememberMe">
+                                <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
                                 <label class="form-check-label" for="rememberMe">
                                     Remember me
                                 </label>

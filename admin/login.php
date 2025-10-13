@@ -1,189 +1,112 @@
+<?php
+session_start();
+if (isset($_SESSION['admin_id'])) {
+    header('Location: dashboard.php');
+    exit();
+}
+
+include __DIR__ . '/includes/db-config.php';
+
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+    
+    // Debug: Check if we're getting the form data
+    error_log("Login attempt - Username: $username");
+    
+    if (empty($username) || empty($password)) {
+        $error = 'Please enter both username and password';
+    } else {
+        // Use MySQLi prepared statement for security
+        $stmt = $conn->prepare("SELECT id, username, password FROM tbl_admin WHERE username = ?");
+        if ($stmt) {
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows === 1) {
+                $admin = $result->fetch_assoc();
+                
+                // Debug: Check what we found
+                error_log("Found admin: " . $admin['username']);
+                error_log("Stored hash: " . $admin['password']);
+                
+                // Verify the password - using password_verify for bcrypt
+                if (password_verify($password, $admin['password'])) {
+                    // Password is correct, create session
+                    $_SESSION['admin_id'] = $admin['id'];
+                    $_SESSION['admin_username'] = $admin['username'];
+                    
+                    // Debug: Session created
+                    error_log("Login successful for user: " . $admin['username']);
+                    
+                    header('Location: dashboard.php');
+                    exit();
+                } else {
+                    // Debug: Password verification failed
+                    error_log("Password verification failed for user: $username");
+                    $error = 'Invalid username or password';
+                }
+            } else {
+                // Debug: No user found
+                error_log("No admin found with username: $username");
+                $error = 'Invalid username or password';
+            }
+            
+            $stmt->close();
+        } else {
+            $error = 'Database error: Unable to prepare statement';
+            error_log("Prepare statement failed: " . $conn->error);
+        }
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-    }
-    header, aside, main {
-      display: none; /* hidden until login */
-    }
-    /* Login Page */
-    .login-container {
-      display: flex;
-      height: 100vh;
-      justify-content: center;
-      align-items: center;
-      background: #2c3e50;
-    }
-    .login-box {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 10px;
-      width: 300px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    .login-box h2 {
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-    .login-box input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .login-box button {
-      width: 100%;
-      padding: 10px;
-      background: #3498db;
-      border: none;
-      color: #fff;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .login-box button:hover {
-      background: #2980b9;
-    }
-    /* Dashboard Styles */
-    header {
-      background: #34495e;
-      color: #fff;
-      padding: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    aside {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 220px;
-      height: 100%;
-      background: #2c3e50;
-      color: #fff;
-      padding-top: 60px;
-    }
-    aside ul {
-      list-style: none;
-      padding: 0;
-    }
-    aside ul li {
-      padding: 15px;
-      cursor: pointer;
-    }
-    aside ul li:hover {
-      background: #1abc9c;
-    }
-    main {
-      margin-left: 220px;
-      padding: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Eventia</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; }
+        .login-container { max-width: 400px; margin: 100px auto; padding: 20px; }
+        .login-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        .login-title { text-align: center; margin-bottom: 1.5rem; color: #1e293b; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; }
+        .btn { width: 100%; padding: 0.75rem; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+        .btn:hover { background: #2563eb; }
+        .error { color: #dc2626; text-align: center; margin-bottom: 1rem; padding: 0.5rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; }
+        .debug-info { color: #6b7280; font-size: 0.875rem; margin-top: 1rem; text-align: center; }
+    </style>
 </head>
 <body>
-
-  <!-- Login Page -->
-  <div class="login-container" id="login-page">
-    <div class="login-box">
-      <h2>Admin Login</h2>
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button onclick="login()">Login</button>
+    <div class="login-container">
+        <div class="login-card">
+            <h1 class="login-title">Eventia Admin</h1>
+            <?php if ($error): ?>
+                <div class="error"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <div class="debug-info">
+                Default credentials: admin / password
+            </div>
+        </div>
     </div>
-  </div>
-
-  <!-- Dashboard -->
-  <header id="header">
-    <div>Admin Dashboard</div>
-    <div><button onclick="logout()">Logout</button></div>
-  </header>
-
-  <aside id="sidebar">
-    <ul>
-      <li onclick="navigate('dashboard')">Dashboard</li>
-      <li onclick="navigate('packages')">Packages</li>
-      <li onclick="navigate('services')">Services</li>
-      <li onclick="navigate('blog')">Blog</li>
-      <li onclick="navigate('booking')">Package booking</li>
-      <li onclick="navigate('shop')">Shop manage product</li>
-      <li onclick="navigate('inquiries')">Inquiries</li>
-      <li onclick="navigate('reviews')">Clients review</li>
-      <li onclick="navigate('settings')">Settings</li>
-    </ul>
-  </aside>
-
-  <main id="content">
-    <h1>Welcome to the Dashboard</h1>
-    <p>Select a section from the sidebar.</p>
-  </main>
-
-  <script>
-    // Simple hardcoded admin login (you can expand this)
-    const ADMIN_USER = "admin";
-    const ADMIN_PASS = "1234";
-
-    function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
-      if (user === ADMIN_USER && pass === ADMIN_PASS) {
-        document.getElementById("login-page").style.display = "none";
-        document.getElementById("header").style.display = "flex";
-        document.getElementById("sidebar").style.display = "block";
-        document.getElementById("content").style.display = "block";
-      } else {
-        alert("Invalid credentials!");
-      }
-    }
-
-    function logout() {
-      document.getElementById("login-page").style.display = "flex";
-      document.getElementById("header").style.display = "none";
-      document.getElementById("sidebar").style.display = "none";
-      document.getElementById("content").style.display = "none";
-      document.getElementById("username").value = "";
-      document.getElementById("password").value = "";
-    }
-
-    function navigate(page) {
-      const content = document.getElementById("content");
-      switch(page) {
-        case "packages":
-          content.innerHTML = "<h2>Packages</h2><p>Manage your packages here.</p>";
-          break;
-        case "services":
-          content.innerHTML = "<h2>Services</h2><p>Manage your services here.</p>";
-          break;
-        case "blog":
-          content.innerHTML = "<h2>Blog</h2><p>Manage your blog posts here.</p>";
-          break;
-        case "booking":
-          content.innerHTML = "<h2>Package Booking</h2><p>Manage bookings here.</p>";
-          break;
-        case "shop":
-          content.innerHTML = "<h2>Shop Products</h2><p>Manage shop products here.</p>";
-          break;
-        case "inquiries":
-          content.innerHTML = "<h2>Inquiries</h2><p>Check user inquiries here.</p>";
-          break;
-        case "reviews":
-          content.innerHTML = "<h2>Clients Review</h2><p>See client reviews here.</p>";
-          break;
-        case "settings":
-          content.innerHTML = "<h2>Settings</h2><p>Update admin settings here.</p>";
-          break;
-        default:
-          content.innerHTML = "<h1>Welcome to the Dashboard</h1><p>Select a section from the sidebar.</p>";
-      }
-    }
-  </script>
 </body>
 </html>
