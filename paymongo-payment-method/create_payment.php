@@ -1,5 +1,8 @@
 <?php
 
+// ### Establish Database Connection ###
+include  __DIR__ ."/../functions/session.php";
+
 if($_SERVER['REQUEST_METHOD']=='POST'){
     
     // Check if this is a test payment
@@ -31,6 +34,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
     // Collect form data
     $amount = isset($_POST['amount']) ? intval($_POST['amount']) * 100 : 99999; // Convert to centavo
+    $_SESSION['amount']=$amount;
     $firstName = isset($_POST['firstName']) ? $_POST['firstName'] : 'Test';
     $lastName = isset($_POST['lastName']) ? $_POST['lastName'] : 'User';
     $email = isset($_POST['email']) ? $_POST['email'] : 'test@example.com';

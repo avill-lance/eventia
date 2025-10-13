@@ -35,7 +35,7 @@
 <!-- JavaScript Files -->
 <!-- Note: Bootstrap JS is now loaded in header.php -->
 <script src="js/jquery-3.7.1.js"></script>
-<script src="js/datatables.js"></script>
+<script src="js/js/datatables.min.js"></script>
 <script src="js/sweetalert2@11.js"></script>
 
 <!-- Page-specific JS loading - only load what's needed -->

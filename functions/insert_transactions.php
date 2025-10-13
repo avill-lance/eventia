@@ -39,6 +39,7 @@ if(!isset($_SESSION['id'])) {
 }
 
 try {
+    $refernce_id=$_SESSION[''];
     $user_id = $_SESSION['id'];
     
     // Get transactions for this user - use user_id

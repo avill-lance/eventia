@@ -3,7 +3,7 @@ Response: Array
 (
     [data] => Array
         (
-            [id] => cs_8Rncb2DUSQ3wNKzaBCRsBzQN
+            [id] => cs_Kcwym9aWQNA9Eo4PNghvxC5t
             [type] => checkout_session
             [attributes] => Array
                 (
@@ -25,23 +25,23 @@ Response: Array
                         )
 
                     [billing_information_fields_editable] => enabled
-                    [cancel_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251013-011356-68ec3634932af
-                    [checkout_url] => https://checkout.paymongo.com/cs_8Rncb2DUSQ3wNKzaBCRsBzQN_client_WiEG2M8GASZ2i1tVUPFqPipq#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
-                    [client_key] => cs_8Rncb2DUSQ3wNKzaBCRsBzQN_client_WiEG2M8GASZ2i1tVUPFqPipq
+                    [cancel_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251013-032107-68ec5403ef022
+                    [checkout_url] => https://checkout.paymongo.com/cs_Kcwym9aWQNA9Eo4PNghvxC5t_client_LZTL3C5S6QV1UUcyJfJShBHM#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
+                    [client_key] => cs_Kcwym9aWQNA9Eo4PNghvxC5t_client_LZTL3C5S6QV1UUcyJfJShBHM
                     [customer_email] => 
-                    [description] => Birthday Celebration Package Booking
+                    [description] => Engagement Party Package Booking
                     [line_items] => Array
                         (
                             [0] => Array
                                 (
-                                    [amount] => 6000000
+                                    [amount] => 7500000
                                     [currency] => PHP
                                     [description] => 
                                     [images] => Array
                                         (
                                         )
 
-                                    [name] => Birthday Celebration Package - Upton Wilder
+                                    [name] => Engagement Party Package - Mia Gregory
                                     [quantity] => 1
                                 )
 
@@ -55,25 +55,25 @@ Response: Array
 
                     [payment_intent] => Array
                         (
-                            [id] => pi_AQUvHBVoDKSURURwFdQvHADy
+                            [id] => pi_vFCCikauFS4MBiGwG7MgQKAr
                             [type] => payment_intent
                             [attributes] => Array
                                 (
-                                    [amount] => 6000000
+                                    [amount] => 7500000
                                     [capture_type] => automatic
-                                    [client_key] => pi_AQUvHBVoDKSURURwFdQvHADy_client_AwbmujJt6g5zLbeScugafBkY
+                                    [client_key] => pi_vFCCikauFS4MBiGwG7MgQKAr_client_8vg9vAyh2mzpBpoih2qJmgX9
                                     [currency] => PHP
-                                    [description] => Birthday Celebration Package Booking
+                                    [description] => Engagement Party Package Booking
                                     [livemode] => 
-                                    [original_amount] => 6000000
+                                    [original_amount] => 7500000
                                     [statement_descriptor] => Eventia Incorporation
                                     [status] => awaiting_payment_method
                                     [last_payment_error] => 
                                     [payment_method_allowed] => Array
                                         (
-                                            [0] => gcash
-                                            [1] => card
-                                            [2] => grab_pay
+                                            [0] => grab_pay
+                                            [1] => gcash
+                                            [2] => card
                                         )
 
                                     [payments] => Array
@@ -92,8 +92,8 @@ Response: Array
 
                                     [metadata] => 
                                     [setup_future_usage] => 
-                                    [created_at] => 1760310838
-                                    [updated_at] => 1760310838
+                                    [created_at] => 1760318469
+                                    [updated_at] => 1760318469
                                 )
 
                         )
@@ -101,18 +101,18 @@ Response: Array
                     [payment_method_types] => Array
                         (
                             [0] => gcash
-                            [1] => grab_pay
-                            [2] => card
+                            [1] => card
+                            [2] => grab_pay
                         )
 
-                    [reference_number] => EVT-20251013-011356-68ec3634932af
+                    [reference_number] => EVT-20251013-032107-68ec5403ef022
                     [send_email_receipt] => 
                     [show_description] => 1
                     [show_line_items] => 1
                     [status] => active
-                    [success_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251013-011356-68ec3634932af
-                    [created_at] => 1760310838
-                    [updated_at] => 1760310838
+                    [success_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251013-032107-68ec5403ef022
+                    [created_at] => 1760318469
+                    [updated_at] => 1760318469
                     [metadata] => 
                 )
 
