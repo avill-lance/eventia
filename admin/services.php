@@ -23,8 +23,6 @@ try {
 } catch (Exception $e) {
     $error = "Error loading services: " . $e->getMessage();
 }
-
-$conn->close();
 ?>
 
 <!-- SERVICES MANAGEMENT -->
@@ -291,13 +289,13 @@ function resetServiceForm() {
 }
 
 // Dynamic Form Builders
-function addCustomizationOption() {
+function addCustomizationOption(optionData = {}) {
     const container = document.getElementById('customizationOptionsContainer');
     const optionId = 'option_' + Date.now();
     
     const optionHtml = `
         <div class="customization-option" style="border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; border-radius: 8px;">
-            <div style="display: flex; justify-content: between; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <strong>Customization Option</strong>
                 <button type="button" class="btn small danger" onclick="this.parentElement.parentElement.remove()">
                     <i class="fas fa-times"></i>
@@ -305,26 +303,22 @@ function addCustomizationOption() {
             </div>
             <div class="grid-2">
                 <div class="field">
-                    <label>Option Name</label>
-                    <input type="text" name="customization[${optionId}][name]" placeholder="e.g., guests, premium_menu" required>
+                    <label>Option Name *</label>
+                    <input type="text" name="customization[${optionId}][name]" value="${optionData.name || ''}" placeholder="e.g., guests, premium_menu" required>
                 </div>
                 <div class="field">
-                    <label>Display Label</label>
-                    <input type="text" name="customization[${optionId}][label]" placeholder="e.g., Number of Guests" required>
-                </div>
-                <div class="field">
-                    <label>Type</label>
+                    <label>Type *</label>
                     <select name="customization[${optionId}][type]" onchange="toggleOptionFields(this)" required>
-                        <option value="number">Number</option>
-                        <option value="boolean">Yes/No Toggle</option>
-                        <option value="select">Dropdown</option>
+                        <option value="number" ${(optionData.type || 'number') === 'number' ? 'selected' : ''}>Number</option>
+                        <option value="boolean" ${(optionData.type || 'number') === 'boolean' ? 'selected' : ''}>Yes/No Toggle</option>
+                        <option value="select" ${(optionData.type || 'number') === 'select' ? 'selected' : ''}>Dropdown</option>
                     </select>
                 </div>
                 <div class="field">
-                    <label>Price Effect</label>
+                    <label>Price Effect *</label>
                     <select name="customization[${optionId}][price_type]" required>
-                        <option value="fixed">Fixed Price</option>
-                        <option value="per_unit">Price Per Unit</option>
+                        <option value="fixed" ${(optionData.price_type || 'fixed') === 'fixed' ? 'selected' : ''}>Fixed Price</option>
+                        <option value="per_unit" ${(optionData.price_type || 'fixed') === 'per_unit' ? 'selected' : ''}>Price Per Unit</option>
                     </select>
                 </div>
             </div>
@@ -335,9 +329,13 @@ function addCustomizationOption() {
     `;
     
     container.insertAdjacentHTML('beforeend', optionHtml);
+    
+    // Initialize the dynamic fields
+    const select = container.querySelector(`select[name="customization[${optionId}][type]"]`);
+    toggleOptionFields(select, optionData);
 }
 
-function toggleOptionFields(select) {
+function toggleOptionFields(select, optionData = {}) {
     const optionId = select.name.match(/customization\[(.*?)\]/)[1];
     const fieldsContainer = document.getElementById(`fields_${optionId}`);
     const type = select.value;
@@ -349,41 +347,45 @@ function toggleOptionFields(select) {
             <div class="grid-2">
                 <div class="field">
                     <label>Minimum</label>
-                    <input type="number" name="customization[${optionId}][min]" value="1">
+                    <input type="number" name="customization[${optionId}][min]" value="${optionData.min || 1}">
                 </div>
                 <div class="field">
                     <label>Maximum</label>
-                    <input type="number" name="customization[${optionId}][max]" value="100">
+                    <input type="number" name="customization[${optionId}][max]" value="${optionData.max || 100}">
                 </div>
             </div>
         `;
     } else if (type === 'select') {
+        const optionsValue = Array.isArray(optionData.choices) ? 
+            optionData.choices.join(', ') : 
+            (optionData.options || optionData.choices || '');
         fieldsHtml = `
             <div class="field">
-                <label>Options (comma-separated)</label>
-                <input type="text" name="customization[${optionId}][options]" placeholder="e.g., Standard,Premium,Deluxe">
+                <label>Options (comma-separated) *</label>
+                <input type="text" name="customization[${optionId}][options]" value="${optionsValue}" placeholder="e.g., Standard,Premium,Deluxe" required>
             </div>
         `;
     }
     // Boolean type doesn't need additional fields
     
+    // Always add price field
     fieldsHtml += `
         <div class="field">
-            <label>Price (₱)</label>
-            <input type="number" name="customization[${optionId}][price]" step="0.01" min="0" required>
+            <label>Price (₱) *</label>
+            <input type="number" name="customization[${optionId}][price]" step="0.01" min="0" value="${optionData.price || 0}" required>
         </div>
     `;
     
     fieldsContainer.innerHTML = fieldsHtml;
 }
 
-function addServiceDetail() {
+function addServiceDetail(detailData = {}) {
     const container = document.getElementById('serviceDetailsContainer');
     const detailId = 'detail_' + Date.now();
     
     const detailHtml = `
         <div class="service-detail" style="border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; border-radius: 8px;">
-            <div style="display: flex; justify-content: between; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <strong>Service Detail</strong>
                 <button type="button" class="btn small danger" onclick="this.parentElement.parentElement.remove()">
                     <i class="fas fa-times"></i>
@@ -392,15 +394,15 @@ function addServiceDetail() {
             <div class="grid-2">
                 <div class="field">
                     <label>Detail Name *</label>
-                    <input type="text" name="details[${detailId}][detail_name]" required>
+                    <input type="text" name="details[${detailId}][detail_name]" value="${detailData.detail_name || ''}" required>
                 </div>
                 <div class="field">
                     <label>Minimum Price (₱)</label>
-                    <input type="number" name="details[${detailId}][price_min]" step="0.01" min="0">
+                    <input type="number" name="details[${detailId}][price_min]" step="0.01" min="0" value="${detailData.price_min || 0}">
                 </div>
                 <div class="field">
                     <label>Maximum Price (₱)</label>
-                    <input type="number" name="details[${detailId}][price_max]" step="0.01" min="0">
+                    <input type="number" name="details[${detailId}][price_max]" step="0.01" min="0" value="${detailData.price_max || 0}">
                 </div>
             </div>
         </div>
@@ -409,13 +411,13 @@ function addServiceDetail() {
     container.insertAdjacentHTML('beforeend', detailHtml);
 }
 
-function addServiceFeature() {
+function addServiceFeature(featureData = {}) {
     const container = document.getElementById('serviceFeaturesContainer');
     const featureId = 'feature_' + Date.now();
     
     const featureHtml = `
         <div class="service-feature" style="border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; border-radius: 8px;">
-            <div style="display: flex; justify-content: between; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <strong>Service Feature</strong>
                 <button type="button" class="btn small danger" onclick="this.parentElement.parentElement.remove()">
                     <i class="fas fa-times"></i>
@@ -423,7 +425,7 @@ function addServiceFeature() {
             </div>
             <div class="field">
                 <label>Feature Name *</label>
-                <input type="text" name="features[${featureId}][feature_name]" required>
+                <input type="text" name="features[${featureId}][feature_name]" value="${featureData.feature_name || ''}" required>
             </div>
         </div>
     `;
@@ -443,6 +445,20 @@ function saveService() {
     const saveBtn = document.getElementById('saveServiceBtn');
     const saveText = document.getElementById('saveServiceText');
     const saveLoading = document.getElementById('saveServiceLoading');
+    
+    // Validate form
+    const serviceName = document.getElementById('service_name').value.trim();
+    const basePrice = document.getElementById('base_price').value;
+    
+    if (!serviceName) {
+        showToast('Service name is required', 'error');
+        return;
+    }
+    
+    if (!basePrice || parseFloat(basePrice) < 0) {
+        showToast('Valid base price is required', 'error');
+        return;
+    }
     
     // Show loading state
     saveBtn.disabled = true;
@@ -481,44 +497,121 @@ function editService(serviceId) {
 }
 
 function loadServiceData(serviceId) {
+    console.log('Loading service data for ID:', serviceId);
+    
+    // Show loading state
+    const saveBtn = document.getElementById('saveServiceBtn');
+    saveBtn.disabled = true;
+    
     fetch(`services-ajax.php?action=load&service_id=${serviceId}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.status);
+            }
+            
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                return response.text().then(text => {
+                    console.error('Non-JSON response:', text.substring(0, 500));
+                    throw new Error('Server returned non-JSON response. Check for PHP errors.');
+                });
+            }
+            
+            return response.json();
+        })
         .then(data => {
-            if (data.success) {
+            if (data.success && data.service) {
+                console.log('Service data loaded successfully:', data.service);
                 populateServiceForm(data.service);
             } else {
-                showToast('Error loading service data', 'error');
+                throw new Error(data.message || 'Failed to load service data');
             }
         })
         .catch(error => {
-            showToast('Error loading service: ' + error, 'error');
+            console.error('Error loading service:', error);
+            showToast('Error loading service: ' + error.message, 'error');
+            closeServiceModal();
+        })
+        .finally(() => {
+            saveBtn.disabled = false;
         });
 }
 
 function populateServiceForm(service) {
-    document.getElementById('service_id').value = service.service_id;
-    document.getElementById('service_name').value = service.service_name;
-    document.getElementById('category').value = service.category || '';
-    document.getElementById('base_price').value = service.base_price;
-    document.getElementById('service_description').value = service.service_description || '';
-    document.getElementById('status').value = service.status;
-    document.getElementById('customizable').checked = service.customizable == 1;
+    console.log('Populating form with service data:', service);
     
-    // TODO: Populate customization options, details, and features
-    // This would require parsing the JSON and building the dynamic forms
+    // Populate basic fields
+    document.getElementById('service_id').value = service.service_id || '';
+    document.getElementById('service_name').value = service.service_name || '';
+    document.getElementById('category').value = service.category || '';
+    document.getElementById('base_price').value = service.base_price || 0;
+    document.getElementById('service_description').value = service.service_description || '';
+    document.getElementById('status').value = service.status || 'active';
+    document.getElementById('customizable').checked = (service.customizable == 1 || service.customizable === true);
+    
+    // Clear existing dynamic content
+    document.getElementById('customizationOptionsContainer').innerHTML = '';
+    document.getElementById('serviceDetailsContainer').innerHTML = '';
+    document.getElementById('serviceFeaturesContainer').innerHTML = '';
+    
+    // Populate customization options
+    if (service.customization_options && service.customization_options.options) {
+        console.log('Loading customization options:', service.customization_options.options);
+        Object.entries(service.customization_options.options).forEach(([name, config]) => {
+            console.log('Adding option:', name, config);
+            addCustomizationOption({
+                name: name,
+                type: config.type || 'number',
+                price: config.price || 0,
+                price_type: config.price_type || 'fixed',
+                min: config.min || 1,
+                max: config.max || 100,
+                choices: config.choices || [],
+                options: Array.isArray(config.choices) ? config.choices.join(', ') : (config.options || '')
+            });
+        });
+    }
+    
+    // Populate service details
+    if (service.details && service.details.length > 0) {
+        console.log('Loading service details:', service.details);
+        service.details.forEach(detail => {
+            addServiceDetail({
+                detail_name: detail.detail_name || '',
+                price_min: detail.price_min || 0,
+                price_max: detail.price_max || 0
+            });
+        });
+    }
+    
+    // Populate service features
+    if (service.features && service.features.length > 0) {
+        console.log('Loading service features:', service.features);
+        service.features.forEach(feature => {
+            addServiceFeature({
+                feature_name: feature.feature_name || ''
+            });
+        });
+    }
+    
+    // Show first tab after loading
+    setTimeout(() => {
+        document.querySelectorAll('.tab-btn')[0].click();
+    }, 100);
 }
 
 function deleteService(serviceId) {
+    const csrfToken = document.querySelector('input[name="csrf_token"]').value;
     document.getElementById('confirmMessage').textContent = 'Are you sure you want to delete this service? This will also delete all related details and features.';
     document.getElementById('confirmActionBtn').textContent = 'Delete';
     document.getElementById('confirmActionBtn').onclick = function() {
-        confirmDelete(serviceId);
+        confirmDelete(serviceId, csrfToken);
     };
     document.getElementById('confirmModal').showModal();
 }
 
-function confirmDelete(serviceId) {
-    fetch(`services-ajax.php?action=delete&service_id=${serviceId}`)
+function confirmDelete(serviceId, csrfToken) {
+    fetch(`services-ajax.php?action=delete&service_id=${serviceId}&csrf_token=${encodeURIComponent(csrfToken)}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -542,15 +635,23 @@ function closeConfirmModal() {
 
 // Toast function (reuse from dashboard)
 function showToast(message, type = 'info') {
-    const toast = document.getElementById('toast');
+    // Create toast if it doesn't exist
+    let toast = document.getElementById('toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast';
+        toast.style.cssText = 'position:fixed;bottom:20px;right:20px;padding:12px 16px;border-radius:8px;color:white;z-index:10000;display:none;max-width:300px;word-wrap:break-word;';
+        document.body.appendChild(toast);
+    }
+    
     toast.textContent = message;
     toast.style.display = 'block';
-    toast.style.background = type === 'error' ? 'var(--danger)' : 
-                            type === 'success' ? 'var(--success)' : 'var(--panel)';
+    toast.style.background = type === 'error' ? '#dc3545' : 
+                            type === 'success' ? '#28a745' : '#17a2b8';
     
     setTimeout(() => {
         toast.style.display = 'none';
-    }, 3000);
+    }, 4000);
 }
 </script>
 
@@ -627,7 +728,7 @@ function showToast(message, type = 'info') {
 /* Page Header */
 .page-header {
     display: flex;
-    justify-content: between;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
 }
@@ -639,6 +740,6 @@ function showToast(message, type = 'info') {
 </style>
 
 <!-- Toast -->
-<div id="toast" style="position:fixed;bottom:20px;right:20px;padding:10px 14px;border-radius:12px;background:#111827;border:1px solid var(--border);display:none"></div>
+<div id="toast" style="position:fixed;bottom:20px;right:20px;padding:12px 16px;border-radius:8px;color:white;z-index:10000;display:none;max-width:300px;word-wrap:break-word;"></div>
 
 <?php include __DIR__ . '/admin-components/admin-footer.php';?>

@@ -219,10 +219,6 @@ try {
                             </td>
                             <td style="padding: 16px 12px; border-bottom: 1px solid var(--border); text-align: center;">
                                 <div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">
-                                    <button class="btn" onclick="viewPackageDetails(<?php echo $package['package_id']; ?>)" title="View Details" style="padding: 6px 10px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
-                                        <i class="bi bi-eye"></i>
-                                        <span class="btn-text">View</span>
-                                    </button>
                                     <button class="btn primary" onclick="editPackage(<?php echo $package['package_id']; ?>)" title="Edit" style="padding: 6px 10px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
                                         <i class="bi bi-pencil"></i>
                                         <span class="btn-text">Edit</span>

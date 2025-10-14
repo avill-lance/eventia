@@ -1,5 +1,3 @@
-[file name]: packages-ajax.php
-[file content begin]
 <?php
 // packages-ajax.php
 
@@ -377,4 +375,3 @@ function savePackage() {
     $stmt->close();
 }
 ?>
-[file content end]
