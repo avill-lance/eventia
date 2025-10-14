@@ -71,7 +71,9 @@ function getOTP(){
     $.ajax({
         url: 'functions/SendOTP.php',
         type: 'POST',
-        data: { email: email},
+        data: { email: email,
+            purpose: 'forgot'
+        },
         success: function(response) {
             if (response.trim() === 'sent') {
                 Swal.fire({

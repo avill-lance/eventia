@@ -61,4 +61,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <script src="js/admin/admin.js"></script>
 <?php endif; ?>
 </body>
+
+<!-- Only load self_booking.js on booking pages -->
+<?php if ($current_page === 'guided_booking.php'): ?>
+<script src="js/guided_booking.js"></script>
+<?php endif; ?>
 </html>

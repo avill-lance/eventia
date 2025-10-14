@@ -1,98 +1,62 @@
 <?php
 session_start();
-require_once __DIR__ . '/database/config.php';
+require_once __DIR__ . '/../database/config.php';
 
 header('Content-Type: application/json');
-
-// Allow CORS if needed
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['error' => 'Invalid request method']);
-    exit;
+// Support both POST and GET
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
+} else {
+    $data = $_GET;
 }
 
-// Get the raw POST data
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
-
-if (json_last_error() !== JSON_ERROR_NONE) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Invalid JSON data']);
-    exit;
-}
-
-$month = $data['month'] ?? null;
-$year = $data['year'] ?? null;
-
-if (!$month || !$year) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Month and year required']);
-    exit;
-}
+$month = $data['month'] ?? date('n');
+$year = $data['year'] ?? date('Y');
 
 try {
-    // Get booked dates from database
-    $bookedDates = [];
-    $stmt = $conn->prepare("
-        SELECT DISTINCT event_date 
-        FROM tbl_bookings 
-        WHERE MONTH(event_date) = ? AND YEAR(event_date) = ?
-        AND booking_status IN ('confirmed', 'pending')
-    ");
-    
-    if (!$stmt) {
-        throw new Exception('Prepare failed: ' . $conn->error);
-    }
-    
-    $stmt->bind_param("ii", $month, $year);
-    
-    if (!$stmt->execute()) {
-        throw new Exception('Execute failed: ' . $stmt->error);
-    }
-    
-    $result = $stmt->get_result();
-    
-    while ($row = $result->fetch_assoc()) {
-        $bookedDates[] = $row['event_date'];
-    }
-    
-    $stmt->close();
-    
-    // For now, let's mark some dates as limited for testing
-    $limitedDates = [];
-    
-    // Mark weekends as limited availability
+    // Get all dates in the month
     $startDate = new DateTime("$year-$month-01");
     $endDate = new DateTime("$year-$month-" . $startDate->format('t'));
     
+    $bookedDates = [];
+    $limitedDates = [];
+    
+    // Check each date in the month for bookings
     $currentDate = clone $startDate;
     while ($currentDate <= $endDate) {
         $dateStr = $currentDate->format('Y-m-d');
         $dayOfWeek = $currentDate->format('w'); // 0 = Sunday, 6 = Saturday
         
-        // If it's a weekend and not booked, mark as limited
-        if (($dayOfWeek == 0 || $dayOfWeek == 6) && !in_array($dateStr, $bookedDates)) {
+        // FIXED: Include bookings with empty status (treat as confirmed)
+        $stmt = $conn->prepare("
+            SELECT COUNT(*) as booking_count 
+            FROM tbl_bookings 
+            WHERE event_date = ? 
+            AND (booking_status IN ('confirmed', 'pending') OR booking_status = '' OR booking_status IS NULL)
+            AND (contact_name != '' OR contact_email != '')  -- At least some contact info
+        ");
+        $stmt->bind_param("s", $dateStr);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $bookingCount = $row['booking_count'] ?? 0;
+        
+        // Determine availability based on booking count
+        if ($bookingCount >= 2) { // Fully booked if 2 or more bookings
+            $bookedDates[] = $dateStr;
+          //  echo "🔴 $dateStr: $bookingCount bookings - FULLY BOOKED\n";
+        } else if ($bookingCount >= 1) {
             $limitedDates[] = $dateStr;
+           // echo "🟡 $dateStr: $bookingCount bookings - LIMITED\n";
+        } else {
+           // echo "🟢 $dateStr: $bookingCount bookings - AVAILABLE\n";
         }
         
+        $stmt->close();
         $currentDate->modify('+1 day');
-    }
-    
-    // Also add a few random weekdays as limited for testing
-    $testLimitedDates = [
-        "$year-$month-20",
-        "$year-$month-21", 
-        "$year-$month-22"
-    ];
-    
-    foreach ($testLimitedDates as $testDate) {
-        if (!in_array($testDate, $bookedDates) && !in_array($testDate, $limitedDates)) {
-            $limitedDates[] = $testDate;
-        }
     }
     
     echo json_encode([
@@ -102,12 +66,16 @@ try {
         'month' => $month,
         'year' => $year,
         'total_booked' => count($bookedDates),
-        'total_limited' => count($limitedDates)
+        'total_limited' => count($limitedDates),
+        'debug_info' => "Found " . count($bookedDates) . " booked dates and " . count($limitedDates) . " limited dates"
     ]);
     
 } catch (Exception $e) {
     http_response_code(500);
     error_log('Availability check error: ' . $e->getMessage());
-    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+    echo json_encode([
+        'error' => 'Database error: ' . $e->getMessage(),
+        'success' => false
+    ]);
 }
 ?>

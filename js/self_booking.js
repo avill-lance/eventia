@@ -1,3 +1,48 @@
+// In your initialization or in the function that shows the modal
+document.getElementById('saveCustomizationBtn').addEventListener('click', saveCustomization);
+
+// Add this debug function to test calendar clicks
+function testCalendarClick() {
+    console.log('🧪 Testing calendar functionality...');
+    
+    // Test a specific date that should be booked
+    const testDate = new Date('2025-10-14');
+    console.log('Testing date:', testDate);
+    
+    getDateAvailability(testDate).then(availability => {
+        console.log('🧪 Test Result:', {
+            date: testDate.toDateString(),
+            status: availability.status,
+            message: availability.message
+        });
+    });
+}
+
+function generateCalendar(date) {
+    console.log('🔄 Generating calendar for:', date.toLocaleDateString());
+    
+    const calendarDays = document.getElementById('calendarDays');
+    const currentMonthYear = document.getElementById('currentMonthYear');
+    
+    // ... existing code ...
+    
+    // Add debug info
+    console.log('📅 Calendar generated. Expected colors:');
+    console.log('   Oct 12: 🟡 Yellow (Limited)');
+    console.log('   Oct 14: 🔴 Red (Fully Booked)'); 
+    console.log('   Weekends: 🟡 Yellow (Limited)');
+    console.log('   Other weekdays: 🟢 Green (Available)');
+}
+
+// Call this in your DOMContentLoaded to test
+document.addEventListener('DOMContentLoaded', function() {
+    // ... your existing code ...
+    
+    // Test calendar after a short delay
+    setTimeout(testCalendarClick, 1000);
+});
+
+
 window.nextStep = nextStep;
 window.prevStep = prevStep;
 window.selectVenueType = selectVenueType;
@@ -237,15 +282,17 @@ function saveCustomization() {
     
     console.log('💾 Saving customization for service:', currentCustomizingService);
     
+    // Use the dynamically created IDs with the service ID
     const customization = {
-        package: document.getElementById('customPackage') ? document.getElementById('customPackage').value : null,
-        units: document.getElementById('customUnits') ? parseInt(document.getElementById('customUnits').value) : null,
-        requirements: document.getElementById('customRequirements').value,
-        notes: document.getElementById('customNotes').value,
+        package: document.getElementById(`customPackage_${currentCustomizingService}`) ? document.getElementById(`customPackage_${currentCustomizingService}`).value : 'basic',
+        units: document.getElementById(`customUnits_${currentCustomizingService}`) ? parseInt(document.getElementById(`customUnits_${currentCustomizingService}`).value) : 4,
+        requirements: document.getElementById(`customRequirements_${currentCustomizingService}`) ? document.getElementById(`customRequirements_${currentCustomizingService}`).value : '',
+        notes: document.getElementById(`customNotes_${currentCustomizingService}`) ? document.getElementById(`customNotes_${currentCustomizingService}`).value : '',
         timestamp: new Date().toISOString()
     };
     
     serviceCustomizations[currentCustomizingService] = customization;
+    bookingData.customizations[currentCustomizingService] = customization;
     
     // Add hidden input for customization data
     let existingInput = document.querySelector(`input[name="customization[${currentCustomizingService}]"]`);
@@ -254,25 +301,50 @@ function saveCustomization() {
         input.type = 'hidden';
         input.name = `customization[${currentCustomizingService}]`;
         input.value = JSON.stringify(customization);
-        document.getElementById('bookingForm').appendChild(input);
+        document.getElementById('customizationsContainer').appendChild(input);
     } else {
         existingInput.value = JSON.stringify(customization);
     }
     
     // Hide modal
     const customizationModal = bootstrap.Modal.getInstance(document.getElementById('customizationModal'));
-    customizationModal.hide();
+    if (customizationModal) {
+        customizationModal.hide();
+    }
     
     // Show success feedback
-    const customizeBtn = document.querySelector(`[data-service-id="${currentCustomizingService}"]`);
-    if (customizeBtn) {
-        customizeBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Customized';
-        customizeBtn.classList.remove('btn-outline-primary');
-        customizeBtn.classList.add('btn-success');
+    const service = phpServices.find(s => s.service_id == currentCustomizingService);
+    if (service) {
+        addAdminMessage(`${service.service_name} customization saved! ✅`);
     }
     
     console.log('✅ Customization saved successfully');
+    
+    // Continue with next service or move to next stage
+    setTimeout(() => {
+        // You'll need to implement logic to show the next service or continue the flow
+        checkAndContinueCustomizationFlow();
+    }, 1000);
+    
     currentCustomizingService = null;
+}
+
+// NEW FUNCTION: Check if there are more services to customize
+function checkAndContinueCustomizationFlow() {
+    // Check if there are any remaining services that need customization
+    const remainingServices = bookingData.services.filter(serviceId => {
+        const service = phpServices.find(s => s.service_id == serviceId);
+        return service && service.customizable && !serviceCustomizations[serviceId];
+    });
+    
+    if (remainingServices.length > 0) {
+        // Show customization for next service
+        showServiceCustomizations(remainingServices);
+    } else {
+        // All services customized, move to next stage
+        addAdminMessage("All customizations have been set! Let's move on to your information.");
+        setTimeout(() => startStage(4), 1000);
+    }
 }
 
 function nextStep(step) {
@@ -460,44 +532,38 @@ $("#submitBooking").click(function(e){
     
     // Collect all form data properly
     const formData = new FormData();
-    
-    // Add basic form data
+
+    // Add ALL form inputs
     const formInputs = $("#bookingForm").serializeArray();
     console.log("📝 Form inputs:", formInputs);
     formInputs.forEach(function(input) {
         formData.append(input.name, input.value);
     });
-    
+
     // Add calculated amount
     const totalAmount = calculateTotalAmount();
     console.log("💰 Calculated amount:", totalAmount);
     formData.append('amount', totalAmount);
-    
-    // Add event type (from package)
-    const selectedPackage = $('input[name="package"]:checked');
-    if(selectedPackage.length) {
-        formData.append('eventType', selectedPackage.val());
-        console.log("🎯 Event type:", selectedPackage.val());
-    }
-    
+
     // Add customer info
     const contactName = $('#contact_name').val();
     formData.append('firstName', contactName.split(' ')[0]);
     formData.append('lastName', contactName.split(' ').slice(1).join(' '));
     formData.append('email', $('#contact_email').val());
     formData.append('phone', $('#contact_phone').val());
+
+    // Add event type (from package)
+    const selectedPackage = $('input[name="package"]:checked');
+    if(selectedPackage.length) {
+        formData.append('eventType', selectedPackage.val());
+        console.log("🎯 Event type:", selectedPackage.val());
+    }
+
+    // Add booking reference
+    formData.append('booking_reference', $('#bookingReference').val());
     
-    console.log("👤 Customer info:", {
-        firstName: contactName.split(' ')[0],
-        lastName: contactName.split(' ').slice(1).join(' '),
-        email: $('#contact_email').val(),
-        phone: $('#contact_phone').val()
-    });
-    
-    // For testing - uncomment this line to use test mode
-    formData.append('test_mode', 'true');
-    console.log("🧪 Test mode enabled");
-    
+    // REMOVE TEST MODE - Comment this line out since your PHP doesn't handle it
+    // formData.append('test_mode', 'true');
     console.log("📤 Sending AJAX request...");
     
     $.ajax({
@@ -513,36 +579,32 @@ $("#submitBooking").click(function(e){
             
             if(response.success && response.checkout_url) {
                 console.log("🎉 Payment created successfully");
+                console.log("🔗 Checkout URL:", response.checkout_url);
+                console.log("📋 Reference:", response.reference);
+                
                 // Store reference in sessionStorage for verification
                 sessionStorage.setItem('paymentRef', response.reference);
-                if(response.test_mode) {
-                    sessionStorage.setItem('testMode', 'true');
-                    console.log("🧪 Test payment created - Reference:", response.reference);
-                    window.location.href = response.checkout_url;
-                } else {
-                    console.log("💳 Real payment created - Reference:", response.reference);
-                    
-                    // Show instructions for real payment
-                    Swal.fire({
-                        title: 'Redirecting to PayMongo',
-                        html: 'You will be redirected to PayMongo to complete your payment.<br><br>' +
-                              '<strong>Reference Number:</strong> ' + response.reference + '<br><br>' +
-                              'Please complete the payment process and return to this site.',
-                        icon: 'info',
-                        showCancelButton: true,
-                        confirmButtonText: 'Proceed to PayMongo',
-                        cancelButtonText: 'Stay Here',
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            console.log("🔄 Redirecting to:", response.checkout_url);
-                            window.location.href = response.checkout_url;
-                        } else {
-                            console.log("🚫 User cancelled redirect");
-                        }
-                    });
-                }
+                
+                // Show instructions and redirect (for real payment)
+                Swal.fire({
+                    title: 'Redirecting to PayMongo',
+                    html: 'You will be redirected to PayMongo to complete your payment.<br><br>' +
+                          '<strong>Reference Number:</strong> ' + response.reference + '<br><br>' +
+                          'Please complete the payment process and return to this site.',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: 'Proceed to PayMongo',
+                    cancelButtonText: 'Stay Here',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.log("🔄 Redirecting to:", response.checkout_url);
+                        window.location.href = response.checkout_url;
+                    } else {
+                        console.log("🚫 User cancelled redirect");
+                    }
+                });
             } else {
                 console.log("❌ Payment creation failed:", response);
                 Swal.fire('Error!', response.error || 'Failed to create payment', 'error');
@@ -550,15 +612,18 @@ $("#submitBooking").click(function(e){
         },
         error: function(xhr, status, error) {
             console.error('❌ AJAX Error:', error);
-            console.log('Status:', xhr.status);
+            console.log('Status:', status);
+            console.log('XHR Status:', xhr.status);
             console.log('Response Text:', xhr.responseText);
             submitBtn.html(originalText).prop('disabled', false);
             
+            // Try to parse error response
             try {
                 var errorResponse = JSON.parse(xhr.responseText);
                 console.log('Error details:', errorResponse);
                 Swal.fire('Error!', errorResponse.error || 'Network error: ' + error, 'error');
             } catch(e) {
+                console.log('Raw response:', xhr.responseText);
                 Swal.fire('Error!', 'Server error: ' + xhr.responseText, 'error');
             }
         }
@@ -585,24 +650,33 @@ function calculateTotalAmount() {
 }
 });
 
-// Calendar functionality
+// Calendar functionality - FIXED VERSION
 let currentDate = new Date();
 let selectedCalendarDate = null;
 
 // Initialize calendar
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('📅 Initializing calendar functionality...');
+    
     // Add event listener for calendar button
-    document.getElementById('openCalendar').addEventListener('click', openCalendar);
+    const openCalendarBtn = document.getElementById('openCalendar');
+    if (openCalendarBtn) {
+        openCalendarBtn.addEventListener('click', openCalendar);
+        console.log('✅ Calendar button event listener added');
+    }
     
     // Calendar navigation
-    document.getElementById('prevMonth').addEventListener('click', previousMonth);
-    document.getElementById('nextMonth').addEventListener('click', nextMonth);
+    const prevMonthBtn = document.getElementById('prevMonth');
+    const nextMonthBtn = document.getElementById('nextMonth');
+    const confirmDateBtn = document.getElementById('confirmDate');
     
-    // Confirm date selection
-    document.getElementById('confirmDate').addEventListener('click', confirmDateSelection);
+    if (prevMonthBtn) prevMonthBtn.addEventListener('click', previousMonth);
+    if (nextMonthBtn) nextMonthBtn.addEventListener('click', nextMonth);
+    if (confirmDateBtn) confirmDateBtn.addEventListener('click', confirmDateSelection);
     
     // Initialize calendar
     generateCalendar(currentDate);
+    console.log('✅ Calendar initialized');
 });
 
 function openCalendar() {
@@ -615,8 +689,15 @@ function openCalendar() {
 }
 
 function generateCalendar(date) {
+    console.log('🔄 Generating calendar for:', date.toLocaleDateString());
+    
     const calendarDays = document.getElementById('calendarDays');
     const currentMonthYear = document.getElementById('currentMonthYear');
+    
+    if (!calendarDays || !currentMonthYear) {
+        console.error('❌ Calendar elements not found');
+        return;
+    }
     
     // Set current month year display
     currentMonthYear.textContent = date.toLocaleDateString('en-US', { 
@@ -632,6 +713,8 @@ function generateCalendar(date) {
     const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     const totalDays = lastDay.getDate();
     const startingDay = firstDay.getDay(); // 0 = Sunday
+    
+    console.log(`📅 Calendar info: Start day: ${startingDay}, Total days: ${totalDays}`);
     
     // Add empty cells for days before the first day of month
     for (let i = 0; i < startingDay; i++) {
@@ -649,6 +732,7 @@ function generateCalendar(date) {
         const dayElement = document.createElement('div');
         dayElement.className = 'calendar-day';
         dayElement.textContent = day;
+        dayElement.setAttribute('data-date', `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`);
         
         const currentDate = new Date(date.getFullYear(), date.getMonth(), day);
         
@@ -663,7 +747,7 @@ function generateCalendar(date) {
             dayElement.title = 'Date has passed';
             console.log(`❌ ${currentDate.toDateString()} - Past date`);
         } else {
-            // Use the checkAndSetAvailability function
+            // Check availability for this date
             checkAndSetAvailability(currentDate, dayElement);
         }
         
@@ -671,11 +755,12 @@ function generateCalendar(date) {
     }
 }
 
-// Make sure this function is properly defined
+// FIXED: Proper async availability checking
 async function checkAndSetAvailability(date, element) {
     try {
+        console.log(`🔍 Checking availability for: ${date.toDateString()}`);
         const availability = await getDateAvailability(date);
-        console.log(`📅 ${date.toDateString()} - Status: ${availability.status}, Message: ${availability.message}`);
+        console.log(`📊 ${date.toDateString()} - Status: ${availability.status}, Message: ${availability.message}`);
         
         // Clear any existing availability classes
         element.classList.remove('available', 'partially-available', 'unavailable');
@@ -684,42 +769,31 @@ async function checkAndSetAvailability(date, element) {
         element.classList.add(availability.status);
         element.title = availability.message;
         
-        // Remove any existing click events
-        element.replaceWith(element.cloneNode(true));
-        const newElement = element.parentElement.lastElementChild;
-        
         // Only add click event if the date is available or partially available
         if (availability.status !== 'unavailable') {
-            newElement.addEventListener('click', () => {
+            element.style.cursor = 'pointer';
+            element.addEventListener('click', function() {
                 console.log(`🎯 Clicked on ${date.toDateString()} with status: ${availability.status}`);
-                selectDate(date, newElement);
+                selectDate(date, element);
             });
             console.log(`✅ ${date.toDateString()} - Click event added`);
         } else {
+            element.style.cursor = 'not-allowed';
             console.log(`🚫 ${date.toDateString()} - No click event added (unavailable)`);
         }
         
     } catch (error) {
-        console.error('Error in checkAndSetAvailability:', error);
+        console.error('❌ Error in checkAndSetAvailability:', error);
         // Fallback: mark as available and add click event
         element.classList.remove('available', 'partially-available', 'unavailable');
         element.classList.add('available');
         element.title = 'Available';
+        element.style.cursor = 'pointer';
         element.addEventListener('click', () => selectDate(date, element));
     }
 }
 
-// Add this helper function for async availability checking
-async function checkAndSetAvailability(date, element) {
-    const availability = await getDateAvailability(date);
-    element.classList.add(availability.status);
-    element.title = availability.message;
-    
-    if (availability.status !== 'unavailable') {
-        element.addEventListener('click', () => selectDate(date, element));
-    }
-}
-
+// FIXED: Improved availability checking function
 async function getDateAvailability(date) {
     const dateStr = date.toISOString().split('T')[0];
     const today = new Date();
@@ -733,32 +807,25 @@ async function getDateAvailability(date) {
     try {
         console.log('🔍 Checking availability for:', dateStr);
         
-        // Get availability data from server
-        const response = await fetch('get_availability.php', {
-            method: 'POST',
+        // Use GET instead of POST for simplicity
+        const response = await fetch(`functions/get_availability.php?month=${date.getMonth() + 1}&year=${date.getFullYear()}`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                month: date.getMonth() + 1,
-                year: date.getFullYear()
-            })
+            }
         });
         
         if (!response.ok) {
-            // If the file doesn't exist, use fallback logic
-            console.warn('⚠️ Availability endpoint not available, using fallback logic');
-            return getFallbackAvailability(date);
+            throw new Error('Network response was not ok');
         }
         
         const data = await response.json();
+        console.log('📊 Server response for availability:', data);
         
-        if (data.error) {
+        if (data.error || !data.success) {
             console.error('Error from server:', data.error);
             return getFallbackAvailability(date);
         }
-        
-        console.log('📊 Server response:', data);
         
         // Check if date is fully booked
         if (data.booked_dates && data.booked_dates.includes(dateStr)) {
@@ -779,7 +846,7 @@ async function getDateAvailability(date) {
         return { status: 'available', message: 'Available' };
         
     } catch (error) {
-        console.error('Error checking availability:', error);
+        console.error('❌ Error checking availability:', error);
         // Use fallback logic
         return getFallbackAvailability(date);
     }
@@ -826,50 +893,9 @@ function getFallbackAvailability(date) {
     return { status: 'available', message: 'Available (fallback)' };
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const eventDateInput = document.getElementById('event_date');
-    
-    if (eventDateInput) {
-        eventDateInput.addEventListener('change', async function() {
-            const selectedDate = new Date(this.value);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            if (selectedDate < today) {
-                alert('Please select a future date.');
-                this.value = '';
-                return;
-            }
-            
-            // Check availability for manually entered date
-            const availability = await getDateAvailability(selectedDate);
-            
-            if (availability.status === 'unavailable') {
-                alert('The selected date is not available. Please choose another date or use the calendar to check availability.');
-                this.value = '';
-            } else if (availability.status === 'partially-available') {
-                if (confirm('This date has limited availability. Would you like to proceed?')) {
-                    // User confirmed, keep the date
-                    console.log('User confirmed limited availability date:', this.value);
-                } else {
-                    this.value = '';
-                }
-            }
-        });
-    }
-});
-
+// FIXED: Date selection function
 function selectDate(date, element) {
     console.log('🟢 selectDate called with:', date);
-    
-    // Debug the element state
-    debugCalendarClick(date, element);
-    
-    // Check if the element is actually unavailable
-    if (element.classList.contains('unavailable')) {
-        console.log('❌ Element is marked as unavailable, ignoring click');
-        return;
-    }
     
     // Remove selected class from all days
     document.querySelectorAll('.calendar-day').forEach(day => {
@@ -888,11 +914,17 @@ function selectDate(date, element) {
     console.log('✅ Date selected successfully:', date);
 }
 
-function updateSelectedDateInfo(date) {
+// FIXED: Update selected date info
+async function updateSelectedDateInfo(date) {
     const selectedDateInfo = document.getElementById('selectedDateInfo');
     const selectedDateAvailability = document.getElementById('selectedDateAvailability');
     
-    const availability = getDateAvailability(date);
+    if (!selectedDateInfo || !selectedDateAvailability) {
+        console.error('❌ Selected date info elements not found');
+        return;
+    }
+    
+    const availability = await getDateAvailability(date);
     
     selectedDateInfo.innerHTML = `
         <strong>${date.toLocaleDateString('en-US', { 
@@ -918,29 +950,40 @@ function updateSelectedDateInfo(date) {
     `;
 }
 
+// FIXED: Confirm date selection
 function confirmDateSelection() {
     if (!selectedCalendarDate) {
         alert('Please select a date from the calendar.');
         return;
     }
     
-    const availability = getDateAvailability(selectedCalendarDate);
-    if (availability.status === 'unavailable') {
-        alert('The selected date is not available. Please choose another date.');
-        return;
-    }
-    
-    // Format date for input field (YYYY-MM-DD)
-    const formattedDate = selectedCalendarDate.toISOString().split('T')[0];
-    
-    // Set the date in the form field
-    document.getElementById('event_date').value = formattedDate;
-    
-    // Close the modal
-    const calendarModal = bootstrap.Modal.getInstance(document.getElementById('calendarModal'));
-    calendarModal.hide();
-    
-    console.log('✅ Date selected:', formattedDate);
+    // Check availability one more time before confirming
+    getDateAvailability(selectedCalendarDate).then(availability => {
+        if (availability.status === 'unavailable') {
+            alert('The selected date is not available. Please choose another date.');
+            return;
+        }
+        
+        if (availability.status === 'partially-available') {
+            if (!confirm('This date has limited availability. Would you like to proceed?')) {
+                return;
+            }
+        }
+        
+        // Format date for input field (YYYY-MM-DD)
+        const formattedDate = selectedCalendarDate.toISOString().split('T')[0];
+        
+        // Set the date in the form field
+        document.getElementById('event_date').value = formattedDate;
+        
+        // Close the modal
+        const calendarModal = bootstrap.Modal.getInstance(document.getElementById('calendarModal'));
+        if (calendarModal) {
+            calendarModal.hide();
+        }
+        
+        console.log('✅ Date selected:', formattedDate);
+    });
 }
 
 function previousMonth() {
@@ -953,5 +996,17 @@ function nextMonth() {
     generateCalendar(currentDate);
 }
 
+// Add debug function for calendar clicks
+function debugCalendarClick(date, element) {
+    console.log('🔍 Calendar Click Debug:');
+    console.log('Date:', date);
+    console.log('Element classes:', element.classList);
+    console.log('Element content:', element.textContent);
+    console.log('Is unavailable:', element.classList.contains('unavailable'));
+    console.log('Is available:', element.classList.contains('available'));
+    console.log('Is partially-available:', element.classList.contains('partially-available'));
+}
+
 // Add to global scope
 window.openCalendar = openCalendar;
+window.selectDate = selectDate;

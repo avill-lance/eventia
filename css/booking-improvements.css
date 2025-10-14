@@ -99,3 +99,123 @@
 #event_date {
     cursor: pointer;
 }
+
+/* ADD THESE TO YOUR EXISTING booking-improvements.css */
+
+/* Enhanced Calendar Styles for Dynamic Availability */
+.calendar-day.partially-available {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left: 3px solid #ffc107;
+}
+
+.calendar-day.unavailable {
+    background-color: #f8d7da;
+    color: #721c24;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+}
+
+.calendar-day.other-month.partially-available {
+    background-color: #fff3cd;
+    opacity: 0.6;
+}
+
+.calendar-day.other-month.unavailable {
+    background-color: #f8d7da;
+    opacity: 0.5;
+}
+
+/* Availability Legend Dots */
+.availability-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.availability-dot.available {
+    background: #198754;
+}
+
+.availability-dot.partially-available {
+    background: #ffc107;
+}
+
+.availability-dot.unavailable {
+    background: #dc3545;
+}
+
+/* Calendar Header Improvements */
+.calendar-header {
+    padding: 10px 0;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 15px;
+}
+
+/* Selected Date Info Styling */
+.selected-date-info {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+/* Hover Effects for Available Dates */
+.calendar-day.available:hover,
+.calendar-day.partially-available:hover {
+    transform: scale(1.05);
+    z-index: 1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Disable hover for unavailable dates */
+.calendar-day.unavailable:hover {
+    transform: none;
+    box-shadow: none;
+    background-color: #f8d7da !important;
+}
+
+/* Enhanced Selected State */
+.calendar-day.selected {
+    background-color: #0d6efd !important;
+    color: white !important;
+    font-weight: bold;
+    box-shadow: 0 0 0 2px #0056b3;
+    z-index: 2;
+}
+
+/* Make sure the legend items align properly */
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.legend-item small {
+    font-size: 0.875em;
+}
+
+/* Calendar container improvements */
+.calendar-container {
+    max-width: 100%;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .calendar-day {
+        height: 40px;
+        font-size: 0.875rem;
+    }
+    
+    .weekday {
+        font-size: 0.75rem;
+        padding: 6px 0;
+    }
+}
