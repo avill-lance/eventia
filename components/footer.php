@@ -35,7 +35,7 @@
 <script src="js/jquery-3.7.1.js"></script>
 <script src="js/js/datatables.min.js"></script>
 <script src="js/sweetalert2@11.js"></script>
-<script src="js/bootstrap.bundle.min.js"></script>
+<!-- <script src="js/bootstrap.bundle.min.js"></script> -->
 
 <!-- Page-specific JS loading - only load what's needed -->
 <?php 
