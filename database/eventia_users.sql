@@ -658,3 +658,91 @@ VALUES ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
 -- Username: admin
 -- Password: admin123 (hashed securely)
 -- Time created: current timestamp
+
+
+-- Blog table structure for Eventia Admin
+-- This table stores blog posts for the Eventia website
+
+CREATE TABLE IF NOT EXISTS `tbl_blog` (
+  `blog_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` longtext NOT NULL,
+  `excerpt` text DEFAULT NULL,
+  `featured_image` varchar(500) DEFAULT NULL,
+  `author_id` int(11) NOT NULL,
+  `status` enum('published','draft','featured') DEFAULT 'draft',
+  `is_featured` tinyint(1) DEFAULT 0,
+  `read_time` int(11) DEFAULT 5 COMMENT 'Estimated reading time in minutes',
+  `meta_description` varchar(300) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `published_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`blog_id`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `author_id` (`author_id`),
+  KEY `status` (`status`),
+  KEY `is_featured` (`is_featured`),
+  KEY `created_at` (`created_at`),
+  CONSTRAINT `tbl_blog_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `tbl_admin` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Insert sample blog posts
+INSERT INTO `tbl_blog` (
+  `title`, 
+  `content`, 
+  `excerpt`, 
+  `featured_image`, 
+  `author_id`, 
+  `status`, 
+  `is_featured`, 
+  `read_time`, 
+  `meta_description`, 
+  `slug`, 
+  `published_at`
+) VALUES 
+(
+  'Summer Wedding Trends 2023', 
+  '<p>Discover the latest trends in summer weddings, from color palettes to unique venue ideas that will make your special day unforgettable. Learn about the hottest themes, decoration styles, and creative concepts that are dominating the wedding industry this season.</p><p>Summer weddings are all about embracing the warm weather and creating a vibrant, joyful atmosphere. This year, we are seeing a shift towards more personalized and intimate celebrations that reflect the couples unique personalities.</p><h3>Color Palettes That Pop</h3><p>This season, bold and vibrant colors are taking center stage. Think sunset oranges, deep blues, and lush greens that complement the natural summer surroundings. Many couples are opting for color combinations that tell their love story.</p><h3>Unique Venue Ideas</h3><p>From beachfront ceremonies to garden parties and rustic barn venues, summer offers endless possibilities for unique wedding locations. Outdoor venues with natural lighting and beautiful landscapes are particularly popular this year.</p>', 
+  'Discover the latest trends in summer weddings, from color palettes to unique venue ideas that will make your special day unforgettable.', 
+  'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 
+  1, 
+  'published', 
+  1, 
+  8, 
+  'Explore the hottest summer wedding trends for 2023 including color palettes, venue ideas, and decoration styles.', 
+  'summer-wedding-trends-2023', 
+  '2023-06-15 00:00:00'
+),
+(
+  'Corporate Event Planning Tips', 
+  '<p>Planning a successful corporate event requires attention to detail and strategic thinking. Learn the essential tips for organizing memorable corporate gatherings that achieve business objectives.</p>', 
+  'Essential tips for organizing successful corporate events that leave lasting impressions on clients and employees.', 
+  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 
+  1, 
+  'published', 
+  0, 
+  6, 
+  'Professional tips for corporate event planning and management.', 
+  'corporate-event-planning-tips', 
+  '2023-06-10 00:00:00'
+),
+(
+  'Birthday Party Themes for All Ages', 
+  '<p>Creative birthday party themes that work for children, teens, and adults. Make every birthday celebration unique and memorable with these innovative theme ideas.</p>', 
+  'Creative birthday party themes suitable for all age groups to make celebrations extra special.', 
+  'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 
+  1, 
+  'published', 
+  0, 
+  5, 
+  'Innovative birthday party theme ideas for different age groups.', 
+  'birthday-party-themes-all-ages', 
+  '2023-06-05 00:00:00'
+);
+
+-- Update the admin table reference to ensure we have an admin user
+UPDATE `tbl_admin` SET `id` = 1 WHERE `username` = 'admin' LIMIT 1;
+
+-- Add index for better performance
+ALTER TABLE `tbl_blog` ADD FULLTEXT KEY `ft_title_content` (`title`,`content`,`excerpt`);
