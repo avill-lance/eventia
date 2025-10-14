@@ -1,4 +1,6 @@
 <?php
+    date_default_timezone_set('Asia/Manila'); // Adjust to your database timezone
+    
     // ### Establish Session ###
     include  __DIR__ . "/../functions/session.php";
 

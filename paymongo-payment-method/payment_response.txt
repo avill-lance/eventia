@@ -3,8 +3,7 @@ Response: Array
 (
     [data] => Array
         (
-            [id] => cs_bmeZCYDRJsiRjuZ8LEqmc2or
-            [id] => cs_FkjKqC878Zx1cduQUAok3syj
+            [id] => cs_EZrErBnY8BdSS8nQRFp8y97u
             [type] => checkout_session
             [attributes] => Array
                 (
@@ -26,28 +25,23 @@ Response: Array
                         )
 
                     [billing_information_fields_editable] => enabled
-                    [cancel_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251014-025041-68ed9e61b5ffb
-                    [checkout_url] => https://checkout.paymongo.com/cs_bmeZCYDRJsiRjuZ8LEqmc2or_client_ctbA4VSuhvnfoqhkRVYWYKuB#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
-                    [client_key] => cs_bmeZCYDRJsiRjuZ8LEqmc2or_client_ctbA4VSuhvnfoqhkRVYWYKuB
-                    [cancel_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251013-132552-68ece1c0e51c4
-                    [checkout_url] => https://checkout.paymongo.com/cs_FkjKqC878Zx1cduQUAok3syj_client_pasRfeuzvSvDT1zKGHisbJBW#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
-                    [client_key] => cs_FkjKqC878Zx1cduQUAok3syj_client_pasRfeuzvSvDT1zKGHisbJBW
+                    [cancel_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=false&ref=EVT-20251014-052747-68edc333aac75
+                    [checkout_url] => https://checkout.paymongo.com/cs_EZrErBnY8BdSS8nQRFp8y97u_client_FoiTYzLADKe6FnEXjyyWeeND#cGtfdGVzdF9aSkh4S0c5M05QZjVkejVDNzdVZUtCWmo=
+                    [client_key] => cs_EZrErBnY8BdSS8nQRFp8y97u_client_FoiTYzLADKe6FnEXjyyWeeND
                     [customer_email] => 
-                    [description] => Wedding Event Package Booking
+                    [description] => Engagement Party Package Booking
                     [line_items] => Array
                         (
                             [0] => Array
                                 (
-                                    [amount] => 11819000
-                                    [amount] => 11619000
+                                    [amount] => 7500000
                                     [currency] => PHP
                                     [description] => 
                                     [images] => Array
                                         (
                                         )
 
-                                    [name] => Wedding Event Package - Keely Holman
-                                    [name] => Wedding Event Package - Desirae Wiley
+                                    [name] => Engagement Party Package - Alexandra Buckley
                                     [quantity] => 1
                                 )
 
@@ -61,28 +55,17 @@ Response: Array
 
                     [payment_intent] => Array
                         (
-                            [id] => pi_3vccmVaRndcAy9KPyrPCvZQ1
+                            [id] => pi_sGPs6dwW6rmPQvaST9bUbPKw
                             [type] => payment_intent
                             [attributes] => Array
                                 (
-                                    [amount] => 11819000
+                                    [amount] => 7500000
                                     [capture_type] => automatic
-                                    [client_key] => pi_3vccmVaRndcAy9KPyrPCvZQ1_client_jwmZsYWrN7MLTHacUwFBcZ5Q
+                                    [client_key] => pi_sGPs6dwW6rmPQvaST9bUbPKw_client_nPW4B6DMasU6DcrBzadjjZX3
                                     [currency] => PHP
-                                    [description] => Wedding Event Package Booking
+                                    [description] => Engagement Party Package Booking
                                     [livemode] => 
-                                    [original_amount] => 11819000
-                            [id] => pi_KXvnoZGoaiByXfKUCBDB8MAS
-                            [type] => payment_intent
-                            [attributes] => Array
-                                (
-                                    [amount] => 11619000
-                                    [capture_type] => automatic
-                                    [client_key] => pi_KXvnoZGoaiByXfKUCBDB8MAS_client_PGY144ffx5sAzZPw4Cq6WHFd
-                                    [currency] => PHP
-                                    [description] => Wedding Event Package Booking
-                                    [livemode] => 
-                                    [original_amount] => 11619000
+                                    [original_amount] => 7500000
                                     [statement_descriptor] => Eventia Incorporation
                                     [status] => awaiting_payment_method
                                     [last_payment_error] => 
@@ -109,38 +92,27 @@ Response: Array
 
                                     [metadata] => 
                                     [setup_future_usage] => 
-                                    [created_at] => 1760403043
-                                    [updated_at] => 1760403043
-                                    [created_at] => 1760354761
-                                    [updated_at] => 1760354761
+                                    [created_at] => 1760412469
+                                    [updated_at] => 1760412469
                                 )
 
                         )
 
                     [payment_method_types] => Array
                         (
-                            [0] => card
-                            [1] => gcash
+                            [0] => gcash
+                            [1] => card
                             [2] => grab_pay
                         )
 
-                    [reference_number] => EVT-20251014-025041-68ed9e61b5ffb
-                            [0] => gcash
-                            [1] => grab_pay
-                            [2] => card
-                        )
-
-                    [reference_number] => EVT-20251013-132552-68ece1c0e51c4
+                    [reference_number] => EVT-20251014-052747-68edc333aac75
                     [send_email_receipt] => 
                     [show_description] => 1
                     [show_line_items] => 1
                     [status] => active
-                    [success_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251014-025041-68ed9e61b5ffb
-                    [created_at] => 1760403043
-                    [updated_at] => 1760403043
-                    [success_url] => http://localhost:8081/Evensia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251013-132552-68ece1c0e51c4
-                    [created_at] => 1760354762
-                    [updated_at] => 1760354762
+                    [success_url] => http://localhost/eventia/paymongo-payment-method/../payment-status.php?success=true&ref=EVT-20251014-052747-68edc333aac75
+                    [created_at] => 1760412469
+                    [updated_at] => 1760412469
                     [metadata] => 
                 )
 

@@ -1,50 +1,55 @@
 <?php
-
 // ### Establish Database Connection ###
 include  __DIR__ ."/../functions/session.php";
 
-if($_SERVER['REQUEST_METHOD']=='POST'){
-    
-    // Check if this is a test payment
-    // $isTest = isset($_POST['test_mode']) && $_POST['test_mode'] === 'true';
-    
-    // if($isTest) {
-    //     // Simulate payment for local testing
-    //     $referenceNumber = 'TEST-' . uniqid();
-    //     $localUrl = "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/../payment-status.php?ref=" . $referenceNumber . "&test=true";
-        
-    //     // Log the test payment
-    //     error_log("=== TEST PAYMENT ===");
-    //     error_log("Reference: " . $referenceNumber);
-    //     error_log("Redirect URL: " . $localUrl);
-    //     error_log("=== END TEST PAYMENT ===");
-        
-    //     header('Content-Type: application/json');
-    //     echo json_encode([
-    //         'success' => true,
-    //         'checkout_url' => $localUrl,
-    //         'reference' => $referenceNumber,
-    //         'test_mode' => true
-    //     ]);
-    //     exit;
-    // }
-    
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Set JSON header first
+header('Content-Type: application/json');
+
+if($_SERVER['REQUEST_METHOD'] != 'POST'){
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
+
+try {
     // Your PayMongo TEST Secret Key
     $secretKey = "sk_test_rj6TvFQRA4PKi88QGLraUWDv";
 
-    // Collect form data
-    $amount = isset($_POST['amount']) ? intval($_POST['amount']) * 100 : 99999; // Convert to centavo
-    $_SESSION['amount']=$amount;
-    $firstName = isset($_POST['firstName']) ? $_POST['firstName'] : 'Test';
-    $lastName = isset($_POST['lastName']) ? $_POST['lastName'] : 'User';
-    $email = isset($_POST['email']) ? $_POST['email'] : 'test@example.com';
-    $eventType = isset($_POST['eventType']) ? $_POST['eventType'] : 'Event';
-    $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
+    // Collect ALL form data for booking
+    $amount = isset($_POST['amount']) ? intval($_POST['amount']) * 100 : 99999;
+    $_SESSION['amount'] = $amount;
+    
+    // Store ALL booking data in session for later use
+    $_SESSION['pending_booking'] = [
+        'amount' => $amount / 100,
+        'firstName' => $_POST['firstName'] ?? '',
+        'lastName' => $_POST['lastName'] ?? '',
+        'email' => $_POST['email'] ?? '',
+        'eventType' => $_POST['eventType'] ?? '',
+        'phone' => $_POST['phone'] ?? '',
+        'package' => $_POST['package'] ?? '',
+        'venue_type' => $_POST['venue_type'] ?? '',
+        'venue_id' => $_POST['venue_id'] ?? '',
+        'event_location' => $_POST['event_location'] ?? '',
+        'full_address' => $_POST['full_address'] ?? '',
+        'event_date' => $_POST['event_date'] ?? '',
+        'event_time' => $_POST['event_time'] ?? '',
+        'guest_count' => $_POST['guest_count'] ?? '',
+        'special_instructions' => $_POST['special_instructions'] ?? '',
+        'services' => $_POST['services'] ?? [],
+        'customizations' => $_POST['customization'] ?? [],
+        'booking_reference' => $_POST['booking_reference'] ?? '',
+        'booking_type' => 'self'
+    ];
 
     // Generate a unique reference first
-    $referenceNumber = 'EVT-' . date('Ymd-His') . '-' . uniqid();
+    $referenceNumber = $_POST['booking_reference'] ?? 'EVT-' . date('Ymd-His') . '-' . uniqid();
 
-    // Use Checkout Sessions API instead (better for redirects)
+    // Use Checkout Sessions API
     $sessionData = [
         "data" => [
             "attributes" => [
@@ -52,14 +57,14 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                     [
                         "amount" => $amount,
                         "currency" => "PHP",
-                        "name" => $eventType . " - " . $firstName . " " . $lastName,
+                        "name" => ($_SESSION['pending_booking']['eventType'] ?? 'Event') . " - " . ($_SESSION['pending_booking']['firstName'] ?? '') . " " . ($_SESSION['pending_booking']['lastName'] ?? ''),
                         "quantity" => 1
                     ]
                 ],
                 "payment_method_types" => ["card", "gcash", "grab_pay"],
-                "success_url" => "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/../payment-status.php?success=true&ref=" . $referenceNumber,
-                "cancel_url" => "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/../payment-status.php?success=false&ref=" . $referenceNumber,
-                "description" => $eventType . " Booking",
+                "success_url" => "http://" . $_SERVER['HTTP_HOST'] . "/eventia/payment-status.php?success=true&ref=" . $referenceNumber,
+                "cancel_url" => "http://" . $_SERVER['HTTP_HOST'] . "/eventia/payment-status.php?success=false&ref=" . $referenceNumber,
+                "description" => ($_SESSION['pending_booking']['eventType'] ?? 'Event') . " Booking",
                 "send_email_receipt" => false,
                 "reference_number" => $referenceNumber
             ]
@@ -69,10 +74,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     // Convert to JSON
     $jsonData = json_encode($sessionData);
     
-    // Log the request
-    error_log("=== PayMongo Checkout Session Request ===");
-    error_log("URL: https://api.paymongo.com/v1/checkout_sessions");
-    error_log("Data: " . $jsonData);
+    if ($jsonData === false) {
+        throw new Exception('JSON encode failed: ' . json_last_error_msg());
+    }
 
     // Initialize cURL
     $ch = curl_init();
@@ -93,52 +97,27 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $curlError = curl_error($ch);
     curl_close($ch);
 
-    // Log response
-    error_log("HTTP Code: " . $httpCode);
-    error_log("Response: " . $result);
-    if($curlError) {
-        error_log("cURL Error: " . $curlError);
+    if ($result === false) {
+        throw new Exception('cURL error: ' . $curlError);
     }
-    error_log("=== End Request ===");
-
-    // Write to file for debugging
-    file_put_contents(__DIR__ . '/payment_response.txt', "HTTP Code: " . $httpCode . "\nResponse: " . print_r(json_decode($result, true), true));
 
     // Decode response
     $response = json_decode($result, true);
 
-    // Check for success
     if ($httpCode == 200 && isset($response['data']['attributes']['checkout_url'])) {
         $checkoutUrl = $response['data']['attributes']['checkout_url'];
         $sessionId = $response['data']['id'] ?? 'unknown';
         
-        // Store payment session in file for status checking
-        $paymentData = [
-            'session_id' => $sessionId,
-            'reference_number' => $referenceNumber,
-            'status' => 'pending',
-            'created_at' => date('Y-m-d H:i:s'),
-            'customer' => $firstName . ' ' . $lastName,
-            'email' => $email,
-            'amount' => $amount / 100
-        ];
-        
-        file_put_contents(__DIR__ . '/payment_sessions.json', json_encode($paymentData) . "\n", FILE_APPEND);
-        
-        header('Content-Type: application/json');
         echo json_encode([
             'success' => true,
             'checkout_url' => $checkoutUrl,
             'reference' => $referenceNumber,
             'session_id' => $sessionId,
-            'message' => 'You will be redirected to PayMongo. After payment, please return to this site manually.'
+            'message' => 'You will be redirected to PayMongo.'
         ]);
 
     } else {
         // Error response
-        header('Content-Type: application/json');
-        http_response_code(400);
-        
         $errorDetail = 'Unknown error';
         if(isset($response['errors'][0]['detail'])) {
             $errorDetail = $response['errors'][0]['detail'];
@@ -146,14 +125,19 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
             $errorDetail = $curlError;
         }
         
+        http_response_code(400);
         echo json_encode([
             'success' => false,
             'error' => $errorDetail,
             'http_code' => $httpCode
         ]);
     }
-} else {
-    http_response_code(405);
-    header('Content-Type: application/json');
-    echo json_encode(['error' => 'Method not allowed']);
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Server error: ' . $e->getMessage()
+    ]);
 }
+?>

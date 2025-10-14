@@ -61,9 +61,6 @@
 $(document).ready(function(){
     $("#changepassword").submit(function(e){
         e.preventDefault();
-        console.log("=== FORM SUBMISSION STARTED ===");
-        console.log("Form data:", $("#changepassword").serialize());
-        
         $.ajax({
             url: 'functions/UpdatePassword.php',
             type: 'POST',
@@ -136,32 +133,6 @@ $(document).ready(function(){
         });
     });
 });    
-</script>
-<script>
-console.log("=== DEBUG FORGOT PASSWORD ===");
-console.log("EditProfile.js should be loaded");
-
-// Check if jQuery is available
-console.log("jQuery available:", typeof jQuery !== 'undefined');
-if (typeof jQuery !== 'undefined') {
-    console.log("jQuery version:", jQuery.fn.jquery);
-}
-
-// Check if our form exists
-const form = document.getElementById('changepassword');
-console.log("Form element found:", form);
-
-// Check if our button exists  
-const button = document.getElementById('savenewpass');
-console.log("Button element found:", button);
-
-// Test if our event handler code would work
-if (typeof jQuery !== 'undefined' && form) {
-    console.log("jQuery and form are available - event handler should work");
-} else {
-    console.log("PROBLEM: jQuery or form not available");
-}
-console.log("=== END DEBUG ===");
 </script>
 </body>
 </html>
