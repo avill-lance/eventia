@@ -260,7 +260,7 @@ $conn->close();
                                     </td>
                                     <td style="padding: 16px 12px; border-bottom: 1px solid var(--border); text-align: center;">
                                         <div style="display: flex; gap: 6px; justify-content: center;">
-                                            <button class="btn primary" onclick="editUser(<?php echo htmlspecialchars(json_encode($user)); ?>)" title="Edit" style="padding: 6px 10px; font-size: 12px;">
+                                            <button class="btn primary" onclick="editUser(<?php echo $user['user_id']; ?>)" title="Edit" style="padding: 6px 10px; font-size: 12px;">
                                                 <i class="bi bi-pencil">Edit</i>
                                             </button>
                                             <button class="btn" onclick="viewUserDetails(<?php echo $user['user_id']; ?>)" title="View Details" style="padding: 6px 10px; font-size: 12px;">
@@ -468,22 +468,66 @@ function showUserEditor() {
     document.getElementById('userEditorModal').showModal();
 }
 
-function editUser(user) {
-    document.getElementById('userEditorTitle').textContent = 'Edit User';
-    document.getElementById('userId').value = user.user_id;
-    document.getElementById('userFirstName').value = user.first_name || '';
-    document.getElementById('userLastName').value = user.last_name || '';
-    document.getElementById('userEmail').value = user.email || '';
-    document.getElementById('userPhone').value = user.phone || '';
-    document.getElementById('userCity').value = user.city || '';
-    document.getElementById('userZip').value = user.zip || '';
-    document.getElementById('userAddress').value = user.address || '';
-    document.getElementById('userRole').value = user.role || 'user';
-    document.getElementById('userStatus').value = user.status || 'active';
-    document.getElementById('passwordField').style.display = 'block';
-    document.getElementById('userPassword').required = false;
-    document.getElementById('userPassword').placeholder = 'Leave blank to keep current password';
-    document.getElementById('userEditorModal').showModal();
+// Replace the editUser function and edit button onclick handler
+
+// Store user data in data attributes instead of passing JSON
+function editUser(userId) {
+    showLoading();
+    
+    fetch(`./functions/get-user.php?user_id=${userId}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => {
+        // First check if response is OK
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // Check content type to ensure it's JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            return response.text().then(text => {
+                console.error('Non-JSON response:', text.substring(0, 200));
+                throw new Error(`Server returned non-JSON response. Please check the server configuration.`);
+            });
+        }
+        
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            const user = data.data;
+            // Populate your form with user data...
+            document.getElementById('userEditorTitle').textContent = 'Edit User';
+            document.getElementById('userId').value = user.user_id;
+            document.getElementById('userFirstName').value = user.first_name || '';
+            document.getElementById('userLastName').value = user.last_name || '';
+            document.getElementById('userEmail').value = user.email || '';
+            document.getElementById('userPhone').value = user.phone || '';
+            document.getElementById('userCity').value = user.city || '';
+            document.getElementById('userZip').value = user.zip || '';
+            document.getElementById('userAddress').value = user.address || '';
+            document.getElementById('userRole').value = user.role || 'user';
+            document.getElementById('userStatus').value = user.status || 'active';
+            document.getElementById('passwordField').style.display = 'block';
+            document.getElementById('userPassword').value = '';
+            document.getElementById('userPassword').required = false;
+            document.getElementById('userPassword').placeholder = 'Leave blank to keep current password';
+            document.getElementById('userEditorModal').showModal();
+        } else {
+            showToast('Error loading user data: ' + (data.message || 'Unknown error'), 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Error loading user data: ' + error.message, 'error');
+    })
+    .finally(() => {
+        hideLoading();
+    });
 }
 
 function closeUserEditor() {
@@ -497,7 +541,7 @@ function viewUserDetails(userId) {
 function toggleUserStatus(userId, newStatus) {
     if (confirm(`Are you sure you want to ${newStatus === 'active' ? 'activate' : 'deactivate'} this user?`)) {
         showLoading();
-        fetch('update-user-status.php', {
+        fetch('functions/update-user-status.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -585,7 +629,7 @@ document.getElementById('userEditorForm').addEventListener('submit', function(e)
     saveBtn.disabled = true;
     spinner.style.display = 'inline';
     
-    fetch('save-user.php', {
+    fetch('functions/save-user.php', {
         method: 'POST',
         body: formData
     })

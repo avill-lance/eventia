@@ -2,47 +2,50 @@
 session_start();
 include __DIR__ . '/../includes/db-config.php';
 
-// Get JSON input
-$input = json_decode(file_get_contents('php://input'), true);
-
-// Verify CSRF token
-if (!isset($input['csrf_token']) || $input['csrf_token'] !== $_SESSION['csrf_token']) {
-    echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
-    exit;
-}
-
 // Check if user is admin
 if (!isset($_SESSION['admin_id'])) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
-    exit;
+    header('HTTP/1.1 403 Forbidden');
+    echo json_encode(['success' => false, 'message' => 'Access denied']);
+    exit();
 }
 
-$response = ['success' => false, 'message' => ''];
+// Get JSON data from request body
+$data = json_decode(file_get_contents('php://input'), true);
+
+// Verify CSRF token
+if (!isset($data['csrf_token']) || $data['csrf_token'] !== $_SESSION['csrf_token']) {
+    header('HTTP/1.1 403 Forbidden');
+    echo json_encode(['success' => false, 'message' => 'CSRF token validation failed']);
+    exit();
+}
+
+$userId = $data['user_id'] ?? 0;
+$status = $data['status'] ?? 'active';
+
+if (!$userId) {
+    echo json_encode(['success' => false, 'message' => 'User ID is required']);
+    exit();
+}
+
+// Validate status
+if (!in_array($status, ['active', 'inactive'])) {
+    echo json_encode(['success' => false, 'message' => 'Invalid status']);
+    exit();
+}
 
 try {
-    $userId = $input['user_id'] ?? '';
-    $status = $input['status'] ?? '';
-    
-    if (empty($userId) || empty($status)) {
-        $response['message'] = 'User ID and status are required';
-        echo json_encode($response);
-        exit;
-    }
-    
     $stmt = $conn->prepare("UPDATE tbl_users SET status = ? WHERE user_id = ?");
     $stmt->bind_param("si", $status, $userId);
     
     if ($stmt->execute()) {
-        $response['success'] = true;
-        $response['message'] = 'User status updated successfully';
+        echo json_encode(['success' => true, 'message' => 'User status updated successfully']);
     } else {
-        $response['message'] = 'Error updating user status: ' . $stmt->error;
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $stmt->error]);
     }
+    
     $stmt->close();
+    $conn->close();
 } catch (Exception $e) {
-    $response['message'] = 'Database error: ' . $e->getMessage();
+    echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
 }
-
-echo json_encode($response);
-$conn->close();
 ?>
