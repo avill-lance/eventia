@@ -35,22 +35,22 @@ if (empty($_SESSION['csrf_token'])) {
                 <a href="dashboard.php" class="nav-item active">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
-                <a href="packages/index.php" class="nav-item">
+                <a href="packages.php" class="nav-item">
                     <i class="fas fa-box"></i> Packages
                 </a>
-                <a href="services/index.php" class="nav-item">
+                <a href="services.php" class="nav-item">
                     <i class="fas fa-concierge-bell"></i> Services
                 </a>
-                <a href="blog/index.php" class="nav-item">
+                <a href="blog.php" class="nav-item">
                     <i class="fas fa-blog"></i> Blog
                 </a>
-                <a href="bookings/index.php" class="nav-item">
+                <a href="bookings.php" class="nav-item">
                     <i class="fas fa-calendar-check"></i> Bookings
                 </a>
-                <a href="reviews/index.php" class="nav-item">
+                <a href="reviews.php" class="nav-item">
                     <i class="fas fa-star"></i> Reviews
                 </a>
-                <a href="users/index.php" class="nav-item">
+                <a href="users.php" class="nav-item">
                     <i class="fas fa-users"></i> Users
                 </a>
                 <a href="logout.php" class="nav-item" style="color: var(--danger);">
