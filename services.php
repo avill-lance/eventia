@@ -107,5 +107,4 @@
             <a href="packages.php" class="btn btn-primary">Start Planning Your Event</a>
         </div>
     </div>
-
 <?php include __DIR__."/components/footer.php" ?>

@@ -37,8 +37,11 @@ while ($row = $services_result->fetch_assoc()) {
     $services[] = $row;
 }
 ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- Additional CSS -->
 <link rel="stylesheet" href="css/booking-improvements.css">
+
 <!-- Hero Section -->
 <div class="hero-section">
     <div class="container text-center">
@@ -259,7 +262,7 @@ while ($row = $services_result->fetch_assoc()) {
                                             </div>
                                             <?php endif; ?>
                                             
-                                            <!-- Customization Button -->
+                                            <!-- Customization Button - FIXED WITH PROPER EVENT HANDLING -->
                                             <div class="customization-options mt-3">
                                                 <button type="button" class="btn btn-sm btn-outline-primary customize-service-btn" 
                                                         data-service-id="<?php echo $service['service_id']; ?>"
@@ -329,7 +332,13 @@ while ($row = $services_result->fetch_assoc()) {
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="event_date" class="form-label">Event Date *</label>
-                                        <input type="date" class="form-control" id="event_date" name="event_date" min="<?php echo date('Y-m-d'); ?>" required>
+                                        <div class="input-group">
+                                            <input type="date" class="form-control" id="event_date" name="event_date" min="<?php echo date('Y-m-d'); ?>" required readonly>
+                                            <button type="button" class="btn btn-outline-primary" id="openCalendar">
+                                                <i class="bi bi-calendar3 me-1"></i> Check Availability
+                                            </button>
+                                        </div>
+                                        <small class="text-muted">Click the calendar to check available dates</small>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -383,7 +392,7 @@ while ($row = $services_result->fetch_assoc()) {
                                 <h5 class="mb-3">Order Summary</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
-                                        <tbody id="orderSummary" name="orderSummary">
+                                        <tbody id="orderSummary">
                                             <!-- Order summary will be populated here -->
                                         </tbody>
                                     </table>
@@ -412,6 +421,7 @@ while ($row = $services_result->fetch_assoc()) {
 
                             <div class="mt-4 d-flex justify-content-between">
                                 <button type="button" class="btn btn-secondary" onclick="prevStep(4)">Previous</button>
+                                <!-- FIXED: Changed back to type="button" to prevent form submission -->
                                 <button type="button" class="btn btn-success" id="submitBooking" name="submitBooking">Proceed to Paymongo</button>
                             </div>
                         </div>
@@ -436,6 +446,83 @@ while ($row = $services_result->fetch_assoc()) {
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" id="saveCustomizationBtn">Save Customization</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Calendar Availability Modal -->
+<div class="modal fade" id="calendarModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Available Date</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="calendar-container">
+                            <div class="calendar-header d-flex justify-content-between align-items-center mb-3">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="prevMonth">
+                                    <i class="bi bi-chevron-left"></i>
+                                </button>
+                                <h5 class="mb-0" id="currentMonthYear">January 2024</h5>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="nextMonth">
+                                    <i class="bi bi-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div class="calendar">
+                                <div class="calendar-weekdays d-flex border-bottom">
+                                    <div class="weekday text-center">Sun</div>
+                                    <div class="weekday text-center">Mon</div>
+                                    <div class="weekday text-center">Tue</div>
+                                    <div class="weekday text-center">Wed</div>
+                                    <div class="weekday text-center">Thu</div>
+                                    <div class="weekday text-center">Fri</div>
+                                    <div class="weekday text-center">Sat</div>
+                                </div>
+                                <div class="calendar-days" id="calendarDays">
+                                    <!-- Calendar days will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="availability-info">
+                            <h6>Availability Legend</h6>
+                            <div class="legend-item mb-2">
+                                <span class="availability-dot available"></span>
+                                <small>Available</small>
+                            </div>
+                            <div class="legend-item mb-2">
+                                <span class="availability-dot partially-available"></span>
+                                <small>Limited</small>
+                            </div>
+                            <div class="legend-item mb-2">
+                                <span class="availability-dot unavailable"></span>
+                                <small>Booked</small>
+                            </div>
+                            
+                            <div class="selected-date-info mt-4 p-3 bg-light rounded">
+                                <h6>Selected Date</h6>
+                                <div id="selectedDateInfo" class="text-muted">No date selected</div>
+                                <div id="selectedDateAvailability" class="mt-2"></div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Dates are subject to venue and service availability
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmDate">Select Date</button>
             </div>
         </div>
     </div>
@@ -468,7 +555,4 @@ while ($row = $services_result->fetch_assoc()) {
         </div>
     </div>
 </div>
-
-<script src="js/jquery-3.7.1.js"></script>
-<script src="js/sweetalert2@11.js"></script>
-<script src="js/self_booking.js"></script>
+<?php include __DIR__."/components/footer.php"; ?>
